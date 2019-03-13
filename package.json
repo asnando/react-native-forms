@@ -1,0 +1,17 @@
+{
+  "name": "react-native-forms",
+  "version": "1.0.0",
+  "description": "📃 HOC Component that renders form with custom fields.",
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "keywords": [],
+  "author": "Fernando Rama",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^16.8.2",
+    "react-native": "^0.58.5",
+    "react-native-tab-view": "^1.3.2"
+  }
+}
