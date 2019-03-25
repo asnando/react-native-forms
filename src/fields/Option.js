@@ -1,89 +1,41 @@
 import React, { Component } from 'react';
+import ModalOptions from './modal/ModalOptions';
+import OptionArrow from './modal/OptionArrow';
+
 import {
   Text,
-  Modal,
   View,
-  SafeAreaView,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
-  ActivityIndicator,
-  FlatList
 } from 'react-native';
+
 import {
   FormTopLabel,
   FormClearButton
 } from '../';
 
-const MODAL_HEADER_HEIGHT = 100;
-
 const initialState = {
-  showModal: false,
-  value: null,
+  value:          null,
+  options:        null,
+  showModal:      false,
   loadingOptions: false,
-  options: null
 };
 
-const OptionArrow = (props) => {
-  return <Text style={styles.arrowRight}>></Text>;
-}
-
-const ModalHeader = (props) => {
-  return (
-    <SafeAreaView style={styles.modalHeader}>
-      <Text style={styles.modalHeaderTitle}>{props.title}</Text>
-      <TouchableOpacity style={styles.closeButton} onPress={props.hideModal}></TouchableOpacity>
-    </SafeAreaView>
-  );
-}
-
-const ModalContent = (props) => {
-  return <FlatList
-    data={props.options}
-    renderItem={
-      ({item}) => {
-        return <TouchableOpacity
-          style={[styles.modalOption]}
-          onPress={props.onOptionSelected.bind(props.onOptionSelected, item.value)}>
-          <Text style={styles.modalOptionLabel}>{item.label}</Text>
-        </TouchableOpacity>;
-      }
-    }
-    keyExtractor={(item, index) => index.toString()} />;
-}
-
-const ModalLoader = (props) => {
-  return (
-    <View style={[ styles.container, styles.modalLoader ]}>
-      <ActivityIndicator size="large" />
-    </View>
-  );
-}
-
-const ModalOptions = (props) => {
-  return (
-    <Modal animationType="slide" visible={props.showModal} onShow={props.onShow}>
-      <ModalHeader title={props.title} hideModal={props.hideModal} />
-      {
-        props.loadingOptions
-        ? <ModalLoader  />
-        : <ModalContent options={props.options} onOptionSelected={props.onOptionSelected} />
-      }
-    </Modal>
-  );
-}
-
 export default class FormOption extends Component {
+
   constructor(props) {
     super(props);
     this.state = initialState;
   }
+
   getValue() {
     return this.state.value;
   }
+
   clearValue() {
     return this.setState({ value: null });
   }
+
   getLabelValue() {
     const { value } = this.state;
     if (value === null) return '';
@@ -96,6 +48,7 @@ export default class FormOption extends Component {
         return value.toString();
     };
   }
+
   _onShow() {
     if (typeof this.props.onFieldEnter === 'function') {
       this.props.onFieldEnter(this.props.name);
@@ -109,6 +62,7 @@ export default class FormOption extends Component {
       });
     }
   }
+
   _getOptionsFromProvider() {
     return new Promise((resolve, reject) => {
       let provider = this.props.options();
@@ -123,6 +77,7 @@ export default class FormOption extends Component {
       }
     });
   }
+
   show() {
     this.setState({
       showModal: true,
@@ -130,12 +85,14 @@ export default class FormOption extends Component {
       loadingOptions: typeof this.props.options === 'function'
     });
   }
+
   hide() {
     this.setState({
       showModal: false,
       options: null
     });
   }
+
   onOptionSelected(value) {
     // Call next field on form (from parent).
     if (typeof this.props.nextField === 'function') {
@@ -144,6 +101,7 @@ export default class FormOption extends Component {
     this.setState({ value });
     this.hide();
   }
+
   render() {
     return (
       <View>
@@ -164,39 +122,10 @@ export default class FormOption extends Component {
       </View>
     );
   }
+
 }
 
 const styles = StyleSheet.create({
-  modalHeader: {
-    height: MODAL_HEADER_HEIGHT,
-    backgroundColor: '#fff',
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderColor: '#d5d5d5'
-  },
-  modalHeaderTitle: {
-    flex: 1,
-    fontSize: 24,
-    marginLeft: 16,
-  },
-  closeButton: {
-    marginRight: 16,
-    width: 32,
-    height: 32,
-    backgroundColor: '#ccc'
-  },
-  modalOption: {
-    width: '100%',
-    height: 80,
-    borderBottomWidth: 1,
-    borderColor: '#ccc',
-    justifyContent: 'center',
-  },
-  modalOptionLabel: {
-    fontSize: 18,
-    marginLeft: 16,
-  },
   optionWrapper: {
     width: 300,
     height: 75,
@@ -204,15 +133,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderBottomWidth: 1,
     borderColor: '#d5d5d5'
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center'
-  },
-  arrowRight: {
-    position: 'absolute',
-    right: 10,
-    fontSize: 24,
-    color: '#aaa'
   },
 });
