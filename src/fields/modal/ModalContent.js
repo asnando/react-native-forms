@@ -7,18 +7,28 @@ import {
 } from 'react-native';
 
 const ModalContent = (props) => {
-  return <FlatList
-    data={props.options}
-    renderItem={
-      ({item}) => {
-        return <TouchableOpacity
-          style={[styles.modalOption]}
-          onPress={props.onOptionSelected.bind(props.onOptionSelected, item.value)}>
-          <Text style={styles.modalOptionLabel}>{item.label}</Text>
-        </TouchableOpacity>;
+  // When options are not loaded yet, shows the
+  // loader on the top of modal. Otherwise the loader
+  // will be displayed at the bottom.
+  if (!props.options.length) {
+    return null;
+  }
+  
+  return (
+    <FlatList
+      data={props.options}
+      renderItem={
+        ({item}) => {
+          return <TouchableOpacity
+            style={[styles.modalOption]}
+            onPress={props.onOptionSelected.bind(props.onOptionSelected, item.value)}>
+            <Text style={styles.modalOptionLabel}>{item.label}</Text>
+          </TouchableOpacity>
+        }
       }
-    }
-    keyExtractor={(item, index) => index.toString()} />;
+      onEndReached={props.onNextPage}
+      keyExtractor={(item, index) => index.toString()} />
+  );
 }
 
 export default ModalContent;

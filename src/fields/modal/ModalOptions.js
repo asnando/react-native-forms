@@ -7,12 +7,12 @@ import ModalLoader from './ModalLoader';
 const ModalOptions = (props) => {
   return (
     <Modal animationType="slide" visible={props.showModal} onShow={props.onShow}>
-      <ModalHeader title={props.title} hideModal={props.hideModal} />
-      {
-        props.loadingOptions
-        ? <ModalLoader  />
-        : <ModalContent options={props.options} onOptionSelected={props.onOptionSelected} />
-      }
+      <ModalHeader title={props.title} hideModal={props.hideModal} onInputValue={props.onInputValue} />
+      <ModalContent
+        options={props.options}
+        onOptionSelected={props.onOptionSelected}
+        onNextPage={props.onNextPage} />
+      { props.loading ? <ModalLoader /> : null}
     </Modal>
   );
 }

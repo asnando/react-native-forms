@@ -14,18 +14,38 @@ import {
   FormClearButton
 } from '../';
 
+const REQUEST_INTERVAL = 1000;
+const INPUT_INTERVAL = 300;
+
 const initialState = {
-  value:          null,
-  options:        null,
-  showModal:      false,
-  loadingOptions: false,
+  value:           null,
+  optionsProvider: null,
+  options:         [],
+  showModal:       false,
+  loading:         true,
+  page:            1,
+  hasNextPage:     true,
+  pageSize:        0,
+  inputName:       null,
+  filterObject:    {},
 };
 
 export default class FormOption extends Component {
 
   constructor(props) {
     super(props);
-    this.state = initialState;
+    this.state = {
+      ...initialState,
+      optionsProvider: (typeof props.options === 'object' && typeof props.options.resolver === 'function') ? props.options.resolver : null,
+      options: Array.isArray(props.options) ? props.options : initialState.options,
+      pageSize: typeof props.options === 'object' ? (props.options.pageSize || 0) : initialState.pageSize,
+      inputName: typeof props.options === 'object' ? props.options.inputName : null,
+      filterObject: typeof props.options === 'object' ? props.options.filter : initialState.filterObject
+    };
+    // Create a timeout to wait user input editing.
+    // Only after full edit it dispatch a request to
+    // the options provider.
+    this.editing = null;
   }
 
   getValue() {
@@ -49,47 +69,89 @@ export default class FormOption extends Component {
     };
   }
 
-  _onShow() {
+  onShow() {
+    // Tells the form controller that user entered the modal.
     if (typeof this.props.onFieldEnter === 'function') {
       this.props.onFieldEnter(this.props.name);
     }
-    if (typeof this.props.options === 'function') {
-      this._getOptionsFromProvider().then(options => {
-        this.setState({
-          options,
-          loadingOptions: false
+    // #
+    this.setLoadingStatus(true, () => {
+      this.getOptionsFromProvider({ page: this.state.page }).then(options => {
+        this.setOptions(options, () => {
+          this.setLoadingStatus(false);
         });
       });
-    }
+    });
   }
 
-  _getOptionsFromProvider() {
-    return new Promise((resolve, reject) => {
-      let provider = this.props.options();
-      if (provider instanceof Promise) {
-        provider
-        .then(options => resolve(options))
-        .catch(error => {
-          console.log(error);
+  setLoadingStatus(status, callback) {
+    this.setState({ loading: status }, callback);
+  }
+
+  setOptions(options, callback) {
+    this.setState({ options }, callback);
+  }
+
+  addOptions(options, callback) {
+    this.setState({
+      options: [
+        ...this.state.options,
+        ...options
+      ]
+    }, callback);
+  }
+
+  createOptionsObject(opts = {}) {
+    return this.state.filterObject;
+  }
+
+  createExtraOptionsObject(opts = {}) {
+    return { size: 0, page: opts.page };
+  }
+
+  getOptionsFromProvider(opts = {}) {
+    return (() => {
+      return new Promise((resolve, reject) => {
+        if (!this.state.optionsProvider) {
+          return resolve(this.state.options);
+        }
+        const providerResponse = this.state.optionsProvider(
+          this.createOptionsObject(opts),
+          this.createExtraOptionsObject(opts)
+        );
+        if (providerResponse instanceof Promise) {
+          return providerResponse.then(resolve).catch(reject);
+        } else {
+          return resolve(providerResponse);
+        }
+      });
+    })().then(options => {
+      return new Promise((resolve, reject) => {
+        this.setState({
+          hasNextPage: (options.length >= this.state.pageSize)
+        }, ()  => {
+          return resolve(options);
         });
-      } else {
-        resolve(provider);
-      }
-    });
+      });
+    })
   }
 
   show() {
     this.setState({
       showModal: true,
-      // When options is a function, shows the screen loader.
-      loadingOptions: typeof this.props.options === 'function'
+      loading: true,
     });
   }
 
   hide() {
+    const filterObject = this.state.filter;
+    if (typeof filterObject === 'object' && !!this.state.inputName) {
+      delete filterObject[this.state.inputName];
+    }
     this.setState({
       showModal: false,
-      options: null
+      options: [],
+      filterObject
     });
   }
 
@@ -98,8 +160,55 @@ export default class FormOption extends Component {
     if (typeof this.props.nextField === 'function') {
       this.props.nextField();
     }
-    this.setState({ value });
-    this.hide();
+    this.setState({ value }, this.hide.bind(this));
+  }
+
+  onNextPage() {
+    // Abort if any transaction is already in execution or if
+    // there is no more pages of options to load.
+    if (this.state.loading || !this.state.hasNextPage) {
+      return;
+    }
+    this.setLoadingStatus(true, () => {
+      // Wait a little bit before loading data.
+      setTimeout(() => {
+        this.getOptionsFromProvider({
+          page: this.state.page + 1,
+        }).then(options => {
+          this.addOptions(options, () => {
+            this.setState({ page: this.state.page + 1 }, () => {
+              this.setLoadingStatus(false);
+            });
+          });
+        });
+      }, REQUEST_INTERVAL);
+    });
+  }
+
+  onInputValue(value) {
+
+    if (this.editing) clearTimeout(this.editing);
+    this.editing = setTimeout(onSubmitEditing.bind(this), INPUT_INTERVAL);
+
+    function onSubmitEditing() {
+      this.setLoadingStatus(true, () => {
+        this.setState({
+          page: 1,
+          options: initialState.options,
+          filterObject: {
+            ...this.state.filterObject,
+            [this.state.inputName]: value,
+          }
+        }, () => {
+          this.getOptionsFromProvider({ text: value }).then(options => {
+            this.setOptions(options, () => {
+              this.setLoadingStatus(false);
+            });
+          });
+        });
+      });
+    }
+
   }
 
   render() {
@@ -108,11 +217,13 @@ export default class FormOption extends Component {
         <ModalOptions
           showModal={this.state.showModal}
           hideModal={this.hide.bind(this)}
-          onShow={this._onShow.bind(this)}
+          onShow={this.onShow.bind(this)}
           onOptionSelected={this.onOptionSelected.bind(this)}
-          options={this.state.options || this.props.options}
+          onNextPage={this.onNextPage.bind(this)}
+          onInputValue={this.onInputValue.bind(this)}
+          options={this.state.options}
           title={this.props.title}
-          loadingOptions={this.state.loadingOptions} />
+          loading={this.state.loading} />
         <TouchableOpacity style={styles.optionWrapper} onPress={this.show.bind(this)}>
           <FormTopLabel label={this.props.title}></FormTopLabel>
           <Text>{this.getLabelValue()}</Text>

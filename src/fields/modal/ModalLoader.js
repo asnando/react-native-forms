@@ -17,7 +17,8 @@ export default ModalLoader;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
+    height: 64,
     justifyContent: 'center'
   },
 });
