@@ -42,7 +42,13 @@ class ModalHeader extends React.Component {
     return (
       <SafeAreaView style={styles.modalHeader}>
         <TouchableOpacity style={styles.closeButton} onPress={this.props.hideModal} />
-        <TextInput style={styles.modalHeaderSearchBox} value={this.state.text} onChangeText={this.onInputValue.bind(this)} />
+        <TextInput
+          style={[
+            styles.modalHeaderSearchBox,
+            { display: !this.props.showFilterInput ? 'none' : 'flex'}
+          ]}
+          value={this.state.text}
+          onChangeText={this.onInputValue.bind(this)} />
         { !this.hasValidText() ? null
             : <TouchableOpacity style={styles.clearButton} onPress={this.onClearValue.bind(this)} />
         }

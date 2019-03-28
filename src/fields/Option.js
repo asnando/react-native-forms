@@ -28,6 +28,7 @@ const initialState = {
   pageSize:        0,
   inputName:       null,
   filterObject:    {},
+  showFilterInput: false,
 };
 
 export default class FormOption extends Component {
@@ -42,6 +43,9 @@ export default class FormOption extends Component {
       inputName: typeof props.options === 'object' ? props.options.inputName : null,
       filterObject: typeof props.options === 'object' ? props.options.filter : initialState.filterObject
     };
+    if (typeof this.optionsProvider === 'function') {
+      this.state.showFilterInput = true;
+    }
     // Create a timeout to wait user input editing.
     // Only after full edit it dispatch a request to
     // the options provider.
@@ -218,6 +222,7 @@ export default class FormOption extends Component {
     return (
       <View>
         <ModalOptions
+          showFilterInputField={this.state.showFilterInputField}
           showModal={this.state.showModal}
           hideModal={this.hide.bind(this)}
           onShow={this.onShow.bind(this)}
