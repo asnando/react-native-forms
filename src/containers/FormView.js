@@ -127,7 +127,7 @@ export default class FormView extends Component {
         case 'phone':
         case 'cpf':
         case 'cnpj':
-        case 'option':
+        default:
           field.nextField = this._onNextField.bind(this);
           field.onFieldEnter = this._onFieldEnter.bind(this);
           break;
