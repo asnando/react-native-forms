@@ -2,6 +2,7 @@
 export { default as Form } from './containers/Form';
 export { default as FormTab } from './containers/FormTab';
 export { default as FormView } from './containers/FormView';
+export { default as FormWithSteps } from './containers/FormWithSteps';
 // Components
 export { default as FormButton } from './components/Button';
 export { default as FormClearButton } from './components/ClearButton';

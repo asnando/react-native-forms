@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 
-export default class TopLabel extends Component {
-  render() {
-    return <Text style={styles.topLabel}>{this.props.label}</Text>
-  }
+const TopLabel = (props) => {
+  return <Text style={styles.topLabel}>{props.label}</Text>
 }
+
+export default TopLabel;
 
 const styles = StyleSheet.create({
   topLabel: {
