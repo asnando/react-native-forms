@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-export default class SimpleLabel extends Component {
-  render() {
-    return (
-      <View style={styles.labelWrapper}>
-        <Text style={styles.label}>{this.props.label}</Text>
-        {this.props.children}
-      </View>
-    );
-  }
+const SimpleLabel = (props) => {
+  return (
+    <View style={styles.labelWrapper}>
+      <Text style={styles.label}>{props.label}</Text>
+      {props.children}
+    </View>
+  );
 }
+
+export default SimpleLabel;
 
 const styles = StyleSheet.create({
   labelWrapper: {

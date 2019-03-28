@@ -144,6 +144,7 @@ export default class FormView extends Component {
         case 'phone':
         case 'cpf':
         case 'cnpj':
+        default:
           return <FormTextInput
             ref={(r) => this.fields[field.name] = r}
             key={fieldKey}
@@ -178,7 +179,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     alignItems: 'center',
+    justifyContent: 'center',
     paddingTop: 16,
-    paddingBottom: 16
+    paddingBottom: 16,
   }
 });

@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Button } from 'react-native';
 
-export default class FormButton extends Component {
+export default class FormButton extends PureComponent {
   _onPress(event) {
     if (typeof this.props.onPress === 'function') {
       this.props.onPress(event);
@@ -10,6 +10,7 @@ export default class FormButton extends Component {
   render() {
     return <Button
       title={this.props.title}
-      onPress={this._onPress.bind(this)}></Button>
+      onPress={this._onPress.bind(this)}
+      {...this.props.style}></Button>
   }
 }
