@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Keyboard } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import {
-  FormView
-} from '../';
+import { FormView } from './FormView';
 
 const initialState = {
   index: 0,

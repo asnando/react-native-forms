@@ -1,17 +1,9 @@
 import React, { Component } from 'react';
-import {
-  TextInput,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity
-} from 'react-native';
+import { TextInput, View, StyleSheet, } from 'react-native';
 import maskTypes from '../constants/maskTypes';
 import validators from '../constants/validators';
-import {
-  FormTopLabel,
-  FormClearButton
-} from '../';
+import FormTopLabel from '../components/TopLabel';
+import FormClearButton from '../components/ClearButton';
 
 const initialState = {
   value: null,
@@ -137,7 +129,6 @@ export default class FormTextInput extends Component {
 
   componentDidUpdate() {
     setTimeout(this._updateCursor.bind(this), 0);
-    // if (this._hasValidator()) this._validate();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -224,16 +215,6 @@ export default class FormTextInput extends Component {
       ...this.state,
       value: this._getInitialValue()
     });
-  }
-
-  // _validate() {
-  //   this.input.setNativeProps({
-  //     style: this.isValid() ? this._resolveStyle('valid') : this._resolveStyle('invalid')
-  //   });
-  // }
-
-  _checkValidation() {
-    return true;
   }
 
   _updateMaskedValue(value) {
@@ -405,7 +386,9 @@ export default class FormTextInput extends Component {
   render() {
     return (
       <View style={styles.textInputWrapper}>
-        <FormTopLabel label={this.props.title}></FormTopLabel>
+        <FormTopLabel
+          ref={(ref) => this.label = ref}
+          label={this.props.title} />
         <TextInput
           style={styles.textInput}
           ref={(ref) => this.input = ref}
@@ -418,6 +401,7 @@ export default class FormTextInput extends Component {
           onFocus={this._onFocus.bind(this)}
           onBlur={this._onBlur.bind(this)}
           onSubmitEditing={this._onSubmitEditing.bind(this)}
+          blurOnSubmit={this.props.blurOnSubmit}
           keyboardType={this.state.keyboardType} />
         <FormClearButton onClear={this.clearValue.bind(this)} value={this._hasValue()} />
       </View>

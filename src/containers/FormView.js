@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
-import {
-  FormButton,
-  FormTextInput,
-  FormSwitch,
-  FormOption
-} from '../';
+import { View, StyleSheet, KeyboardAvoidingView } from 'react-native';
+import FormButton from '../components/Button';
+import FormTextInput from '../fields/TextInput';
+import FormSwitch from '../fields/Switch';
+import FormOption from '../fields/Option';
+import FormRadio from '../fields/Radio';
 
 const initialState = {
   fields: {},
@@ -108,10 +107,17 @@ export default class FormView extends Component {
   }
 
   _renderFields() {
-    return (this.props.fields || []).map((field, fieldKey) => {
+    return (this.props.fields || []).map((field, fieldKey, self) => {
 
-      // If field dont have styles for valid/invalid action, assume the general form style.
-      field.validStyle = field.validStyle || this.props.validStyle;
+      // Set boolean if keyboard should close after user
+      // leave the field. Otherwise the keyboard will be left open.
+      const blurOnSubmit = () => {
+        return fieldKey == (self.filter(f => /(text|password|email|phone|cpf|cnpj|undefined)/.test(f.type)).length - 1);
+      }
+      
+      // If field dont have styles for valid/invalid action,
+      // assume the generic form style.
+      field.validStyle   = field.validStyle   || this.props.validStyle;
       field.invalidStyle = field.invalidStyle || this.props.invalidStyle;
 
       switch (field.type) {
@@ -127,9 +133,10 @@ export default class FormView extends Component {
         case 'phone':
         case 'cpf':
         case 'cnpj':
-        case 'option':
-          field.nextField = this._onNextField.bind(this);
+        default:
+          field.nextField    = this._onNextField.bind(this);
           field.onFieldEnter = this._onFieldEnter.bind(this);
+          field.blurOnSubmit = blurOnSubmit;
           break;
       };
 
@@ -138,17 +145,23 @@ export default class FormView extends Component {
         case 'clear':
         case 'submit':
           return <FormButton key={fieldKey} {...field} />;
+        case 'radio':
+          return <FormRadio
+            ref={r => this.fields[field.name] = r}
+            key={fieldKey}
+            {...field} />;
         case 'text':
         case 'password':
         case 'email':
         case 'phone':
         case 'cpf':
         case 'cnpj':
+        default:
           return <FormTextInput
             ref={(r) => this.fields[field.name] = r}
             key={fieldKey}
             secureTextEntry={field.type === 'password'}
-            {...field} />
+            {...field} />;
         case 'boolean':
           return <FormSwitch
             ref={(r) => this.fields[field.name] = r}
@@ -165,9 +178,11 @@ export default class FormView extends Component {
 
   render() {
     return (
-      <View style={styles.formView}>
-        {this._renderFields()}
-      </View>
+      <KeyboardAvoidingView style={styles.formView} behavior="position" enabled>
+        {/* <View style={styles.formView}> */}
+          {this._renderFields()}
+        {/* </View> */}
+      </KeyboardAvoidingView>
     );
   }
 
@@ -178,7 +193,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     alignItems: 'center',
+    justifyContent: 'center',
     paddingTop: 16,
-    paddingBottom: 16
+    paddingBottom: 16,
   }
 });

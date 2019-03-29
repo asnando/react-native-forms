@@ -1,11 +1,13 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Text, StyleSheet } from 'react-native';
 
-export default class TopLabel extends Component {
+class TopLabel extends PureComponent {
   render() {
     return <Text style={styles.topLabel}>{this.props.label}</Text>
   }
 }
+
+export default TopLabel;
 
 const styles = StyleSheet.create({
   topLabel: {

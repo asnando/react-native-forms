@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
-import {
-  FormTab,
-  FormView
-} from '../';
+import { StyleSheet, ScrollView } from 'react-native';
+import FormTab from './FormTab';
+import FormView from './FormView';
+import FormWithSteps from './FormWithSteps';
 
 export default class Form extends Component {
   submit() {
@@ -13,22 +12,26 @@ export default class Form extends Component {
     if (this.form && typeof this.form.clear === 'function') this.form.clear();
   }
   render() {
+    if (Array.isArray(this.props.steps)) {
+      return <FormWithSteps {...this.props} ref={r => this.form = r} />;
+    }
     return (
-      // <KeyboardAvoidingView style={styles.form} behavior="padding" keyboardVerticalOffset={0}>
-        <ScrollView style={styles.form} alwaysBounceVertical={false} keyboardShouldPersistTaps='always'>
-          {
-            this.props.tabs
-              ? (<FormTab ref={(r) => this.form = r} {...this.props} />)
-              : (<FormView {...this.props} ref={(r) => this.form = r} />)
-          }
-        </ScrollView>
-      // </KeyboardAvoidingView>
+      <ScrollView
+        style={[ styles.form, this.props.style ]}
+        alwaysBounceVertical={false}
+        keyboardShouldPersistTaps='always'>
+        {
+          this.props.tabs
+            ? (<FormTab {...this.props} ref={r => this.form = r} />)
+            : (<FormView {...this.props} ref={r => this.form = r} />)
+        }
+      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
   form: {
-    flex: 1,
+    flex: 1
   },
 });
