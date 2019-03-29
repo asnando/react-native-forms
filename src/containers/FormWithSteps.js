@@ -38,11 +38,19 @@ class FormWithSteps extends Component {
       form: Object.assign(this.state.form, activeTabForm)
     }, () => {
       if (isLastTab) {
-        console.log('Resolved form:', this.state.form);
+        // Call parent onSubmit function which will
+        // resolve this form value to whom called it.
+        if (typeof this.props.onSubmit === 'function') {
+          this.props.onSubmit(this.state.form);
+        }
       } else {
         this._requestNextTab();
       }
     });
+  }
+
+  submit() {
+    console.log('###');
   }
 
   _createSceneMap() {
@@ -65,6 +73,7 @@ class FormWithSteps extends Component {
         return props.backButtonTitle || DEFAULT_BACK_BUTTON_TITLE;
       }
 
+      // Adds button to submit each part of the form.
       step.fields.push({
         type: 'submit',
         style: step.nextStepButtonStyle,
@@ -77,7 +86,10 @@ class FormWithSteps extends Component {
           backButtonTitle={resolveBackButtonTitle()}
           isLastTab={isLastTab}
           isFirstTab={!index}
+          invalidStyle={this.props.invalidStyle}
+          validStyle={this.props.validStyle}
           onTabSubmit={this._onTabSubmit.bind(this, isLastTab)}
+          onInvalid={this.props.onInvalid}
           requestNextTab={this._requestNextTab.bind(this)}
           requestPreviousTab={this._requestPreviousTab.bind(this)} />;
       };

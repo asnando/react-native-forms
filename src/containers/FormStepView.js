@@ -17,7 +17,10 @@ const FormStepView = (props) => {
       <View style={styles.formStepViewTitleContainer}>
         <Text style={styles.formStepViewTitle}>{props.title}</Text>
       </View>
-      <FormView {...props} onSubmit={props.onTabSubmit} />
+      <FormView
+        {...props}
+        onSubmit={props.onTabSubmit}
+        onInvalid={props.onInvalid} />
     </View>
   );
 }
