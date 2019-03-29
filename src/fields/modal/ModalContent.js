@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList
-} from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 
 const ModalContent = (props) => {
   // When options are not loaded yet, shows the

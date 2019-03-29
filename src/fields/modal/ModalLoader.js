@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import { View, StyleSheet, ActivityIndicator, } from 'react-native';
 
 const ModalLoader = (props) => {
   return (

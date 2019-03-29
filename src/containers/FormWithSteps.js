@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
+import { TabView, SceneMap } from 'react-native-tab-view';
 import FormStepView from './FormStepView';
 import StepIndicator from '../components/StepIndicator';
-import { TabView, SceneMap } from 'react-native-tab-view';
 
 const DEFAULT_NEXT_STEP_BUTTON_TITLE  = 'Next';
 const DEFAULT_SUBMIT_BUTTON_TITLE     = 'Send';

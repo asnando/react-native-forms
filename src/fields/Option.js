@@ -1,18 +1,9 @@
 import React, { Component } from 'react';
-import ModalOptions from './modal/ModalOptions';
+import { Text, View, StyleSheet, TouchableOpacity, } from 'react-native';
 import OptionArrow from './modal/OptionArrow';
-
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
-
-import {
-  FormTopLabel,
-  FormClearButton
-} from '../';
+import ModalOptions from './modal/ModalOptions';
+import FormTopLabel from '../components/TopLabel';
+import FormClearButton from '../components/ClearButton';
 
 const REQUEST_INTERVAL = 1000;
 const INPUT_INTERVAL = 300;

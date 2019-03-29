@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
-import {
-  FormButton,
-  FormTextInput,
-  FormSwitch,
-  FormOption
-} from '../';
+import { View, StyleSheet } from 'react-native';
+import FormButton from '../components/Button';
+import FormTextInput from '../fields/TextInput';
+import FormSwitch from '../fields/Switch';
+import FormOption from '../fields/Option';
 
 const initialState = {
   fields: {},

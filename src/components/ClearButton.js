@@ -1,9 +1,5 @@
 import React, { PureComponent } from 'react';
-import {
-  TouchableOpacity,
-  StyleSheet,
-  Text,
-} from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, } from 'react-native';
 
 export default class ClearButton extends PureComponent {
   render() {

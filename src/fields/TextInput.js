@@ -1,17 +1,9 @@
 import React, { Component } from 'react';
-import {
-  TextInput,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity
-} from 'react-native';
+import { TextInput, View, StyleSheet, } from 'react-native';
 import maskTypes from '../constants/maskTypes';
 import validators from '../constants/validators';
-import {
-  FormTopLabel,
-  FormClearButton
-} from '../';
+import FormTopLabel from '../components/TopLabel';
+import FormClearButton from '../components/ClearButton';
 
 const initialState = {
   value: null,

@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Text,
-  SafeAreaView,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-} from 'react-native';
+import { SafeAreaView, TouchableOpacity, StyleSheet, TextInput, } from 'react-native';
 
 const MODAL_HEADER_HEIGHT = 100;
 

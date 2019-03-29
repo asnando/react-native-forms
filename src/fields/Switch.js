@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Switch } from 'react-native';
-import {
-  FormLabel
- } from '../';
+import FormLabel from '../components/Label';
 
 const initialState = {
   value: false

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
-import { FormTab, FormView, FormWithSteps, } from '../';
+import FormTab from './FormTab';
+import FormView from './FormView';
+import FormWithSteps from './FormWithSteps';
 
 export default class Form extends Component {
   submit() {
