@@ -6,7 +6,10 @@ import ModalLoader from './ModalLoader';
 
 const ModalOptions = (props) => {
   return (
-    <Modal animationType="slide" visible={props.showModal} onShow={props.onShow}>
+    <Modal
+      animationType="slide"
+      visible={props.showModal}
+      onShow={props.onShow}>
       <ModalHeader
         title={props.title}
         hideModal={props.hideModal}
