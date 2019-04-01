@@ -136,7 +136,6 @@ export default class FormOption extends Component {
       showModal: true,
       loading: true,
     });
-    console.log(this.state);
   }
 
   hide() {
@@ -162,6 +161,9 @@ export default class FormOption extends Component {
   }
 
   onNextPage() {
+    if (typeof this.state.optionsProvider !== 'function') {
+      return;
+    }
     // Abort if any transaction is already in execution or if
     // there is no more pages of options to load.
     if (this.state.loading || !this.state.hasNextPage) {

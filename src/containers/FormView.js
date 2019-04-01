@@ -205,9 +205,7 @@ export default class FormView extends Component {
   render() {
     return (
       <KeyboardAvoidingView style={styles.formView} behavior="padding" enabled>
-        <ScrollView>
-          {this._renderFields()}
-        </ScrollView>
+        {this._renderFields()}
       </KeyboardAvoidingView>
     );
   }
