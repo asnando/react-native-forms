@@ -234,7 +234,6 @@ export default class FormTextInput extends Component {
 
   highlightInvalid() {
     this.setInvalidStyle();
-    setTimeout(this.setInitialStyle.bind(this), INVALID_HIGHLIGHT_ANIMATION_TIME);
   }
 
   _updateMaskedValue(value) {

@@ -137,9 +137,9 @@ export default class FormView extends Component {
 
       // Set boolean if keyboard should close after user
       // leave the field. Otherwise the keyboard will be left open.
-      const blurOnSubmit = () => {
+      const blurOnSubmit = (() => {
         return fieldKey == (self.filter(f => /(text|password|email|phone|cpf|cnpj|undefined)/.test(f.type)).length - 1);
-      }
+      })();
       
       // If field dont have styles for valid/invalid action,
       // assume the generic form style.
@@ -204,7 +204,7 @@ export default class FormView extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView style={styles.formView} behavior="position" enabled>
+      <KeyboardAvoidingView style={styles.formView} behavior="padding" enabled>
         {this._renderFields()}
       </KeyboardAvoidingView>
     );
@@ -216,9 +216,9 @@ const styles = StyleSheet.create({
   formView: {
     flex: 1,
     width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 16,
-    paddingBottom: 16,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // paddingTop: 16,
+    // paddingBottom: 16,
   },
 });

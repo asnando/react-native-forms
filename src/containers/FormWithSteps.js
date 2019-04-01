@@ -7,6 +7,7 @@ import StepIndicator from '../components/StepIndicator';
 const DEFAULT_NEXT_STEP_BUTTON_TITLE  = 'Next';
 const DEFAULT_SUBMIT_BUTTON_TITLE     = 'Send';
 const DEFAULT_BACK_BUTTON_TITLE       = 'Back';
+const DEFAULT_CLOSE_BUTTON_TITLE      = 'Close';
 
 class FormWithSteps extends Component {
 
@@ -73,6 +74,10 @@ class FormWithSteps extends Component {
         return props.backButtonTitle || DEFAULT_BACK_BUTTON_TITLE;
       }
 
+      function resolveCloseButtonTitle() {
+        return props.closeButtonTitle || DEFAULT_CLOSE_BUTTON_TITLE;
+      }
+
       // Adds button to submit each part of the form.
       step.fields.push({
         type: 'submit',
@@ -83,6 +88,8 @@ class FormWithSteps extends Component {
       map[index.toString()] = () => {
         return <FormStepView
           {...step}
+          canClose={this.props.canClose || false}
+          closeButtonTitle={resolveCloseButtonTitle()}
           backButtonTitle={resolveBackButtonTitle()}
           isLastTab={isLastTab}
           isFirstTab={!index}
@@ -90,8 +97,10 @@ class FormWithSteps extends Component {
           validStyle={this.props.validStyle}
           onTabSubmit={this._onTabSubmit.bind(this, isLastTab)}
           onInvalid={this.props.onInvalid}
+          onCloseRequest={this.props.onCloseRequest}
           requestNextTab={this._requestNextTab.bind(this)}
-          requestPreviousTab={this._requestPreviousTab.bind(this)} />;
+          requestPreviousTab={this._requestPreviousTab.bind(this)}
+          closeForm={this._closeForm.bind(this)} />;
       };
     });
     return SceneMap(map);
@@ -113,6 +122,10 @@ class FormWithSteps extends Component {
 
   _onTabIndexChange(index) {
     return this.setState({ index });
+  }
+
+  _closeForm() {
+    console.log('close!!!');
   }
 
   render() {

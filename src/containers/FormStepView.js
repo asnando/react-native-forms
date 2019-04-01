@@ -5,22 +5,27 @@ import FormView from './FormView';
 const FormStepView = (props) => {
   return (
     <View style={styles.formStepViewContainer}>
-      {
-        props.isFirstTab
-          ? null
-          : (
-            <View style={{ alignItems: 'flex-start' }}>
-              <Button title={props.backButtonTitle} onPress={props.requestPreviousTab}></Button>
-            </View>
-          )
-      }
+      {/* Top Icons */}
+      <View style={styles.formStepViewTopContainer}>
+        { props.isFirstTab
+          ? 
+            props.canClose
+              ? <Button title={props.closeButtonTitle} onPress={props.onCloseRequest}></Button>
+              : null
+          : <Button title={props.backButtonTitle} onPress={props.requestPreviousTab}></Button>
+        }
+      </View>
+      {/* Title */}
       <View style={styles.formStepViewTitleContainer}>
         <Text style={styles.formStepViewTitle}>{props.title}</Text>
       </View>
-      <FormView
-        {...props}
-        onSubmit={props.onTabSubmit}
-        onInvalid={props.onInvalid} />
+      {/* Form */}
+      <View style={styles.formStepViewFormContainer}>
+        <FormView
+          {...props}
+          onSubmit={props.onTabSubmit}
+          onInvalid={props.onInvalid} />
+      </View>
     </View>
   );
 }
@@ -29,16 +34,27 @@ export default FormStepView;
 
 const styles = StyleSheet.create({
   formStepViewContainer: {
-    height: '100%',
-    width: '90%',
-    marginLeft: '5%',
+    flex: 1,
+    width: '80%',
+    marginLeft: '10%',
+  },
+  formStepViewTopContainer: {
+    alignItems: 'flex-start',
+    width: '100%',
   },
   formStepViewTitleContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
+    // backgroundColor: 'red',
   },
   formStepViewTitle: {
-    fontSize: 24,
+    fontSize: 32,
+  },
+  formStepViewFormContainer: {
+    // backgroundColor: 'green',
+    flex: 2,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start'
   }
 });
