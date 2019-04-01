@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, KeyboardAvoidingView } from 'react-native';
+import { Button, View, StyleSheet, KeyboardAvoidingView, Text} from 'react-native';
 import FormButton from '../components/Button';
 import FormTextInput from '../fields/TextInput';
 import FormSwitch from '../fields/Switch';
@@ -8,7 +8,7 @@ import FormRadio from '../fields/Radio';
 
 const initialState = {
   fields: {},
-  activeField: null
+  activeField: null,
 };
 
 export default class FormView extends Component {
@@ -29,6 +29,12 @@ export default class FormView extends Component {
     });
     return form;
   }
+
+  // _getFieldValue(name) {
+  //   const { fields } = this;
+  //   const field = fields[name];
+  //   return field.getValue();
+  // }
 
   // Calls the "clearValue" method of each form field.
   _clearForm() {
@@ -64,6 +70,10 @@ export default class FormView extends Component {
     if (!this.isValid()) {
       if (typeof this.props.onInvalid === 'function') {
         this.props.onInvalid(this.whatIsInvalid());
+      } else {
+        // Change the color of field which is invalid.
+        const field = this.whatIsInvalid();
+        this._getFieldComponentReferenceByName(field.name).highlightInvalid();
       }
       return false;
     }
@@ -71,6 +81,22 @@ export default class FormView extends Component {
       this.props.onSubmit(this._resolveFormValues());
     }
   }
+
+  _getFieldComponentReferenceByName(name) {
+    return this.fields[name];
+  }
+
+  // _showInvalidFiledMessage(field) {
+  //   const displayName = field.title || field.label;
+  //   const value = this._getFieldValue(field.name);
+  //   if (field.required && !value) {
+  //     console.log(`${displayName} must be filled`);
+  //   } else if (!/undefined|text/.test(field.type)) {
+  //     console.log(`Invalid value for ${displayName}`);
+  //   } else {
+  //     console.log(`Please, inform value for ${displayName}`);
+  //   }
+  // }
 
   // Called from FormButton with "clear" type or parent clear action.
   clear() {
@@ -179,9 +205,7 @@ export default class FormView extends Component {
   render() {
     return (
       <KeyboardAvoidingView style={styles.formView} behavior="position" enabled>
-        {/* <View style={styles.formView}> */}
-          {this._renderFields()}
-        {/* </View> */}
+        {this._renderFields()}
       </KeyboardAvoidingView>
     );
   }
@@ -196,5 +220,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingTop: 16,
     paddingBottom: 16,
-  }
+  },
 });
