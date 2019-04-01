@@ -79,11 +79,14 @@ class FormWithSteps extends Component {
       }
 
       // Adds button to submit each part of the form.
-      step.fields.push({
-        type: 'submit',
-        style: step.nextStepButtonStyle,
-        title: isLastTab ? resolveSubmitButtonTitle() : resolveNextStepButtonTitle(),
-      });
+      const alreadyHaveSubmitButton = !!step.fields.find(f => /submit/.test(f.type));
+      if (!alreadyHaveSubmitButton) {
+        step.fields.push({
+          type: 'submit',
+          style: step.nextStepButtonStyle,
+          title: isLastTab ? resolveSubmitButtonTitle() : resolveNextStepButtonTitle(),
+        });
+      }
 
       map[index.toString()] = () => {
         return <FormStepView

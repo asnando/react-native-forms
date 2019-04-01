@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, View, StyleSheet, KeyboardAvoidingView, Text} from 'react-native';
+import { Button, View, StyleSheet, KeyboardAvoidingView, Text, ScrollView } from 'react-native';
 import FormButton from '../components/Button';
 import FormTextInput from '../fields/TextInput';
 import FormSwitch from '../fields/Switch';
@@ -205,7 +205,9 @@ export default class FormView extends Component {
   render() {
     return (
       <KeyboardAvoidingView style={styles.formView} behavior="padding" enabled>
-        {this._renderFields()}
+        <ScrollView>
+          {this._renderFields()}
+        </ScrollView>
       </KeyboardAvoidingView>
     );
   }
