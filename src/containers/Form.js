@@ -11,6 +11,10 @@ export default class Form extends Component {
   clear() {
     if (this.form && typeof this.form.clear === 'function') this.form.clear();
   }
+  disableSubmitButton() {
+    console.warn('#');
+    // this.form.disableSubmitButton();
+  }
   render() {
     if (Array.isArray(this.props.steps)) {
       return <FormWithSteps {...this.props} ref={r => this.form = r} />;
@@ -32,6 +36,6 @@ export default class Form extends Component {
 
 const styles = StyleSheet.create({
   form: {
-    flex: 1
+    flex: 1,
   },
 });

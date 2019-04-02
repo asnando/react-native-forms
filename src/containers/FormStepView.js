@@ -1,33 +1,59 @@
-import React from 'react';
-import { StyleSheet, View, Button, Text } from 'react-native';
+import React, { PureComponent, Component } from 'react';
+import { StyleSheet, View, Button, Text, Keyboard } from 'react-native';
 import FormView from './FormView';
 
-const FormStepView = (props) => {
-  return (
-    <View style={styles.formStepViewContainer}>
-      {/* Top Icons */}
-      <View style={styles.formStepViewTopContainer}>
-        { props.isFirstTab
-          ? 
-            props.canClose
-              ? <Button title={props.closeButtonTitle} onPress={props.onCloseRequest}></Button>
-              : null
-          : <Button title={props.backButtonTitle} onPress={props.requestPreviousTab}></Button>
-        }
+class FormStepView extends Component {
+
+  // We create the state within fields in order to support
+  // the "showWhen" feature seted inside the field object configuration.
+  constructor(props) {
+    super(props);
+    this.state = {
+      fields: [...this.props.fields]
+    };
+  }
+
+  onStepActive() {
+    // this.setState({
+    //   fields: this.props.fields.filter(field => 
+    //     !field.showWhen ? true : this.props.shouldShowField(field))
+    // }, () => {
+    //   console.log(this.state.fields);
+    // });
+  }
+
+  onStepLeave() {
+    return Keyboard.dismiss();
+  }
+
+  render() {
+    return (
+      <View style={styles.formStepViewContainer}>
+        {/* Top Icons */}
+        <View style={styles.formStepViewTopContainer}>
+          { this.props.isFirstTab
+            ? 
+              this.props.canClose
+                ? <Button title={this.props.closeButtonTitle} onPress={this.props.onCloseRequest}></Button>
+                : null
+            : <Button title={this.props.backButtonTitle} onPress={this.props.requestPreviousTab}></Button>
+          }
+        </View>
+        {/* Title */}
+        <View style={styles.formStepViewTitleContainer}>
+          <Text style={styles.formStepViewTitle}>{this.props.title}</Text>
+        </View>
+        {/* Form */}
+        <View style={styles.formStepViewFormContainer}>
+          <FormView
+            {...this.props}
+            fields={this.state.fields}
+            onSubmit={this.props.onTabSubmit}
+            onInvalid={this.props.onInvalid} />
+        </View>
       </View>
-      {/* Title */}
-      <View style={styles.formStepViewTitleContainer}>
-        <Text style={styles.formStepViewTitle}>{props.title}</Text>
-      </View>
-      {/* Form */}
-      <View style={styles.formStepViewFormContainer}>
-        <FormView
-          {...props}
-          onSubmit={props.onTabSubmit}
-          onInvalid={props.onInvalid} />
-      </View>
-    </View>
-  );
+    );
+  }
 }
 
 export default FormStepView;
@@ -45,14 +71,11 @@ const styles = StyleSheet.create({
   formStepViewTitleContainer: {
     flex: 1,
     justifyContent: 'center',
-    // alignItems: 'center',
-    // backgroundColor: 'red',
   },
   formStepViewTitle: {
     fontSize: 32,
   },
   formStepViewFormContainer: {
-    // backgroundColor: 'green',
     flex: 2,
     alignItems: 'flex-start',
     justifyContent: 'flex-start'

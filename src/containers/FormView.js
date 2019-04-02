@@ -123,7 +123,6 @@ export default class FormView extends Component {
     const nextField = Object.keys(fields).filter((field, index, self) => {
       return self.indexOf(activeField) + 1 === index;
     }).map(fieldName => fields[fieldName]).pop();
-    console.log('next field', nextField);
     if (nextField) {
       if (typeof nextField.focus === 'function') {
         nextField.focus();

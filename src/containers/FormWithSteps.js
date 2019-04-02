@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
-import { TabView, SceneMap } from 'react-native-tab-view';
+import { Text, View, StyleSheet, Dimensions } from 'react-native';
+import { TabView, SceneMap, PagerPan, TabBar } from 'react-native-tab-view';
 import FormStepView from './FormStepView';
 import StepIndicator from '../components/StepIndicator';
 
@@ -13,6 +13,9 @@ class FormWithSteps extends Component {
 
   constructor(props) {
     super(props);
+    // Save reference to the steps components inside the tabs container.
+    this.steps = {};
+    // 
     this.state = {
       index: 0,
       routes: this._createRoutesFromProps(),
@@ -29,7 +32,7 @@ class FormWithSteps extends Component {
     return this.props.steps.map((step, index) => {
       return {
         key: index.toString(),
-        title: step.label
+        title: 'Step'.concat(index.toString())
       };
     });
   }
@@ -48,10 +51,6 @@ class FormWithSteps extends Component {
         this._requestNextTab();
       }
     });
-  }
-
-  submit() {
-    console.log('###');
   }
 
   _createSceneMap() {
@@ -88,9 +87,12 @@ class FormWithSteps extends Component {
         });
       }
 
-      map[index.toString()] = () => {
+      const indexAsString = index.toString();
+
+      map[indexAsString] = () => {
         return <FormStepView
           {...step}
+          ref={r => this.steps[indexAsString] = r}
           canClose={this.props.canClose || false}
           closeButtonTitle={resolveCloseButtonTitle()}
           backButtonTitle={resolveBackButtonTitle()}
@@ -103,40 +105,70 @@ class FormWithSteps extends Component {
           onCloseRequest={this.props.onCloseRequest}
           requestNextTab={this._requestNextTab.bind(this)}
           requestPreviousTab={this._requestPreviousTab.bind(this)}
-          closeForm={this._closeForm.bind(this)} />;
+          // shouldShowField={this._shouldShowField.bind(this)}
+          />;
       };
     });
     return SceneMap(map);
   }
 
+  // // Called from inside the "FormStepView" component when tab changed.
+  // // This must return a boolean value that says if field should be showed
+  // // or not. This will hide and show some fields based on the value of another
+  // // fields inside the general form.
+  // _shouldShowField(field) {
+  //   if (!field.showWhen) return true;
+  //   return !!Object.keys(field.showWhen).find(key => {
+  //     return this.state.form[key] === field.showWhen[key];
+  //   });
+  // }
+
   _requestNextTab() {
     const { index, routes } = this.state;
     if (index < routes.length - 1) {
-      this.setState({ index: index + 1 });
+      this._onTabLeave(index);
+      this.setState({ index: index + 1 }, () => {
+        this._onTabActive(this.state.index);
+      });
     }
   }
 
   _requestPreviousTab() {
     const { index } = this.state;
     if (index > 0) {
-      this.setState({ index: index - 1 });
+      this._onTabLeave(index);
+      this.setState({ index: index - 1 }, () => {
+        this._onTabActive(this.state.index);
+      });
     }
+  }
+
+  _onTabLeave(index) {
+    this.steps[index].onStepLeave();
+  }
+
+  _onTabActive(index) {
+    // called from the tab navigation requests.
+    // Trigger the "onStepActive" method of the "FormStepView" component.
+    this.steps[index].onStepActive();
   }
 
   _onTabIndexChange(index) {
     return this.setState({ index });
   }
 
-  _closeForm() {
-    console.log('close!!!');
-  }
+  // Fix: On Android the tabs content are only showed
+  // using the "renderPager" method.
+  _renderPager = (props) => <PagerPan {...props} />
 
   render() {
     return (
       <View style={styles.container}>
         <TabView
+          style={styles.tabView}
           navigationState={this.state}
           renderScene={this.state.sceneMap}
+          renderPager={this._renderPager}
           onIndexChange={this._onTabIndexChange.bind(this)}
           initialLayout={this.state.tabLayout}
           renderTabBar={ props => null }
@@ -155,8 +187,14 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 64,
     flex: 1,
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    // backgroundColor: 'red',
+  },
+  tabView: {
+    // !!IMPORTANT: Do not remove this style.
+    width: '100%',
   },
   formStep: {
     flex: 1,
