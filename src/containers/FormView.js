@@ -23,11 +23,25 @@ export default class FormView extends Component {
     let form = {};
     const { fields } = this;
     Object.keys(fields).forEach(fieldName => {
+      // Reference to the registered component reference.
       let field = fields[fieldName];
+      // Get original configuration of the field.
       const fieldConfiguration = this.props.fields.find(f => f.name === fieldName);
-      if (!field || typeof field.getValue !== 'function') return;
+      // Resolve alias name for the form value object.
       const resolvedFieldKey = fieldConfiguration.as || fieldName;
-      form[resolvedFieldKey] = field.getValue();
+      // Use the "getValue" method of the field component. If
+      // undefined or not a function just ignore.
+      if (!field || typeof field.getValue !== 'function') return;
+      // Get the field value from inside the component.
+      let fieldValue = field.getValue();
+      // In some cases the field value must be resolved before
+      // it is set in the form object. If this resolver function
+      // exists, call it.
+      if (typeof fieldConfiguration.resolve === 'function') {
+        fieldValue = fieldConfiguration.resolve(fieldValue);
+      }
+      // Set the value.
+      form[resolvedFieldKey] = fieldValue;
     });
     return form;
   }
