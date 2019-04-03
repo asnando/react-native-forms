@@ -12,7 +12,6 @@ export default class Form extends Component {
     if (this.form && typeof this.form.clear === 'function') this.form.clear();
   }
   disableSubmitButton() {
-    console.warn('#');
     // this.form.disableSubmitButton();
   }
   render() {

@@ -24,17 +24,13 @@ export default class FormView extends Component {
     const { fields } = this;
     Object.keys(fields).forEach(fieldName => {
       let field = fields[fieldName];
+      const fieldConfiguration = this.props.fields.find(f => f.name === fieldName);
       if (!field || typeof field.getValue !== 'function') return;
-      form[fieldName] = field.getValue();
+      const resolvedFieldKey = fieldConfiguration.as || fieldName;
+      form[resolvedFieldKey] = field.getValue();
     });
     return form;
   }
-
-  // _getFieldValue(name) {
-  //   const { fields } = this;
-  //   const field = fields[name];
-  //   return field.getValue();
-  // }
 
   // Calls the "clearValue" method of each form field.
   _clearForm() {
