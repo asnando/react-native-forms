@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     width: 32,
     height: 32,
+    borderRadius: 4,
     backgroundColor: '#ccc'
   },
   clearButton: {

@@ -225,11 +225,13 @@ export default class FormOption extends Component {
           options={this.state.options}
           title={this.props.title}
           loading={this.state.loading} />
-        <TouchableOpacity style={styles.optionWrapper} onPress={this.show.bind(this)}>
-          <FormTopLabel label={this.props.title}></FormTopLabel>
-          <Text>{this.getLabelValue()}</Text>
-          <OptionArrow />
-          <FormClearButton onClear={this.clearValue.bind(this)} value={this.getLabelValue()} />
+        <TouchableOpacity style={styles.optionContainer} onPress={this.show.bind(this)}>
+          <FormTopLabel style={styles.optionLabel} label={this.props.title}></FormTopLabel>
+          <View style={styles.optionValueArea}>
+            <Text style={styles.optionValueLabel}>{this.getLabelValue()}</Text>
+            {/* <OptionArrow /> */}
+            <FormClearButton onClear={this.clearValue.bind(this)} value={this.getLabelValue()} />
+          </View>
         </TouchableOpacity>
       </View>
     );
@@ -238,12 +240,25 @@ export default class FormOption extends Component {
 }
 
 const styles = StyleSheet.create({
-  optionWrapper: {
+  optionContainer: {
     width: 300,
     height: 75,
-    marginBottom: 25,
-    justifyContent: 'center',
-    borderBottomWidth: 1,
-    borderColor: '#d5d5d5'
   },
+  optionLabel: {
+    flex: 1,
+    height: 25,
+    width: '100%',
+  },
+  optionValueArea: {
+    flex: 1,
+    marginTop: 25,
+    justifyContent: 'center',
+  },
+  optionValueLabel: {
+    marginTop: 25,
+    height: 50,
+    fontSize: 18,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 });

@@ -213,15 +213,20 @@ export default class FormTextInput extends Component {
   }
 
   setInvalidStyle() {
+    return;
     this.input.setNativeProps({ style: this.props.invalidStyle || styles.invalidField });
+    this.label.setInvalidStyle();
   }
 
   setValidStyle() {
+    return;
     this.input.setNativeProps({ style: this.props.validStyle || styles.validField });
   }
 
   setInitialStyle() {
+    return;
     this.input.setNativeProps({ style: styles.initialStyle });
+    this.label.setInitialStyle();
   }
 
   _validateUIStyle() {
@@ -439,7 +444,7 @@ const styles = StyleSheet.create({
   textInput: {
     height: 40,
     // borderBottomWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#000',
     fontSize: 20,
     flex: 1
   },

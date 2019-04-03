@@ -60,7 +60,7 @@ export default class FormView extends Component {
     return !this.props.fields
       .filter(field => !!field.required)
       .map(field => this.fields[field.name])
-      .filter(field => !field.isValid())
+      .filter(field => typeof field.isValid === 'function' ? !field.isValid() : false)
       .length;
   }
 
@@ -95,18 +95,6 @@ export default class FormView extends Component {
   _getFieldComponentReferenceByName(name) {
     return this.fields[name];
   }
-
-  // _showInvalidFiledMessage(field) {
-  //   const displayName = field.title || field.label;
-  //   const value = this._getFieldValue(field.name);
-  //   if (field.required && !value) {
-  //     console.log(`${displayName} must be filled`);
-  //   } else if (!/undefined|text/.test(field.type)) {
-  //     console.log(`Invalid value for ${displayName}`);
-  //   } else {
-  //     console.log(`Please, inform value for ${displayName}`);
-  //   }
-  // }
 
   // Called from FormButton with "clear" type or parent clear action.
   clear() {
@@ -228,9 +216,6 @@ const styles = StyleSheet.create({
   formView: {
     flex: 1,
     width: '100%',
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    // paddingTop: 16,
-    // paddingBottom: 16,
+    justifyContent: 'space-between',
   },
 });

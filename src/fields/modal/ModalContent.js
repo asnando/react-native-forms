@@ -33,11 +33,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 80,
     borderBottomWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#f0f0f0',
     justifyContent: 'center',
   },
   modalOptionLabel: {
-    fontSize: 18,
+    fontSize: 20,
     marginLeft: 16,
   },
 });
