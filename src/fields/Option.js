@@ -43,6 +43,10 @@ export default class FormOption extends Component {
     this.editing = null;
   }
 
+  isValid() {
+    return !!this.getValue();
+  }
+
   getValue() {
     return this.state.value;
   }
