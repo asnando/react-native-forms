@@ -40,8 +40,10 @@ export default class FormView extends Component {
       if (typeof fieldConfiguration.resolve === 'function') {
         fieldValue = fieldConfiguration.resolve(fieldValue);
       }
-      // Set the value.
-      form[resolvedFieldKey] = fieldValue;
+      // Set the value (only if not empty).
+      if ((fieldValue || !isNaN(fieldValue)) && !/^$/.test(fieldValue)) {
+        form[resolvedFieldKey] = fieldValue;
+      }
     });
     return form;
   }
