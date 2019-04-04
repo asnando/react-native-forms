@@ -20,7 +20,7 @@ export default class Form extends Component {
     }
     return (
       <ScrollView
-        style={[ styles.form, this.props.style ]}
+        contentContainerStyle={[ styles.form, this.props.style ]}
         alwaysBounceVertical={false}
         keyboardShouldPersistTaps='always'>
         {
@@ -35,6 +35,10 @@ export default class Form extends Component {
 
 const styles = StyleSheet.create({
   form: {
-    flex: 1,
+    // flex: 1,
+    justifyContent: 'center',
+    maxWidth: '95%',
+    margin: '2.5%',
+    marginTop: '10%',
   },
 });

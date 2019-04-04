@@ -218,6 +218,7 @@ const styles = StyleSheet.create({
   formView: {
     flex: 1,
     width: '100%',
+    paddingTop: 16,
     justifyContent: 'space-between',
   },
 });

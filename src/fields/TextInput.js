@@ -435,18 +435,19 @@ export default class FormTextInput extends Component {
 
 const styles = StyleSheet.create({
   textInputWrapper: {
-    width: 300,
-    height: 80,
-    marginTop: 0,
+    width: '90%',
+    marginLeft: '5%',
+    height: 75,
+    marginTop: 25,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   textInput: {
     height: 40,
-    // borderBottomWidth: 1,
+    borderBottomWidth: 1,
     borderColor: '#000',
     fontSize: 20,
-    flex: 1
+    flex: 1,
   },
   invalidField: {
     borderColor: 'red',

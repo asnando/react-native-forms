@@ -233,7 +233,7 @@ export default class FormOption extends Component {
           <FormTopLabel style={styles.optionLabel} label={this.props.title}></FormTopLabel>
           <View style={styles.optionValueArea}>
             <Text style={styles.optionValueLabel}>{this.getLabelValue()}</Text>
-            {/* <OptionArrow /> */}
+            <OptionArrow />
             <FormClearButton onClear={this.clearValue.bind(this)} value={this.getLabelValue()} />
           </View>
         </TouchableOpacity>
@@ -245,8 +245,10 @@ export default class FormOption extends Component {
 
 const styles = StyleSheet.create({
   optionContainer: {
-    width: 300,
+    width: '90%',
+    marginLeft: '5%',
     height: 75,
+    marginTop: 25,
   },
   optionLabel: {
     flex: 1,
@@ -257,6 +259,8 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 25,
     justifyContent: 'center',
+    // borderBottomWidth: 1,
+    borderColor: '#000',
   },
   optionValueLabel: {
     marginTop: 25,
