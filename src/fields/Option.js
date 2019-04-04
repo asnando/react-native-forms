@@ -149,6 +149,7 @@ export default class FormOption extends Component {
     }
     this.setState({
       showModal: false,
+      page: initialState.page,
       // Do not erase options when there is not options provider function
       // to fetch the data again (if user reopens the modal).
       options: (typeof this.state.optionsProvider === 'function') ? [] : this.state.options,
