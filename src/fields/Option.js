@@ -105,7 +105,10 @@ export default class FormOption extends Component {
   }
 
   createExtraOptionsObject(opts = {}) {
-    return { size: 0, page: opts.page };
+    return {
+      size: this.state.pageSize,
+      page: opts.page
+    };
   }
 
   getOptionsFromProvider(opts = {}) {
@@ -128,7 +131,7 @@ export default class FormOption extends Component {
       return new Promise((resolve, reject) => {
         this.setState({
           hasNextPage: (options.length >= this.state.pageSize)
-        }, ()  => {
+        }, () => {
           return resolve(options);
         });
       });
