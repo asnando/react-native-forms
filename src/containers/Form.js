@@ -5,6 +5,9 @@ import FormView from './FormView';
 import FormWithSteps from './FormWithSteps';
 
 export default class Form extends Component {
+  getValue() {
+    return this.form.getValue();
+  }
   submit() {
     if (this.form && typeof this.form.submit === 'function') this.form.submit();
   }

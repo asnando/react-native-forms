@@ -94,6 +94,10 @@ export default class FormView extends Component {
     }
   }
 
+  getValue() {
+    return this._resolveFormValues();
+  }
+
   _getFieldComponentReferenceByName(name) {
     return this.fields[name];
   }

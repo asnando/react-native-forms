@@ -47,6 +47,15 @@ export default class FormTab extends Component {
 
   _renderScene = SceneMap(this._createSceneMap())
 
+  getValue() {
+    const tab = this.tabs[this.state.index];
+    if (tab && typeof tab.getValue === 'function') {
+      return tab.getValue();
+    } else {
+      return {};
+    }
+  }
+
   submit() {
     const tab = this.tabs[this.state.index];
     if (tab && typeof tab.submit === 'function') tab.submit();
