@@ -19,6 +19,7 @@ const initialState = {
   pageSize:        0,
   inputName:       null,
   filterObject:    {},
+  inputValue:      '',
   showFilterInput: false,
 };
 
@@ -32,7 +33,7 @@ export default class FormOption extends Component {
       options: Array.isArray(props.options) ? props.options : initialState.options,
       pageSize: typeof props.options === 'object' ? (props.options.pageSize || 0) : initialState.pageSize,
       inputName: typeof props.options === 'object' ? props.options.inputName : null,
-      filterObject: typeof props.options === 'object' ? props.options.filter : initialState.filterObject
+      filterObject: typeof props.options !== 'undefined' ? props.options.filter : initialState.filterObject
     };
     if (typeof this.state.optionsProvider === 'function') {
       this.state.showFilterInput = true;
@@ -101,7 +102,12 @@ export default class FormOption extends Component {
   }
 
   createOptionsObject(opts = {}) {
-    return this.state.filterObject;
+    const { filterObject } = this.state;
+    const inputObject = {
+      [this.state.inputName]: this.state.inputValue
+    };
+    return typeof filterObject === 'undefined' ? inputObject
+      : Object.assign( typeof filterObject === 'function' ? filterObject() : filterObject, inputObject);
   }
 
   createExtraOptionsObject(opts = {}) {
@@ -195,7 +201,10 @@ export default class FormOption extends Component {
 
   onInputValue(value) {
 
-    if (this.editing) clearTimeout(this.editing);
+    if (this.editing) {
+      clearTimeout(this.editing);
+    }
+
     this.editing = setTimeout(onSubmitEditing.bind(this), INPUT_INTERVAL);
 
     function onSubmitEditing() {
@@ -203,10 +212,7 @@ export default class FormOption extends Component {
         this.setState({
           page: 1,
           options: initialState.options,
-          filterObject: {
-            ...this.state.filterObject,
-            [this.state.inputName]: value,
-          }
+          inputValue: value,
         }, () => {
           this.getOptionsFromProvider({ text: value }).then(options => {
             this.setOptions(options, () => {
