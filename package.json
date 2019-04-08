@@ -9,7 +9,7 @@
   "keywords": [],
   "author": "Fernando Rama",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "react": "^16.8.2",
     "react-native": "^0.58.5",
     "react-native-custom-button": "git+https://github.com/ffrm/react-native-custom-button.git",
