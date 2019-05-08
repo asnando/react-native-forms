@@ -59,7 +59,7 @@ export default class FormView extends Component {
   }
 
   isValid() {
-    return !this.props.fields
+    return !(this.props.fields || [])
       .filter(field => !!field.required)
       .map(field => this.fields[field.name])
       .filter(field => typeof field.isValid === 'function' ? !field.isValid() : false)
