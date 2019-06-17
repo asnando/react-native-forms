@@ -1,43 +1,48 @@
+/* eslint-disable react/forbid-prop-types */
 import React from 'react';
-import { Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { FlatList } from 'react-native';
+import PropTypes from 'prop-types';
+import {
+  ModalContentOption,
+  ModalContentOptionLabel,
+} from './ModalContent.styles';
+import noop from '../../utils/noop';
 
 const ModalContent = (props) => {
-  // When options are not loaded yet, shows the
-  // loader on the top of modal. Otherwise the loader
-  // will be displayed at the bottom.
-  if (!props.options.length) {
-    return null;
-  }
-  
+  const { options, onNextPage } = props;
+
+  const renderItem = ({ item }) => {
+    const { label, value } = item;
+    let { onOptionSelected } = props;
+    onOptionSelected = onOptionSelected.bind(onOptionSelected, value);
+    return (
+      <ModalContentOption onPress={onOptionSelected}>
+        <ModalContentOptionLabel>
+          {label}
+        </ModalContentOptionLabel>
+      </ModalContentOption>
+    );
+  };
+
   return (
     <FlatList
-      data={props.options}
-      renderItem={
-        ({item}) => {
-          return <TouchableOpacity
-            style={[styles.modalOption]}
-            onPress={props.onOptionSelected.bind(props.onOptionSelected, item.value)}>
-            <Text style={styles.modalOptionLabel}>{item.label}</Text>
-          </TouchableOpacity>
-        }
-      }
-      onEndReached={props.onNextPage}
+      data={options}
+      renderItem={renderItem}
+      onEndReached={onNextPage}
       keyExtractor={(item, index) => index.toString()} />
   );
-}
+};
+
+ModalContent.defaultProps = {
+  options: [],
+  onNextPage: noop,
+  onOptionSelected: noop,
+};
+
+ModalContent.propTypes = {
+  options: PropTypes.array,
+  onOptionSelected: PropTypes.func,
+  onNextPage: PropTypes.func,
+};
 
 export default ModalContent;
-
-const styles = StyleSheet.create({
-  modalOption: {
-    width: '100%',
-    height: 80,
-    borderBottomWidth: 1,
-    borderColor: '#f0f0f0',
-    justifyContent: 'center',
-  },
-  modalOptionLabel: {
-    fontSize: 20,
-    marginLeft: 16,
-  },
-});

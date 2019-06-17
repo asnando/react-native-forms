@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, } from 'react-native';
-import OptionArrow from './modal/OptionArrow';
+import { IconArrowRight } from './modal/ModalOptionsIcons';
 import ModalOptions from './modal/ModalOptions';
 import FormTopLabel from '../components/TopLabel';
 import FormClearButton from '../components/ClearButton';
@@ -243,7 +243,7 @@ export default class FormOption extends Component {
           <FormTopLabel style={styles.optionLabel} label={this.props.title}></FormTopLabel>
           <View style={styles.optionValueArea}>
             <Text style={styles.optionValueLabel}>{this.getLabelValue()}</Text>
-            <OptionArrow />
+            <IconArrowRight />
             <FormClearButton onClear={this.clearValue.bind(this)} value={this.getLabelValue()} />
           </View>
         </TouchableOpacity>

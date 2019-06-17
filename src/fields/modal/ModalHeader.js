@@ -1,92 +1,78 @@
 import React from 'react';
-import { SafeAreaView, TouchableOpacity, StyleSheet, TextInput, } from 'react-native';
-
-const MODAL_HEADER_HEIGHT = 100;
+import PropTypes from 'prop-types';
+import {
+  ModalHeaderContainer,
+  ModalHeaderCloseButton,
+  ModalHeaderInput,
+  ModalInputClearButton,
+} from './ModalHeader.styles';
+import noop from '../../utils/noop';
 
 class ModalHeader extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = { text: '' };
   }
 
   onInputValue(value) {
-    this.setState({ text: value });
-    this.onInputValueChange(value, this.state.text);
+    this.setState({ text: value }, () => {
+      const { text } = this.state;
+      this.onInputValueChange(value, text);
+    });
   }
 
   onClearValue() {
-    this.setState({ text: '' });
-    this.onInputValueChange(null, this.state.text);
+    this.setState({ text: '' }, () => {
+      const { text } = this.state;
+      this.onInputValueChange(null, text);
+    });
   }
 
   onInputValueChange(value, prevValue) {
-    if (value == prevValue) return;
-    if (typeof this.props.onInputValue === 'function') {
-      this.props.onInputValue(value);
+    const { onInputValue } = this.props;
+    if (value !== prevValue) {
+      if (typeof onInputValue === 'function') {
+        onInputValue(value);
+      }
     }
   }
 
   hasValidText() {
-    return !!this.state.text.replace(/\s/g, '');
+    const { text } = this.state;
+    return !!text.replace(/\s/g, '');
   }
 
   render() {
+    const { text } = this.state;
+    const {
+      hideModal, showFilterInput, onClearValue, onInputValue,
+    } = this.props;
     return (
-      <SafeAreaView style={styles.modalHeader}>
-        <TouchableOpacity style={styles.closeButton} onPress={this.props.hideModal} />
-        <TextInput
-          style={[
-            styles.modalHeaderSearchBox,
-            { display: !this.props.showFilterInput ? 'none' : 'flex'}
-          ]}
-          value={this.state.text}
-          onChangeText={this.onInputValue.bind(this)} />
-        { !this.hasValidText() ? null
-            : <TouchableOpacity style={styles.clearButton} onPress={this.onClearValue.bind(this)} />
+      <ModalHeaderContainer>
+        <ModalHeaderCloseButton onPress={hideModal} />
+        <ModalHeaderInput
+          showFilterInput={showFilterInput}
+          value={text}
+          onChangeText={onInputValue} />
+        {
+          this.hasValidText() && (<ModalInputClearButton onPress={onClearValue} />)
         }
-      </SafeAreaView>
+      </ModalHeaderContainer>
     );
   }
 }
+ModalHeader.defaultProps = {
+  showFilterInput: true,
+  hideModal: noop,
+  onClearValue: noop,
+  onInputValue: noop,
+};
+
+ModalHeader.propTypes = {
+  hideModal: PropTypes.func,
+  showFilterInput: PropTypes.bool,
+  onClearValue: PropTypes.func,
+  onInputValue: PropTypes.func,
+};
 
 export default ModalHeader;
-
-const styles = StyleSheet.create({
-  modalHeader: {
-    height: MODAL_HEADER_HEIGHT,
-    backgroundColor: '#eee',
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderColor: '#d5d5d5'
-  },
-  modalHeaderTitle: {
-    flex: 1,
-    fontSize: 24,
-    marginLeft: 16,
-  },
-  modalHeaderSearchBox: {
-    backgroundColor: '#fff',
-    width: 250,
-    height: 32,
-    marginRight: 16,
-    marginLeft: 16,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
-  },
-  closeButton: {
-    marginLeft: 16,
-    width: 32,
-    height: 32,
-    borderRadius: 4,
-    backgroundColor: '#ccc'
-  },
-  clearButton: {
-    marginRight: 16,
-    width: 32,
-    height: 32,
-    backgroundColor: '#ccc'
-  }
-});

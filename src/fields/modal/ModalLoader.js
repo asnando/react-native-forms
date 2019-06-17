@@ -1,20 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, ActivityIndicator, } from 'react-native';
+import { ActivityIndicator } from 'react-native';
+import { ModalLoaderContainer } from './ModalLoader.styles';
 
-const ModalLoader = (props) => {
-  return (
-    <View style={[ styles.container, styles.modalLoader ]}>
-      <ActivityIndicator size="large" />
-    </View>
-  );
-}
+const ModalLoader = () => (
+  <ModalLoaderContainer>
+    <ActivityIndicator size="large" />
+  </ModalLoaderContainer>
+);
 
 export default ModalLoader;
-
-const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-    height: 64,
-    justifyContent: 'center'
-  },
-});
