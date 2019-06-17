@@ -1,27 +1,28 @@
 import React, { PureComponent } from 'react';
-import { TouchableOpacity, StyleSheet, Text, } from 'react-native';
+import { Text } from 'react-native';
+import PropTypes from 'prop-types';
+import noop from '../utils/noop';
+import { ClearButtonContainer } from './ClearButton.styles';
 
-export default class ClearButton extends PureComponent {
+class ClearButton extends PureComponent {
   render() {
+    const { value, onClear } = this.props;
     return (
-      <TouchableOpacity
-        onPress={this.props.onClear}
-        style={[ styles.button, !!this.props.value ? styles.visible : styles.hidden ]} >
+      <ClearButtonContainer value={value} onPress={onClear} >
         <Text>X</Text>
-      </TouchableOpacity>
+      </ClearButtonContainer>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  button: {
-    position: 'absolute',
-    right: 0,
-  },
-  visible: {
-    display: 'flex'
-  },
-  hidden: {
-    display: 'none'
-  }
-});
+ClearButton.defaultProps = {
+  value: null,
+  onClear: noop,
+};
+
+ClearButton.propTypes = {
+  value: PropTypes.string,
+  onClear: PropTypes.func,
+};
+
+export default ClearButton;

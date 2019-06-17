@@ -1,21 +1,25 @@
 import React, { PureComponent } from 'react';
-import { Text, StyleSheet } from 'react-native';
+import PropTypes from 'prop-types';
+import { TopLabelText } from './TopLabel.styles';
 
 class TopLabel extends PureComponent {
   render() {
-    return <Text ref={r => this.label = r} style={[styles.topLabel, this.props.style]}>
-      {this.props.label}
-    </Text>
+    const { label } = this.props;
+    return (
+      // eslint-disable-next-line no-return-assign
+      <TopLabelText ref={r => this.label = r}>
+        {label}
+      </TopLabelText>
+    );
   }
 }
 
-export default TopLabel;
+TopLabel.defaultProps = {
+  label: '',
+};
 
-const styles = StyleSheet.create({
-  topLabel: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    fontSize: 18
-  },
-});
+TopLabel.propTypes = {
+  label: PropTypes.string,
+};
+
+export default TopLabel;
