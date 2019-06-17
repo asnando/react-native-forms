@@ -1,32 +1,92 @@
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable no-return-assign */
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-underscore-dangle */
 import React, { Component } from 'react';
-import { Button, View, StyleSheet, KeyboardAvoidingView, Text, ScrollView, Keyboard } from 'react-native';
+import { KeyboardAvoidingView, Keyboard } from 'react-native';
+import PropTypes from 'prop-types';
 import FormButton from '../components/Button';
 import FormTextInput from '../fields/TextInput';
 import FormSwitch from '../fields/Switch';
 import FormOption from '../fields/Option';
 import FormRadio from '../fields/Radio';
+import { formViewContainerStyle } from './FormView.styles';
 
 const initialState = {
   fields: {},
   activeField: null,
 };
 
-export default class FormView extends Component {
-
+class FormView extends Component {
   constructor(props) {
     super(props);
     this.fields = {};
     this.state = initialState;
   }
 
-  _resolveFormValues() {
-    let form = {};
+  getValue() {
+    return this._resolveFormValues();
+  }
+
+  // Returns the configuration of the first invalid field in the form.
+  whatIsInvalid() {
+    const { fields } = this.props;
+    const invalidFieldName = fields
+      .filter(field => !!field.required)
+      .map(field => this.fields[field.name])
+      .find(field => !field.isValid())
+      .props
+      .name;
+    return fields.find(field => field.name === invalidFieldName);
+  }
+
+  // Called from FormButton with "submit" type or parent submit action.
+  submit() {
+    const { onInvalid, onSubmit } = this.props;
+    if (!this.isValid()) {
+      if (typeof onInvalid === 'function') {
+        onInvalid(this.whatIsInvalid());
+      } else {
+        // Change the color of field which is invalid.
+        const field = this.whatIsInvalid();
+        this._getFieldComponentReferenceByName(field.name).highlightInvalid();
+      }
+      return false;
+    }
+    if (typeof onSubmit === 'function') {
+      onSubmit(this._resolveFormValues());
+    }
+    return true;
+  }
+
+  isValid() {
+    const { fields } = this.props;
+    return !(fields || [])
+      .filter(field => !!field.required)
+      .map(field => this.fields[field.name])
+      .filter(field => (typeof field.isValid === 'function' ? !field.isValid() : false))
+      .length;
+  }
+
+  // Calls the "clearValue" method of each form field.
+  _clearForm() {
     const { fields } = this;
-    Object.keys(fields).forEach(fieldName => {
+    Object.keys(fields).forEach((fieldName) => {
+      if (typeof fields[fieldName].clearValue === 'function') {
+        fields[fieldName].clearValue();
+      }
+    });
+  }
+
+  _resolveFormValues() {
+    const form = {};
+    const { fields } = this.props;
+    Object.keys(this.fields).forEach((fieldName) => {
       // Reference to the registered component reference.
-      let field = fields[fieldName];
+      const field = fields[fieldName];
       // Get original configuration of the field.
-      const fieldConfiguration = this.props.fields.find(f => f.name === fieldName);
+      const fieldConfiguration = fields.find(f => f.name === fieldName);
       // Resolve alias name for the form value object.
       const resolvedFieldKey = fieldConfiguration.as || fieldName;
       // Use the "getValue" method of the field component. If
@@ -41,61 +101,12 @@ export default class FormView extends Component {
         fieldValue = fieldConfiguration.resolve(fieldValue);
       }
       // Set the value (only if not empty).
+      // eslint-disable-next-line no-restricted-globals
       if ((fieldValue || !isNaN(fieldValue)) && !/^$/.test(fieldValue)) {
         form[resolvedFieldKey] = fieldValue;
       }
     });
     return form;
-  }
-
-  // Calls the "clearValue" method of each form field.
-  _clearForm() {
-    const { fields } = this;
-    Object.keys(fields).forEach(fieldName => {
-      if (typeof fields[fieldName].clearValue === 'function') {
-        fields[fieldName].clearValue();
-      }
-    });
-  }
-
-  isValid() {
-    return !(this.props.fields || [])
-      .filter(field => !!field.required)
-      .map(field => this.fields[field.name])
-      .filter(field => typeof field.isValid === 'function' ? !field.isValid() : false)
-      .length;
-  }
-
-  // Returns the configuration of the first invalid field in the form.
-  whatIsInvalid() {
-    const invalidFieldName = this.props.fields
-      .filter(field => !!field.required)
-      .map(field => this.fields[field.name])
-      .find(field => !field.isValid())
-      .props
-      .name;
-    return this.props.fields.find(field => field.name === invalidFieldName);
-  }
-
-  // Called from FormButton with "submit" type or parent submit action.
-  submit() {
-    if (!this.isValid()) {
-      if (typeof this.props.onInvalid === 'function') {
-        this.props.onInvalid(this.whatIsInvalid());
-      } else {
-        // Change the color of field which is invalid.
-        const field = this.whatIsInvalid();
-        this._getFieldComponentReferenceByName(field.name).highlightInvalid();
-      }
-      return false;
-    }
-    if (typeof this.props.onSubmit === 'function') {
-      this.props.onSubmit(this._resolveFormValues());
-    }
-  }
-
-  getValue() {
-    return this._resolveFormValues();
   }
 
   _getFieldComponentReferenceByName(name) {
@@ -104,19 +115,20 @@ export default class FormView extends Component {
 
   // Called from FormButton with "clear" type or parent clear action.
   clear() {
+    const { onClear } = this.props;
     this._clearForm();
-    if (typeof this.props.onClear === 'function') {
-      this.props.onClear();
+    if (typeof onClear === 'function') {
+      onClear();
     }
   }
 
   // Save the focused field by it name. It is used to control
   // the tabulation of the form.
   _onFieldEnter(name) {
-    this.setState({
-      ...this.state,
-      activeField: name
-    });
+    this.setState(prevState => ({
+      ...prevState,
+      activeField: name,
+    }));
   }
 
   // Called when some input field got blured inside the form, so the
@@ -139,18 +151,16 @@ export default class FormView extends Component {
   }
 
   _renderFields() {
-    return (this.props.fields || []).map((field, fieldKey, self) => {
+    const { fields, validStyle, invalidStyle } = this.props;
 
+    return (fields || []).map((field, fieldKey, self) => {
       // Set boolean if keyboard should close after user
       // leave the field. Otherwise the keyboard will be left open.
-      const blurOnSubmit = (() => {
-        return fieldKey == (self.filter(f => /(text|password|email|phone|cpf|cnpj|undefined)/.test(f.type)).length - 1);
-      })();
-      
+      const blurOnSubmit = (() => fieldKey === (self.filter(f => /(text|password|email|phone|cpf|cnpj|undefined)/.test(f.type)).length - 1))();
       // If field dont have styles for valid/invalid action,
       // assume the generic form style.
-      field.validStyle   = field.validStyle   || this.props.validStyle;
-      field.invalidStyle = field.invalidStyle || this.props.invalidStyle;
+      field.validStyle = field.validStyle || validStyle;
+      field.invalidStyle = field.invalidStyle || invalidStyle;
 
       switch (field.type) {
         case 'submit':
@@ -166,11 +176,11 @@ export default class FormView extends Component {
         case 'cpf':
         case 'cnpj':
         default:
-          field.nextField    = this._onNextField.bind(this);
+          field.nextField = this._onNextField.bind(this);
           field.onFieldEnter = this._onFieldEnter.bind(this);
           field.blurOnSubmit = blurOnSubmit;
           break;
-      };
+      }
 
       switch (field.type) {
         case 'button':
@@ -178,10 +188,9 @@ export default class FormView extends Component {
         case 'submit':
           return <FormButton key={fieldKey} {...field} />;
         case 'radio':
-          return <FormRadio
-            ref={r => this.fields[field.name] = r}
-            key={fieldKey}
-            {...field} />;
+          return (
+            <FormRadio ref={r => this.fields[field.name] = r} key={fieldKey} {...field} />
+          );
         case 'text':
         case 'password':
         case 'email':
@@ -189,40 +198,52 @@ export default class FormView extends Component {
         case 'cpf':
         case 'cnpj':
         default:
-          return <FormTextInput
-            ref={(r) => this.fields[field.name] = r}
-            key={fieldKey}
-            secureTextEntry={field.type === 'password'}
-            {...field} />;
+          return (
+            <FormTextInput
+              ref={r => this.fields[field.name] = r}
+              key={fieldKey}
+              secureTextEntry={field.type === 'password'}
+              {...field} />
+          );
         case 'boolean':
-          return <FormSwitch
-            ref={(r) => this.fields[field.name] = r}
-            key={fieldKey}
-            {...field} />;
+          return (
+            <FormSwitch ref={r => this.fields[field.name] = r} key={fieldKey} {...field} />
+          );
         case 'option':
-          return <FormOption
-            ref={(r) => this.fields[field.name] = r}
-            key={fieldKey}
-            {...field} />;
-      };
+          return (
+            <FormOption ref={r => this.fields[field.name] = r} key={fieldKey} {...field} />
+          );
+      }
     });
   }
 
   render() {
     return (
-      <KeyboardAvoidingView style={styles.formView} behavior="padding" enabled>
+      <KeyboardAvoidingView style={formViewContainerStyle} behavior="padding" enabled>
         {this._renderFields()}
       </KeyboardAvoidingView>
     );
   }
-
 }
 
-const styles = StyleSheet.create({
-  formView: {
-    flex: 1,
-    width: '100%',
-    paddingTop: 16,
-    justifyContent: 'space-between',
-  },
-});
+const noop = () => {};
+
+FormView.defaultProps = {
+  fields: [],
+  onInvalid: noop,
+  onSubmit: noop,
+  onClear: noop,
+  validStyle: null,
+  invalidStyle: null,
+};
+
+FormView.propTypes = {
+  fields: PropTypes.array,
+  onInvalid: PropTypes.func,
+  onSubmit: PropTypes.func,
+  onClear: PropTypes.func,
+  validStyle: PropTypes.object,
+  invalidStyle: PropTypes.object,
+};
+
+export default FormView;

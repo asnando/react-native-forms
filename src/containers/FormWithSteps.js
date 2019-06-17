@@ -3,11 +3,15 @@ import { Text, View, StyleSheet, Dimensions } from 'react-native';
 import { TabView, SceneMap, PagerPan, TabBar } from 'react-native-tab-view';
 import FormStepView from './FormStepView';
 import StepIndicator from '../components/StepIndicator';
+import {
+  FormWithStepsContainer,
+  tabViewStyle,
+} from './FormWithSteps.styles';
 
-const DEFAULT_NEXT_STEP_BUTTON_TITLE  = 'Next';
-const DEFAULT_SUBMIT_BUTTON_TITLE     = 'Send';
-const DEFAULT_BACK_BUTTON_TITLE       = 'Back';
-const DEFAULT_CLOSE_BUTTON_TITLE      = 'Close';
+const DEFAULT_NEXT_STEP_BUTTON_TITLE = 'Next';
+const DEFAULT_SUBMIT_BUTTON_TITLE = 'Send';
+const DEFAULT_BACK_BUTTON_TITLE = 'Back';
+const DEFAULT_CLOSE_BUTTON_TITLE = 'Close';
 
 class FormWithSteps extends Component {
 
@@ -112,17 +116,6 @@ class FormWithSteps extends Component {
     return SceneMap(map);
   }
 
-  // // Called from inside the "FormStepView" component when tab changed.
-  // // This must return a boolean value that says if field should be showed
-  // // or not. This will hide and show some fields based on the value of another
-  // // fields inside the general form.
-  // _shouldShowField(field) {
-  //   if (!field.showWhen) return true;
-  //   return !!Object.keys(field.showWhen).find(key => {
-  //     return this.state.form[key] === field.showWhen[key];
-  //   });
-  // }
-
   _requestNextTab() {
     const { index, routes } = this.state;
     if (index < routes.length - 1) {
@@ -163,9 +156,9 @@ class FormWithSteps extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <FormWithStepsContainer>
         <TabView
-          style={styles.tabView}
+          style={tabViewStyle}
           navigationState={this.state}
           renderScene={this.state.sceneMap}
           renderPager={this._renderPager}
@@ -174,35 +167,10 @@ class FormWithSteps extends Component {
           renderTabBar={ props => null }
           swipeEnabled={false} />
         <StepIndicator {...this.props} currentIndex={this.state.index} />
-      </View>
+      </FormWithStepsContainer>
     );
   }
 
 }
 
 export default FormWithSteps;
-
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 64,
-    flex: 1,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: 'red',
-  },
-  tabView: {
-    // !!IMPORTANT: Do not remove this style.
-    width: '100%',
-  },
-  formStep: {
-    flex: 1,
-    backgroundColor: 'yellow',
-    // width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 10,
-    borderColor: 'white'
-  },
-});
