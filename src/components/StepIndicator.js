@@ -9,7 +9,8 @@ const StepIndicator = props => {
           key={stepIndex}
           style={[
             styles.stepIndicator,
-            props.currentIndex === stepIndex ? props.indicatorActiveStyle : null,
+            props.currentIndex === stepIndex
+              ? props.indicatorActiveStyle || styles.stepIndicatorActive : null,
           ]} />
       )}
     </View>
@@ -27,11 +28,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   stepIndicator: {
-    backgroundColor: '#909090',
+    backgroundColor: '#bbb',
     width: 8,
     height: 8,
     borderRadius: 8,
     marginLeft: 4,
     marginRight: 4,
   },
+  stepIndicatorActive: {
+    backgroundColor: '#3d99fc'
+  }
 });

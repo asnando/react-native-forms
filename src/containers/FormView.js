@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, KeyboardAvoidingView } from 'react-native';
+import { Button, View, StyleSheet, KeyboardAvoidingView, Text, ScrollView, Keyboard } from 'react-native';
 import FormButton from '../components/Button';
 import FormTextInput from '../fields/TextInput';
 import FormSwitch from '../fields/Switch';
@@ -8,7 +8,7 @@ import FormRadio from '../fields/Radio';
 
 const initialState = {
   fields: {},
-  activeField: null
+  activeField: null,
 };
 
 export default class FormView extends Component {
@@ -23,9 +23,27 @@ export default class FormView extends Component {
     let form = {};
     const { fields } = this;
     Object.keys(fields).forEach(fieldName => {
+      // Reference to the registered component reference.
       let field = fields[fieldName];
+      // Get original configuration of the field.
+      const fieldConfiguration = this.props.fields.find(f => f.name === fieldName);
+      // Resolve alias name for the form value object.
+      const resolvedFieldKey = fieldConfiguration.as || fieldName;
+      // Use the "getValue" method of the field component. If
+      // undefined or not a function just ignore.
       if (!field || typeof field.getValue !== 'function') return;
-      form[fieldName] = field.getValue();
+      // Get the field value from inside the component.
+      let fieldValue = field.getValue();
+      // In some cases the field value must be resolved before
+      // it is set in the form object. If this resolver function
+      // exists, call it.
+      if (typeof fieldConfiguration.resolve === 'function') {
+        fieldValue = fieldConfiguration.resolve(fieldValue);
+      }
+      // Set the value (only if not empty).
+      if ((fieldValue || !isNaN(fieldValue)) && !/^$/.test(fieldValue)) {
+        form[resolvedFieldKey] = fieldValue;
+      }
     });
     return form;
   }
@@ -41,10 +59,10 @@ export default class FormView extends Component {
   }
 
   isValid() {
-    return !this.props.fields
+    return !(this.props.fields || [])
       .filter(field => !!field.required)
       .map(field => this.fields[field.name])
-      .filter(field => !field.isValid())
+      .filter(field => typeof field.isValid === 'function' ? !field.isValid() : false)
       .length;
   }
 
@@ -64,12 +82,24 @@ export default class FormView extends Component {
     if (!this.isValid()) {
       if (typeof this.props.onInvalid === 'function') {
         this.props.onInvalid(this.whatIsInvalid());
+      } else {
+        // Change the color of field which is invalid.
+        const field = this.whatIsInvalid();
+        this._getFieldComponentReferenceByName(field.name).highlightInvalid();
       }
       return false;
     }
     if (typeof this.props.onSubmit === 'function') {
       this.props.onSubmit(this._resolveFormValues());
     }
+  }
+
+  getValue() {
+    return this._resolveFormValues();
+  }
+
+  _getFieldComponentReferenceByName(name) {
+    return this.fields[name];
   }
 
   // Called from FormButton with "clear" type or parent clear action.
@@ -103,6 +133,8 @@ export default class FormView extends Component {
       } else if (typeof nextField.show === 'function') {
         nextField.show();
       }
+    } else {
+      Keyboard.dismiss();
     }
   }
 
@@ -111,9 +143,9 @@ export default class FormView extends Component {
 
       // Set boolean if keyboard should close after user
       // leave the field. Otherwise the keyboard will be left open.
-      const blurOnSubmit = () => {
+      const blurOnSubmit = (() => {
         return fieldKey == (self.filter(f => /(text|password|email|phone|cpf|cnpj|undefined)/.test(f.type)).length - 1);
-      }
+      })();
       
       // If field dont have styles for valid/invalid action,
       // assume the generic form style.
@@ -178,10 +210,8 @@ export default class FormView extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView style={styles.formView} behavior="position" enabled>
-        {/* <View style={styles.formView}> */}
-          {this._renderFields()}
-        {/* </View> */}
+      <KeyboardAvoidingView style={styles.formView} behavior="padding" enabled>
+        {this._renderFields()}
       </KeyboardAvoidingView>
     );
   }
@@ -192,9 +222,7 @@ const styles = StyleSheet.create({
   formView: {
     flex: 1,
     width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
     paddingTop: 16,
-    paddingBottom: 16,
-  }
+    justifyContent: 'space-between',
+  },
 });

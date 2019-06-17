@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, Keyboard } from 'react-native';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import { FormView } from './FormView';
+import { StyleSheet, Keyboard, View, Text, Dimensions } from 'react-native';
+import { TabView, SceneMap, TabBar, PagerPan } from 'react-native-tab-view';
+import FormView from './FormView';
 
 const initialState = {
   index: 0,
@@ -39,10 +39,22 @@ export default class FormTab extends Component {
   }
 
   _renderTabBar = props => {
-    return <TabBar {...props} />;
+    return <TabBar
+      style={{ borderRadius: 8 }}
+      indicatorStyle={{ display: 'none' }}
+      {...props} />;
   }
 
   _renderScene = SceneMap(this._createSceneMap())
+
+  getValue() {
+    const tab = this.tabs[this.state.index];
+    if (tab && typeof tab.getValue === 'function') {
+      return tab.getValue();
+    } else {
+      return {};
+    }
+  }
 
   submit() {
     const tab = this.tabs[this.state.index];
@@ -54,12 +66,16 @@ export default class FormTab extends Component {
     if (tab && typeof tab.clear === 'function') tab.clear();
   }
 
+  _renderPager = (props) => <PagerPan {...props} />
+
   render() {
     return (
       <TabView
+        style={styles.formTab}
         navigationState={this.state}
         onIndexChange={this._onIndexChange}
         renderTabBar={this._renderTabBar}
+        renderPager={this._renderPager}
         renderScene={this._renderScene} />
     );
   }
@@ -68,7 +84,7 @@ export default class FormTab extends Component {
 
 const styles = StyleSheet.create({
   formTab: {
-    flex: 1
+    flex: 1,
   }
 });
 

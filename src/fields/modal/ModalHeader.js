@@ -23,7 +23,6 @@ class ModalHeader extends React.Component {
   onInputValueChange(value, prevValue) {
     if (value == prevValue) return;
     if (typeof this.props.onInputValue === 'function') {
-      console.log(this.props.onInputValue);
       this.props.onInputValue(value);
     }
   }
@@ -81,6 +80,7 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     width: 32,
     height: 32,
+    borderRadius: 4,
     backgroundColor: '#ccc'
   },
   clearButton: {

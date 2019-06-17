@@ -5,7 +5,7 @@ const email = (value) => {
 
 // PHONE
 const phone = (value) => {
-  return /^\d{2}9\d{8}$/.test(value);
+  return /^\d{2}\d{8,}$/.test(value);
 };
 
 // CNPJ

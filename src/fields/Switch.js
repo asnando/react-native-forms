@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switch } from 'react-native';
+import { Switch, Text, View, StyleSheet } from 'react-native';
 import FormLabel from '../components/Label';
 
 const initialState = {
@@ -30,12 +30,20 @@ export default class FormSwitch extends Component {
 
   render() {
     return (
-      <FormLabel label={this.props.label}>
+      <View style={styles.container}>
+        <FormLabel label={this.props.label} />
         <Switch
           value={this.state.value}
           onValueChange={this._handleValueChange.bind(this)} />
-      </FormLabel>
+      </View>
     );
   }
   
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  }
+});

@@ -19,6 +19,7 @@ const initialState = {
   pageSize:        0,
   inputName:       null,
   filterObject:    {},
+  inputValue:      '',
   showFilterInput: false,
 };
 
@@ -32,15 +33,19 @@ export default class FormOption extends Component {
       options: Array.isArray(props.options) ? props.options : initialState.options,
       pageSize: typeof props.options === 'object' ? (props.options.pageSize || 0) : initialState.pageSize,
       inputName: typeof props.options === 'object' ? props.options.inputName : null,
-      filterObject: typeof props.options === 'object' ? props.options.filter : initialState.filterObject
+      filterObject: typeof props.options !== 'undefined' ? props.options.filter : initialState.filterObject
     };
-    if (typeof this.optionsProvider === 'function') {
+    if (typeof this.state.optionsProvider === 'function') {
       this.state.showFilterInput = true;
     }
     // Create a timeout to wait user input editing.
     // Only after full edit it dispatch a request to
     // the options provider.
     this.editing = null;
+  }
+
+  isValid() {
+    return !!this.getValue();
   }
 
   getValue() {
@@ -97,11 +102,19 @@ export default class FormOption extends Component {
   }
 
   createOptionsObject(opts = {}) {
-    return this.state.filterObject;
+    const { filterObject } = this.state;
+    const inputObject = {
+      [this.state.inputName]: this.state.inputValue
+    };
+    return typeof filterObject === 'undefined' ? inputObject
+      : Object.assign( typeof filterObject === 'function' ? filterObject() : filterObject, inputObject);
   }
 
   createExtraOptionsObject(opts = {}) {
-    return { size: 0, page: opts.page };
+    return {
+      size: this.state.pageSize,
+      page: opts.page
+    };
   }
 
   getOptionsFromProvider(opts = {}) {
@@ -124,7 +137,7 @@ export default class FormOption extends Component {
       return new Promise((resolve, reject) => {
         this.setState({
           hasNextPage: (options.length >= this.state.pageSize)
-        }, ()  => {
+        }, () => {
           return resolve(options);
         });
       });
@@ -136,7 +149,6 @@ export default class FormOption extends Component {
       showModal: true,
       loading: true,
     });
-    console.log(this.state);
   }
 
   hide() {
@@ -146,6 +158,7 @@ export default class FormOption extends Component {
     }
     this.setState({
       showModal: false,
+      page: initialState.page,
       // Do not erase options when there is not options provider function
       // to fetch the data again (if user reopens the modal).
       options: (typeof this.state.optionsProvider === 'function') ? [] : this.state.options,
@@ -162,6 +175,9 @@ export default class FormOption extends Component {
   }
 
   onNextPage() {
+    if (typeof this.state.optionsProvider !== 'function') {
+      return;
+    }
     // Abort if any transaction is already in execution or if
     // there is no more pages of options to load.
     if (this.state.loading || !this.state.hasNextPage) {
@@ -185,7 +201,10 @@ export default class FormOption extends Component {
 
   onInputValue(value) {
 
-    if (this.editing) clearTimeout(this.editing);
+    if (this.editing) {
+      clearTimeout(this.editing);
+    }
+
     this.editing = setTimeout(onSubmitEditing.bind(this), INPUT_INTERVAL);
 
     function onSubmitEditing() {
@@ -193,10 +212,7 @@ export default class FormOption extends Component {
         this.setState({
           page: 1,
           options: initialState.options,
-          filterObject: {
-            ...this.state.filterObject,
-            [this.state.inputName]: value,
-          }
+          inputValue: value,
         }, () => {
           this.getOptionsFromProvider({ text: value }).then(options => {
             this.setOptions(options, () => {
@@ -213,7 +229,7 @@ export default class FormOption extends Component {
     return (
       <View>
         <ModalOptions
-          showFilterInputField={this.state.showFilterInputField}
+          showFilterInput={this.state.showFilterInput}
           showModal={this.state.showModal}
           hideModal={this.hide.bind(this)}
           onShow={this.onShow.bind(this)}
@@ -223,11 +239,13 @@ export default class FormOption extends Component {
           options={this.state.options}
           title={this.props.title}
           loading={this.state.loading} />
-        <TouchableOpacity style={styles.optionWrapper} onPress={this.show.bind(this)}>
-          <FormTopLabel label={this.props.title}></FormTopLabel>
-          <Text>{this.getLabelValue()}</Text>
-          <OptionArrow />
-          <FormClearButton onClear={this.clearValue.bind(this)} value={this.getLabelValue()} />
+        <TouchableOpacity style={styles.optionContainer} onPress={this.show.bind(this)}>
+          <FormTopLabel style={styles.optionLabel} label={this.props.title}></FormTopLabel>
+          <View style={styles.optionValueArea}>
+            <Text style={styles.optionValueLabel}>{this.getLabelValue()}</Text>
+            <OptionArrow />
+            <FormClearButton onClear={this.clearValue.bind(this)} value={this.getLabelValue()} />
+          </View>
         </TouchableOpacity>
       </View>
     );
@@ -236,12 +254,29 @@ export default class FormOption extends Component {
 }
 
 const styles = StyleSheet.create({
-  optionWrapper: {
-    width: 300,
+  optionContainer: {
+    width: '90%',
+    marginLeft: '5%',
     height: 75,
-    marginBottom: 25,
-    justifyContent: 'center',
-    borderBottomWidth: 1,
-    borderColor: '#d5d5d5'
+    marginTop: 25,
   },
+  optionLabel: {
+    flex: 1,
+    height: 25,
+    width: '100%',
+  },
+  optionValueArea: {
+    flex: 1,
+    marginTop: 25,
+    justifyContent: 'center',
+    // borderBottomWidth: 1,
+    borderColor: '#000',
+  },
+  optionValueLabel: {
+    marginTop: 25,
+    height: 50,
+    fontSize: 18,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 });

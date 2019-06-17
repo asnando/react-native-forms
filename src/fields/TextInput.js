@@ -5,6 +5,8 @@ import validators from '../constants/validators';
 import FormTopLabel from '../components/TopLabel';
 import FormClearButton from '../components/ClearButton';
 
+const INVALID_HIGHLIGHT_ANIMATION_TIME = 1000;
+
 const initialState = {
   value: null,
   mask: null,
@@ -84,15 +86,6 @@ export default class FormTextInput extends Component {
     };
   }
 
-  _resolveStyle(className) {
-    switch (className) {
-      case 'valid':
-        return this.props.validStyle;
-      case 'invalid':
-        return this.props.invalidStyle;
-    };
-  }
-
   _getInitialValue() {
 
     // If state already have state value means that form is trying to forced clear
@@ -129,6 +122,7 @@ export default class FormTextInput extends Component {
 
   componentDidUpdate() {
     setTimeout(this._updateCursor.bind(this), 0);
+    this._validateUIStyle();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -171,6 +165,7 @@ export default class FormTextInput extends Component {
 
   _onFieldLeaves() {
     this._removeUnusedMaskSpaces();
+    this._validateUIStyle();
     this.setState({ isFocused: false });
   }
 
@@ -215,6 +210,35 @@ export default class FormTextInput extends Component {
       ...this.state,
       value: this._getInitialValue()
     });
+  }
+
+  setInvalidStyle() {
+    return;
+    this.input.setNativeProps({ style: this.props.invalidStyle || styles.invalidField });
+    this.label.setInvalidStyle();
+  }
+
+  setValidStyle() {
+    return;
+    this.input.setNativeProps({ style: this.props.validStyle || styles.validField });
+  }
+
+  setInitialStyle() {
+    return;
+    this.input.setNativeProps({ style: styles.initialStyle });
+    this.label.setInitialStyle();
+  }
+
+  _validateUIStyle() {
+    if (!this.getValue()) {
+      this.setInitialStyle();
+    } else {
+      this.isValid() ? this.setValidStyle() : this.setInvalidStyle();
+    }
+  }
+
+  highlightInvalid() {
+    this.setInvalidStyle();
   }
 
   _updateMaskedValue(value) {
@@ -411,17 +435,30 @@ export default class FormTextInput extends Component {
 
 const styles = StyleSheet.create({
   textInputWrapper: {
-    width: 300,
-    height: 80,
-    marginTop: 0,
+    width: '90%',
+    marginLeft: '5%',
+    height: 75,
+    marginTop: 25,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   textInput: {
     height: 40,
     borderBottomWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#000',
     fontSize: 20,
-    flex: 1
+    flex: 1,
   },
+  invalidField: {
+    borderColor: 'red',
+    color: 'red'
+  },
+  validField: {
+    borderColor: '#000',
+    color: '#000'
+  },
+  initialStyle: {
+    color: '#000',
+    borderColor: '#000'
+  }
 });

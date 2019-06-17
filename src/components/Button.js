@@ -1,16 +1,8 @@
-import React, { PureComponent } from 'react';
-import { Button } from 'react-native';
+import React from 'react';
+import { Button } from 'react-native-custom-button';
 
-export default class FormButton extends PureComponent {
-  _onPress(event) {
-    if (typeof this.props.onPress === 'function') {
-      this.props.onPress(event);
-    }
-  }
-  render() {
-    return <Button
-      title={this.props.title}
-      onPress={this._onPress.bind(this)}
-      {...this.props.style}></Button>
-  }
+const FormButton = (props) => {
+  return <Button title={props.title} onPress={props.onPress} />
 }
+
+export default FormButton;

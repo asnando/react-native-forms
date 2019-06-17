@@ -3,7 +3,9 @@ import { Text, StyleSheet } from 'react-native';
 
 class TopLabel extends PureComponent {
   render() {
-    return <Text style={styles.topLabel}>{this.props.label}</Text>
+    return <Text ref={r => this.label = r} style={[styles.topLabel, this.props.style]}>
+      {this.props.label}
+    </Text>
   }
 }
 
@@ -15,5 +17,5 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     fontSize: 18
-  }
+  },
 });

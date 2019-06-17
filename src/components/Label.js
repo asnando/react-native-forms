@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 
 const SimpleLabel = (props) => {
   return (
-    <View style={styles.labelWrapper}>
+    <View style={[styles.labelWrapper, props.style]}>
       <Text style={styles.label}>{props.label}</Text>
       {props.children}
     </View>

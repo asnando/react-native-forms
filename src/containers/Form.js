@@ -5,11 +5,17 @@ import FormView from './FormView';
 import FormWithSteps from './FormWithSteps';
 
 export default class Form extends Component {
+  getValue() {
+    return this.form.getValue();
+  }
   submit() {
     if (this.form && typeof this.form.submit === 'function') this.form.submit();
   }
   clear() {
     if (this.form && typeof this.form.clear === 'function') this.form.clear();
+  }
+  disableSubmitButton() {
+    // this.form.disableSubmitButton();
   }
   render() {
     if (Array.isArray(this.props.steps)) {
@@ -17,7 +23,7 @@ export default class Form extends Component {
     }
     return (
       <ScrollView
-        style={[ styles.form, this.props.style ]}
+        contentContainerStyle={[ styles.form, this.props.style ]}
         alwaysBounceVertical={false}
         keyboardShouldPersistTaps='always'>
         {
@@ -32,6 +38,10 @@ export default class Form extends Component {
 
 const styles = StyleSheet.create({
   form: {
-    flex: 1
+    // flex: 1,
+    justifyContent: 'center',
+    maxWidth: '95%',
+    margin: '2.5%',
+    marginTop: '10%',
   },
 });
