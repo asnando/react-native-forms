@@ -15,11 +15,15 @@
     "eslint-plugin-import": "^2.17.3",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.13.0",
-    "react": "^16.8.2",
-    "react-native": "^0.58.5",
+    "react": "^16.8.6",
+    "react-native": "^0.59.9",
     "react-native-custom-button": "git+https://github.com/ffrm/react-native-custom-button.git",
     "react-native-flash-message": "^0.1.11",
     "react-native-radio-buttons-group": "^1.0.7",
     "react-native-tab-view": "^1.3.2"
+  },
+  "dependencies": {
+    "prop-types": "^15.7.2",
+    "styled-components": "^4.3.1"
   }
 }
