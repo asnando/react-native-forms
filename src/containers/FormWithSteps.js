@@ -5,7 +5,6 @@ import FormStepView from './FormStepView';
 import StepIndicator from '../components/StepIndicator';
 import {
   FormWithStepsContainer,
-  tabViewStyle,
 } from './FormWithSteps.styles';
 
 const DEFAULT_NEXT_STEP_BUTTON_TITLE = 'Next';
@@ -137,13 +136,13 @@ class FormWithSteps extends Component {
   }
 
   _onTabLeave(index) {
-    this.steps[index].onStepLeave();
+    // this.steps[index].onStepLeave();
   }
 
   _onTabActive(index) {
     // called from the tab navigation requests.
     // Trigger the "onStepActive" method of the "FormStepView" component.
-    this.steps[index].onStepActive();
+    // this.steps[index].onStepActive();
   }
 
   _onTabIndexChange(index) {
@@ -158,7 +157,6 @@ class FormWithSteps extends Component {
     return (
       <FormWithStepsContainer>
         <TabView
-          style={tabViewStyle}
           navigationState={this.state}
           renderScene={this.state.sceneMap}
           renderPager={this._renderPager}
