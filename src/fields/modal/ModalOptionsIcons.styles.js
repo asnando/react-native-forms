@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 export const ModalIconArrowRight = styled.Text`
   position: absolute;
-  right: 10;
+  right: 0;
   font-size: 24;
-  color: #aaa;  
 `;

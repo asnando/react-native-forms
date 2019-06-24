@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 export const FormStepViewContainer = styled.View`
   flex: 1;
-  width: 100%;
 `;
 
 export const FormStepViewTopContainer = styled.View`
@@ -14,6 +13,7 @@ export const FormStepViewTopContainer = styled.View`
 export const FormStepViewTitleContainer = styled.View`
   flex: 1;
   justify-content: center;
+  margin-left: 16;
 `;
 
 export const FormStepViewTitle = styled.Text`
@@ -21,7 +21,7 @@ export const FormStepViewTitle = styled.Text`
 `;
 
 export const FormStepViewFormContainer = styled.View`
-  flex: 2;
-  align-items: flex-start;
-  justify-content: flex-start;
+  flex: 4;
+  /* align-items: flex-start;
+  justify-content: flex-start; */
 `;

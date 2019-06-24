@@ -5,7 +5,3 @@ export const FormWithStepsContainer = styled.View`
   flex: 1;
   width: 100%;
 `;
-
-export const tabViewStyle = {
-  width: '100%',
-};

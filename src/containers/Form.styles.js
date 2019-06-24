@@ -4,5 +4,4 @@ export const formContainerStyle = {
   alignItems: 'center',
   flexDirection: 'row',
   width: '100%',
-  backroundColor: 'yellow',
 };
