@@ -6,6 +6,8 @@
 import React, { Component } from 'react';
 import { View, KeyboardAvoidingView, Keyboard } from 'react-native';
 import PropTypes from 'prop-types';
+import isDef from '../utils/isDef';
+import isEmptyString from '../utils/isEmptyString';
 import FormButton from '../components/Button';
 import FormTextInput from '../fields/TextInput';
 import FormSwitch from '../fields/Switch';
@@ -81,29 +83,27 @@ class FormView extends Component {
 
   _resolveFormValues() {
     const form = {};
-    const { fields } = this.props;
-    Object.keys(this.fields).forEach((fieldName) => {
-      // Reference to the registered component reference.
-      const field = fields[fieldName];
-      // Get original configuration of the field.
-      const fieldConfiguration = fields.find(f => f.name === fieldName);
-      // Resolve alias name for the form value object.
-      const resolvedFieldKey = fieldConfiguration.as || fieldName;
+    const { fields: fieldsConfiguration } = this.props;
+    const { fields: fieldsRefs } = this;
+    Object.keys(fieldsRefs).forEach((fieldName) => {
+      // Save the reference to the field component that represents this field.
+      const fieldRef = fieldsRefs[fieldName];
+      // Resolve the field configuration from fields list.
+      const fieldConfiguration = fieldsConfiguration.find(field => field.name === fieldName);
+      // Resolve field alias or name that must be used as form value key.
+      const fieldAliasName = fieldConfiguration.as || fieldName;
       // Use the "getValue" method of the field component. If
       // undefined or not a function just ignore.
-      if (!field || typeof field.getValue !== 'function') return;
-      // Get the field value from inside the component.
-      let fieldValue = field.getValue();
-      // In some cases the field value must be resolved before
-      // it is set in the form object. If this resolver function
-      // exists, call it.
-      if (typeof fieldConfiguration.resolve === 'function') {
-        fieldValue = fieldConfiguration.resolve(fieldValue);
-      }
-      // Set the value (only if not empty).
-      // eslint-disable-next-line no-restricted-globals
-      if ((fieldValue || !isNaN(fieldValue)) && !/^$/.test(fieldValue)) {
-        form[resolvedFieldKey] = fieldValue;
+      if (fieldRef && typeof fieldRef.getValue === 'function') {
+        let fieldValue = fieldRef.getValue();
+        // If field configuration have a resolver function to parse
+        // the value before returning the actual field value.
+        if (typeof fieldConfiguration.resolve === 'function') {
+          fieldValue = fieldConfiguration.resolve(fieldValue);
+        }
+        if (isDef(fieldValue) && !isEmptyString(fieldValue)) {
+          form[fieldAliasName] = fieldValue;
+        }
       }
     });
     return form;
