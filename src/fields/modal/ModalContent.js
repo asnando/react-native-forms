@@ -11,6 +11,7 @@ import noop from '../../utils/noop';
 const ModalContent = (props) => {
   const { options, onNextPage } = props;
 
+  // eslint-disable-next-line react/prop-types
   const renderItem = ({ item }) => {
     const { label, value } = item;
     let { onOptionSelected } = props;
@@ -29,7 +30,8 @@ const ModalContent = (props) => {
       data={options}
       renderItem={renderItem}
       onEndReached={onNextPage}
-      keyExtractor={(item, index) => index.toString()} />
+      keyExtractor={(item, index) => index.toString()}
+    />
   );
 };
 

@@ -250,7 +250,6 @@ export default class FormOption extends Component {
       </View>
     );
   }
-
 }
 
 const styles = StyleSheet.create({
@@ -277,6 +276,6 @@ const styles = StyleSheet.create({
     height: 50,
     fontSize: 18,
     alignItems: 'center',
-    justifyContent: 'center'
-  }
+    justifyContent: 'center',
+  },
 });

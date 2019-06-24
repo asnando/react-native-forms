@@ -3,8 +3,7 @@ import styled from 'styled-components';
 
 export const FormStepViewContainer = styled.View`
   flex: 1;
-  width: 80%;
-  margin-left: 10%;
+  width: 100%;
 `;
 
 export const FormStepViewTopContainer = styled.View`

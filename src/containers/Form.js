@@ -1,7 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable no-return-assign */
 import React, { Component } from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, KeyboardAvoidingView } from 'react-native';
 import PropTypes from 'prop-types';
 import { formContainerStyle } from './Form.styles';
 import FormTab from './FormTab';
@@ -29,12 +29,15 @@ class Form extends Component {
     const { props } = this;
     const { steps, tabs } = props;
     return isArray(steps)
-      ? (<FormWithSteps {...props} ref={r => this.form = r} />)
+      ? (
+        <FormWithSteps {...props} ref={r => this.form = r} />
+      )
       : (
         <ScrollView
           contentContainerStyle={formContainerStyle}
           alwaysBounceVertical={false}
-          keyboardShouldPersistTaps="always">
+          keyboardShouldPersistTaps="always"
+        >
           { tabs
             ? (<FormTab {...props} ref={r => this.form = r} />)
             : (<FormView {...props} ref={r => this.form = r} />)

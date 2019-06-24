@@ -444,7 +444,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     height: 40,
-    borderBottomWidth: 1,
+    // borderBottomWidth: 1,
     borderColor: '#000',
     fontSize: 20,
     flex: 1,

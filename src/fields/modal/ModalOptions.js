@@ -36,7 +36,7 @@ const ModalOptions = (props) => {
 ModalOptions.defaultProps = {
   title: '',
   showModal: false,
-  loading: false,
+  loading: true,
   showFilterInput: true,
   options: [],
   hideModal: noop,

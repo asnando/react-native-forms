@@ -4,7 +4,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 import React, { Component } from 'react';
-import { KeyboardAvoidingView, Keyboard } from 'react-native';
+import { View, KeyboardAvoidingView, Keyboard } from 'react-native';
 import PropTypes from 'prop-types';
 import FormButton from '../components/Button';
 import FormTextInput from '../fields/TextInput';
@@ -219,9 +219,9 @@ class FormView extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView style={formViewContainerStyle} behavior="padding" enabled>
+      <View style={formViewContainerStyle} behavior="padding" enabled>
         {this._renderFields()}
-      </KeyboardAvoidingView>
+      </View>
     );
   }
 }
