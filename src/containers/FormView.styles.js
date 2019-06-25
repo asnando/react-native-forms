@@ -1,4 +1,11 @@
 // eslint-disable-next-line import/prefer-default-export
-export const formViewContainerStyle = {
-  flex: 1,
-};
+import styled from 'styled-components';
+
+export const FormViewContainer = styled.View`
+  width: 100%;
+`;
+
+export const FormViewScrollContent = styled.View`
+  width: 95%;
+  align-items: center;
+`;

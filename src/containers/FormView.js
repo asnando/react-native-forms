@@ -4,7 +4,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 import React, { Component } from 'react';
-import { View, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { View, KeyboardAvoidingView, Keyboard, ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
 import isDef from '../utils/isDef';
 import isEmptyString from '../utils/isEmptyString';
@@ -13,7 +13,7 @@ import FormTextInput from '../fields/TextInput';
 import FormSwitch from '../fields/Switch';
 import FormOption from '../fields/Option';
 import FormRadio from '../fields/Radio';
-import { formViewContainerStyle } from './FormView.styles';
+import { FormViewContainer, FormViewScrollContent } from './FormView.styles';
 
 const initialState = {
   fields: {},
@@ -219,9 +219,13 @@ class FormView extends Component {
 
   render() {
     return (
-      <View style={formViewContainerStyle} behavior="padding" enabled>
-        {this._renderFields()}
-      </View>
+      <FormViewContainer>
+        <ScrollView alwaysBounceVertical={false} keyboardShouldPersistTaps="handled">
+          <FormViewScrollContent>
+            {this._renderFields()}
+          </FormViewScrollContent>
+        </ScrollView>
+      </FormViewContainer>
     );
   }
 }

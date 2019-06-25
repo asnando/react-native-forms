@@ -3,10 +3,10 @@ import styled from 'styled-components';
 
 export const StepIndicatorContainer = styled.View`
   flex-direction: row;
-  height: 128;
-  padding-bottom: 16;
+  height: 84;
   align-items: center;
-  justify-content: center;  
+  justify-content: center;
+  background-color: transparent;
 `;
 
 export const StepIndicatorCircle = styled.View`

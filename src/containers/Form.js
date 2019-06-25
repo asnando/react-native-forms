@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { ScrollView, KeyboardAvoidingView } from 'react-native';
 import PropTypes from 'prop-types';
-import { formContainerStyle } from './Form.styles';
+import { FormContainer, formScrollViewStyle } from './Form.styles';
 import FormTab from './FormTab';
 import FormView from './FormView';
 import FormWithSteps from './FormWithSteps';
@@ -25,25 +25,28 @@ class Form extends Component {
     if (form && typeof form.clear === 'function') form.clear();
   }
 
-  render() {
+  renderForms() {
     const { props } = this;
     const { steps, tabs } = props;
-    return isArray(steps)
-      ? (
-        <FormWithSteps {...props} ref={r => this.form = r} />
-      )
-      : (
-        <ScrollView
-          contentContainerStyle={formContainerStyle}
-          alwaysBounceVertical={false}
-          keyboardShouldPersistTaps="always"
-        >
-          { tabs
-            ? (<FormTab {...props} ref={r => this.form = r} />)
-            : (<FormView {...props} ref={r => this.form = r} />)
-          }
-        </ScrollView>
-      );
+    if (isArray(steps)) {
+      return <FormWithSteps {...props} ref={r => this.form = r} />;
+    }
+    if (tabs) {
+      return <FormTab {...props} ref={r => this.form = r} />;
+    }
+    return <FormView {...props} ref={r => this.form = r} />;
+  }
+
+  render() {
+    return (
+      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={16} enabled>
+        <FormContainer>
+          <ScrollView alwaysBounceVertical={false} keyboardShouldPersistTaps="handled" contentContainerStyle={formScrollViewStyle}>
+            {this.renderForms()}
+          </ScrollView>
+        </FormContainer>
+      </KeyboardAvoidingView>
+    );
   }
 }
 

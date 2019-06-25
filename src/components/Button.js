@@ -1,11 +1,11 @@
 import React from 'react';
-import { FullWidthButton } from 'react-native-custom-button';
+import { StyledFormButton } from './Button.styles';
 import PropTypes from 'prop-types';
 
 const FormButton = (props) => {
   const { title, onPress } = props;
   return (
-    <FullWidthButton title={title} onPress={onPress} />
+    <StyledFormButton title={title} onPress={onPress} />
   );
 };
 FormButton.defaultProps = {
