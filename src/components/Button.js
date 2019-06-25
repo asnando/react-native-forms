@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyledFormButton } from './Button.styles';
 import PropTypes from 'prop-types';
+import { StyledFormButton } from './Button.styles';
 
 const FormButton = (props) => {
   const { title, onPress } = props;
