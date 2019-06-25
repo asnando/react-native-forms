@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 export const FormStepViewContainer = styled.View`
   height: 100%;
+  margin-top: 48;
 `;
 
 export const FormStepViewTopContainer = styled.View`
