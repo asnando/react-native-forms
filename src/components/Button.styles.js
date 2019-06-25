@@ -4,4 +4,5 @@ import { Button } from 'react-native-custom-button';
 
 export const StyledFormButton = styled(Button)`
   width: 100%;
+  margin: auto;
 `;
