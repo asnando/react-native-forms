@@ -6,6 +6,6 @@ export const FormViewContainer = styled.View`
 `;
 
 export const FormViewScrollContent = styled.View`
-  width: 95%;
+  width: 100%;
   margin: auto;
 `;
