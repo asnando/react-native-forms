@@ -4,7 +4,7 @@
   "description": "📃 HOC Component that renders form with custom fields.",
   "main": "src/index.js",
   "scripts": {
-    "test": ""
+    "lint": "eslint src/"
   },
   "keywords": [],
   "author": "Fernando Rama",
