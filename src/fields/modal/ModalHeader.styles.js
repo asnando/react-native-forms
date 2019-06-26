@@ -20,7 +20,12 @@ export const ModalHeaderCloseButton = styled.TouchableOpacity`
 `;
 
 export const ModalHeaderInput = styled.TextInput`
-  display: ${props => (!props.showFilterInput ? 'none' : 'flex')}
+  display: ${props => (!props.showFilterInput ? 'none' : 'flex')};
+  width: 75%;
+  height: 32;
+  margin: auto;
+  border-bottom-width: 1;
+  border-color: #aaa;
 `;
 
 export const ModalInputClearButton = styled.TouchableOpacity`
