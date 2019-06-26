@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import noop from '../../utils/noop';
 import ModalHeader from './ModalHeader';
 import ModalContent from './ModalContent';
-import ModalLoader from './ModalLoader';
 
 const ModalOptions = (props) => {
   const {
@@ -26,9 +25,14 @@ const ModalOptions = (props) => {
         title={title}
         hideModal={hideModal}
         onInputValue={onInputValue}
-        showFilterInput={showFilterInput} />
-      <ModalContent options={options} onOptionSelected={onOptionSelected} onNextPage={onNextPage} />
-      { loading && <ModalLoader /> }
+        showFilterInput={showFilterInput}
+      />
+      <ModalContent
+        options={options}
+        loading={loading}
+        onOptionSelected={onOptionSelected}
+        onNextPage={onNextPage}
+      />
     </Modal>
   );
 };
