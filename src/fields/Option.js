@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
+import {
+  OptionContainer,
+  OptionValueContainer,
+  OptionValueLabel,
+  optionLabelStyle,
+} from './Option.styles';
 import { IconArrowRight } from './modal/ModalOptionsIcons';
 import ModalOptions from './modal/ModalOptions';
 import FormTopLabel from '../components/TopLabel';
@@ -275,16 +281,16 @@ export default class FormOption extends Component {
           title={title}
           loading={loading}
         />
-        <TouchableOpacity style={styles.optionContainer} onPress={(...args) => this.show(...args)}>
-          <FormTopLabel style={styles.optionLabel} label={title} />
-          <View style={styles.optionValueArea}>
-            <Text style={styles.optionValueLabel}>
+        <OptionContainer onPress={(...args) => this.show(...args)}>
+          <FormTopLabel style={optionLabelStyle} label={title} />
+          <OptionValueContainer>
+            <OptionValueLabel>
               {this.getLabelValue()}
-            </Text>
+            </OptionValueLabel>
             <IconArrowRight />
             <FormClearButton onClear={(...args) => this.clearValue(...args)} value={this.getLabelValue()} />
-          </View>
-        </TouchableOpacity>
+          </OptionValueContainer>
+        </OptionContainer>
       </View>
     );
   }
@@ -293,6 +299,7 @@ export default class FormOption extends Component {
 FormOption.defaultProps = {
   options: [],
   title: '',
+  nextField: null,
 };
 
 FormOption.propTypes = {
@@ -302,35 +309,7 @@ FormOption.propTypes = {
   ]),
   title: PropTypes.string,
   name: PropTypes.string.isRequired,
-  nextField: PropTypes.func.isRequired,
+  nextField: PropTypes.func,
   getResumedFormValue: PropTypes.func.isRequired,
   onFieldEnter: PropTypes.func.isRequired,
 };
-
-const styles = StyleSheet.create({
-  optionContainer: {
-    width: '90%',
-    marginLeft: '5%',
-    height: 75,
-    marginTop: 25,
-  },
-  optionLabel: {
-    flex: 1,
-    height: 25,
-    width: '100%',
-  },
-  optionValueArea: {
-    flex: 1,
-    marginTop: 25,
-    justifyContent: 'center',
-    // borderBottomWidth: 1,
-    borderColor: '#000',
-  },
-  optionValueLabel: {
-    marginTop: 25,
-    height: 50,
-    fontSize: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
