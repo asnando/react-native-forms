@@ -169,6 +169,9 @@ class FormView extends Component {
         case 'clear':
           field.onPress = this.clear.bind(this);
           break;
+        case 'option':
+          field.getResumedFormValue = this.getValue.bind(this);
+          break;
         case 'text':
         case 'password':
         case 'email':
