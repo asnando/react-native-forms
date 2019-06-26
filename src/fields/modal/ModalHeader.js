@@ -5,6 +5,8 @@ import {
   ModalHeaderCloseButton,
   ModalHeaderInput,
   ModalInputClearButton,
+  ModalHeaderButtonContainer,
+  ModalHeaderInputContainer,
 } from './ModalHeader.styles';
 import noop from '../../utils/noop';
 
@@ -50,15 +52,19 @@ class ModalHeader extends React.Component {
     } = this.props;
     return (
       <ModalHeaderContainer>
-        <ModalHeaderCloseButton onPress={hideModal} />
-        <ModalHeaderInput
-          showFilterInput={showFilterInput}
-          value={text}
-          onChangeText={this.onInputValue.bind(this)}
-        />
-        {
-          this.hasValidText() && (<ModalInputClearButton onPress={this.onClearValue.bind(this)} />)
-        }
+        <ModalHeaderButtonContainer>
+          <ModalHeaderCloseButton onPress={hideModal} />
+        </ModalHeaderButtonContainer>
+        <ModalHeaderInputContainer>
+          <ModalHeaderInput
+            showFilterInput={showFilterInput}
+            value={text}
+            onChangeText={(...args) => this.onInputValue(...args)}
+          />
+        </ModalHeaderInputContainer>
+        <ModalHeaderButtonContainer>
+          {this.hasValidText() && (<ModalInputClearButton onPress={(...args) => this.onClearValue(...args)} />)}
+        </ModalHeaderButtonContainer>
       </ModalHeaderContainer>
     );
   }
@@ -66,14 +72,12 @@ class ModalHeader extends React.Component {
 ModalHeader.defaultProps = {
   showFilterInput: true,
   hideModal: noop,
-  onClearValue: noop,
   onInputValue: noop,
 };
 
 ModalHeader.propTypes = {
   hideModal: PropTypes.func,
   showFilterInput: PropTypes.bool,
-  onClearValue: PropTypes.func,
   onInputValue: PropTypes.func,
 };
 
