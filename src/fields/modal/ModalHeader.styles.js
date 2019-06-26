@@ -24,8 +24,10 @@ export const ModalHeaderInput = styled.TextInput`
   width: 75%;
   height: 32;
   margin: auto;
-  border-bottom-width: 1;
+  border-width: 1;
+  border-radius: 4;
   border-color: #aaa;
+  background-color: #fff;
 `;
 
 export const ModalInputClearButton = styled.TouchableOpacity`
