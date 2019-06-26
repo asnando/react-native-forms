@@ -111,29 +111,30 @@ export default class FormOption extends Component {
   }
 
   createExtraOptionsObject(opts = {}) {
+    const { pageSize, page } = this.state;
     return {
-      size: this.state.pageSize,
-      page: opts.page
+      size: pageSize,
+      page: opts.page || page,
     };
   }
 
   getOptionsFromProvider(opts = {}) {
     return (() => {
+      const { optionsProvider } = this.state;
       return new Promise((resolve, reject) => {
-        if (!this.state.optionsProvider) {
+        if (!optionsProvider) {
           return resolve(this.state.options);
         }
-        const providerResponse = this.state.optionsProvider(
+        const providerResponse = optionsProvider(
           this.createOptionsObject(opts),
-          this.createExtraOptionsObject(opts)
+          this.createExtraOptionsObject(opts),
         );
         if (providerResponse instanceof Promise) {
           return providerResponse.then(resolve).catch(reject);
-        } else {
-          return resolve(providerResponse);
         }
+        return resolve(providerResponse);
       });
-    })().then(options => {
+    })().then((options) => {
       return new Promise((resolve, reject) => {
         this.setState({
           hasNextPage: (options.length >= this.state.pageSize)
@@ -200,21 +201,24 @@ export default class FormOption extends Component {
   }
 
   onInputValue(value) {
-
     if (this.editing) {
       clearTimeout(this.editing);
     }
 
-    this.editing = setTimeout(onSubmitEditing.bind(this), INPUT_INTERVAL);
-
-    function onSubmitEditing() {
+    // eslint-disable-next-line no-shadow
+    function onSubmitEditingEnd(value) {
       this.setLoadingStatus(true, () => {
         this.setState({
-          page: 1,
+          // Resets the page
+          page: initialState.page,
+          // Resets the options list
           options: initialState.options,
+          // Set the new received value
           inputValue: value,
         }, () => {
-          this.getOptionsFromProvider({ text: value }).then(options => {
+          this.getOptionsFromProvider({
+            text: value,
+          }).then((options) => {
             this.setOptions(options, () => {
               this.setLoadingStatus(false);
             });
@@ -223,6 +227,7 @@ export default class FormOption extends Component {
       });
     }
 
+    this.editing = setTimeout(onSubmitEditingEnd.bind(this, value), INPUT_INTERVAL);
   }
 
   render() {

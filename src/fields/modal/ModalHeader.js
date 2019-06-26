@@ -15,8 +15,8 @@ class ModalHeader extends React.Component {
   }
 
   onInputValue(value) {
+    const { text } = this.state;
     this.setState({ text: value }, () => {
-      const { text } = this.state;
       this.onInputValueChange(value, text);
     });
   }
@@ -45,7 +45,8 @@ class ModalHeader extends React.Component {
   render() {
     const { text } = this.state;
     const {
-      hideModal, showFilterInput, onClearValue, onInputValue,
+      hideModal,
+      showFilterInput,
     } = this.props;
     return (
       <ModalHeaderContainer>
@@ -53,9 +54,10 @@ class ModalHeader extends React.Component {
         <ModalHeaderInput
           showFilterInput={showFilterInput}
           value={text}
-          onChangeText={onInputValue} />
+          onChangeText={this.onInputValue.bind(this)}
+        />
         {
-          this.hasValidText() && (<ModalInputClearButton onPress={onClearValue} />)
+          this.hasValidText() && (<ModalInputClearButton onPress={this.onClearValue.bind(this)} />)
         }
       </ModalHeaderContainer>
     );
