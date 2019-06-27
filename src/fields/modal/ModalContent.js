@@ -11,6 +11,11 @@ import {
 import noop from '../../utils/noop';
 
 class ModalContent extends PureComponent {
+  onListEndReached() {
+    const { onNextPage, loading } = this.props;
+    if (!loading) onNextPage();
+  }
+
   renderListItem({ item }) {
     const { label, value } = item;
     let { onOptionSelected } = this.props;
@@ -30,12 +35,13 @@ class ModalContent extends PureComponent {
   }
 
   render() {
-    const { options, onNextPage } = this.props;
+    const { options } = this.props;
     return (
       <FlatList
         data={options}
         renderItem={this.renderListItem.bind(this)}
-        onEndReached={onNextPage}
+        onEndReached={this.onListEndReached.bind(this)}
+        onEndReachedThreshold={0.4}
         ListFooterComponent={this.renderActivityIndicator.bind(this)}
         keyExtractor={(item, index) => index.toString()}
       />
