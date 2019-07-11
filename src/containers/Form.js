@@ -32,7 +32,20 @@ class Form extends Component {
       return <FormWithSteps {...props} ref={r => this.form = r} />;
     }
     if (tabs) {
-      return <FormTab {...props} ref={r => this.form = r} />;
+      const {
+        tabTintColor,
+        tabIndicatorColor,
+        tabTextColor,
+      } = props;
+      return (
+        <FormTab
+          {...props}
+          ref={r => this.form = r}
+          tabTintColor={tabTintColor}
+          tabIndicatorColor={tabIndicatorColor}
+          tabTextColor={tabTextColor}
+        />
+      );
     }
     return <FormView {...props} ref={r => this.form = r} />;
   }
@@ -53,11 +66,17 @@ class Form extends Component {
 Form.defaultProps = {
   steps: null,
   tabs: null,
+  tabIndicatorColor: null,
+  tabTextColor: null,
+  tabTintColor: null,
 };
 
 Form.propTypes = {
   steps: PropTypes.array,
   tabs: PropTypes.array,
+  tabIndicatorColor: PropTypes.string,
+  tabTextColor: PropTypes.string,
+  tabTintColor: PropTypes.string,
 };
 
 export default Form;

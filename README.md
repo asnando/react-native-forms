@@ -92,6 +92,12 @@ The tabs model separates multiple forms inside one instance of the form. Just as
 
 Note.: <i>Steps and tabs uses ```react-native-tab-view``` plugin.</i>
 
+# Additional Options
+| Name | Type |
+| tabTintColor | Color |
+| tabIndicatorColor | Color |
+| tabTextColor | Color |
+
 ## Keyboard Types
 default, number-pad, decimal-pad, numeric, email-address, phone-pad
 

@@ -41,10 +41,19 @@ export default class FormTab extends Component {
   }
 
   _renderTabBar = props => {
-    return <TabBar
-      style={{ borderRadius: 8 }}
-      indicatorStyle={{ display: 'none' }}
-      {...props} />;
+    const {
+      tabIndicatorColor,
+      tabTextColor,
+      tabTintColor,
+    } = this.props;
+    return (
+      <TabBar
+        style={{ borderRadius: 8 }}
+        labelStyle={{ color: tabTextColor, fontWeight: 'bold' }}
+        indicatorStyle={{ backgroundColor: tabIndicatorColor }}
+        style={{ backgroundColor: tabTintColor }}
+        {...props} />
+    );
   }
 
   _renderScene = SceneMap(this._createSceneMap())
