@@ -7,6 +7,8 @@ import {
   ModalInputClearButton,
   ModalHeaderButtonContainer,
   ModalHeaderInputContainer,
+  ModalHeaderCloseButtonText,
+  ModalInputClearButtonText,
 } from './ModalHeader.styles';
 import noop from '../../utils/noop';
 
@@ -53,7 +55,11 @@ class ModalHeader extends React.Component {
     return (
       <ModalHeaderContainer>
         <ModalHeaderButtonContainer>
-          <ModalHeaderCloseButton onPress={hideModal} />
+          <ModalHeaderCloseButton onPress={hideModal}>
+            <ModalHeaderCloseButtonText>
+              {'<'}
+            </ModalHeaderCloseButtonText>
+          </ModalHeaderCloseButton>
         </ModalHeaderButtonContainer>
         <ModalHeaderInputContainer>
           <ModalHeaderInput
@@ -63,7 +69,11 @@ class ModalHeader extends React.Component {
           />
         </ModalHeaderInputContainer>
         <ModalHeaderButtonContainer>
-          {this.hasValidText() && (<ModalInputClearButton onPress={(...args) => this.onClearValue(...args)} />)}
+          {this.hasValidText() && (
+            <ModalInputClearButton onPress={(...args) => this.onClearValue(...args)}>
+              <ModalInputClearButtonText>{'X'}</ModalInputClearButtonText>
+            </ModalInputClearButton>
+          )}
         </ModalHeaderButtonContainer>
       </ModalHeaderContainer>
     );
