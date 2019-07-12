@@ -29,7 +29,20 @@ class Form extends Component {
     const { props } = this;
     const { steps, tabs } = props;
     if (isArray(steps)) {
-      return <FormWithSteps {...props} ref={r => this.form = r} />;
+      const {
+        stepIndicatorColor,
+        stepButtonColor,
+        stepButtonTextColor,
+      } = props;
+      return (
+        <FormWithSteps
+          {...props}
+          ref={r => this.form = r}
+          stepIndicatorColor={stepIndicatorColor}
+          stepButtonColor={stepButtonColor}
+          stepButtonTextColor={stepButtonTextColor}
+        />
+      );
     }
     if (tabs) {
       const {
@@ -69,6 +82,9 @@ Form.defaultProps = {
   tabIndicatorColor: null,
   tabTextColor: null,
   tabTintColor: null,
+  stepIndicatorColor: null,
+  stepButtonColor: null,
+  stepButtonTextColor: null,
 };
 
 Form.propTypes = {
@@ -77,6 +93,9 @@ Form.propTypes = {
   tabIndicatorColor: PropTypes.string,
   tabTextColor: PropTypes.string,
   tabTintColor: PropTypes.string,
+  stepIndicatorColor: PropTypes.string,
+  stepButtonColor: PropTypes.string,
+  stepButtonTextColor: PropTypes.string,
 };
 
 export default Form;

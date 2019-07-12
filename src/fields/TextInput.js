@@ -362,7 +362,6 @@ export default class FormTextInput extends Component {
       value = value.replace(/\W/g, '');
       return this._replaceMaskPositionsWithValues(mask, value);
     } catch (exception) {
-      console.log(exception);
       return prevValue;
     }
   }

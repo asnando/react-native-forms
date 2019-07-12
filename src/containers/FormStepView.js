@@ -39,6 +39,8 @@ class FormStepView extends Component {
       onTabSubmit,
       onInvalid,
       requestPreviousTab,
+      stepButtonColor,
+      stepButtonTextColor,
     } = props;
     const { fields } = this.state;
     return (
@@ -62,7 +64,14 @@ class FormStepView extends Component {
         </FormStepViewTitleContainer>
         {/* Form */}
         <FormStepViewFormContainer>
-          <FormView {...this.props} fields={fields} onSubmit={onTabSubmit} onInvalid={onInvalid} />
+          <FormView
+            {...this.props}
+            fields={fields}
+            onSubmit={onTabSubmit}
+            onInvalid={onInvalid}
+            submitButtonColor={stepButtonColor}
+            submitButtonTextColor={stepButtonTextColor}
+          />
         </FormStepViewFormContainer>
       </FormStepViewContainer>
     );
@@ -82,6 +91,8 @@ FormStepView.defaultProps = {
   onTabSubmit: noop,
   onInvalid: noop,
   requestPreviousTab: noop,
+  stepButtonColor: null,
+  stepButtonTextColor: null,
 };
 
 FormStepView.propTypes = {
@@ -95,6 +106,8 @@ FormStepView.propTypes = {
   onTabSubmit: PropTypes.func,
   onInvalid: PropTypes.func,
   requestPreviousTab: PropTypes.func,
+  stepButtonColor: PropTypes.string,
+  stepButtonTextColor: PropTypes.string,
 };
 
 export default FormStepView;

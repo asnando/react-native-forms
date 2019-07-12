@@ -109,6 +109,8 @@ class FormWithSteps extends Component {
           requestNextTab={this._requestNextTab.bind(this)}
           requestPreviousTab={this._requestPreviousTab.bind(this)}
           // shouldShowField={this._shouldShowField.bind(this)}
+          stepButtonColor={this.props.stepButtonColor}
+          stepButtonTextColor={this.props.stepButtonTextColor}
           />;
       };
     });
@@ -154,6 +156,9 @@ class FormWithSteps extends Component {
   _renderPager = (props) => <PagerPan {...props} />
 
   render() {
+    const {
+      stepIndicatorColor,
+    } = this.props;
     return (
       <FormWithStepsContainer>
         <TabView
@@ -164,7 +169,11 @@ class FormWithSteps extends Component {
           initialLayout={this.state.tabLayout}
           renderTabBar={ props => null }
           swipeEnabled={false} />
-        <StepIndicator {...this.props} currentIndex={this.state.index} />
+        <StepIndicator
+          {...this.props}
+          currentIndex={this.state.index}
+          stepIndicatorColor={stepIndicatorColor}
+        />
       </FormWithStepsContainer>
     );
   }
