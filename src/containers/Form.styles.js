@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 
 export const FormContainer = styled.SafeAreaView`
-  flex: 1;
+  height: ${props => props.fullHeight ? '100%' : 'auto'};
   width: 100%;
   flex-direction: row;
 `;

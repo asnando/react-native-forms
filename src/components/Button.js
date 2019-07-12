@@ -16,6 +16,7 @@ const FormButton = (props) => {
       onPress={onPress}
       buttonTintColor={buttonTintColor}
       buttonTextColor={buttonTextColor}
+      buttonStyle={{ width: '100%' }}
     />
   );
 };
