@@ -287,7 +287,7 @@ export default class FormOption extends Component {
             <OptionValueLabel>
               {this.getLabelValue()}
             </OptionValueLabel>
-            <IconArrowRight />
+            <IconArrowRight value={this.getLabelValue()} />
             <FormClearButton onClear={(...args) => this.clearValue(...args)} value={this.getLabelValue()} />
           </OptionValueContainer>
         </OptionContainer>
