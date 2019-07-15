@@ -435,7 +435,6 @@ export default class FormTextInput extends Component {
 const styles = StyleSheet.create({
   textInputWrapper: {
     width: '90%',
-    marginLeft: '5%',
     height: 75,
     marginTop: 25,
     flexDirection: 'row',
@@ -446,6 +445,7 @@ const styles = StyleSheet.create({
     // borderBottomWidth: 1,
     borderColor: '#000',
     fontSize: 20,
+    lineHeight: 18,
     flex: 1,
   },
   invalidField: {
