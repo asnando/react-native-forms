@@ -37,6 +37,6 @@ export default Radio;
 
 const styles = StyleSheet.create({
   radioButtonContainer: {
-    marginBottom: 16
+    marginBottom: 16,
   }
 });
