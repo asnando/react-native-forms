@@ -300,6 +300,7 @@ FormOption.defaultProps = {
   options: [],
   title: '',
   nextField: null,
+  onFieldEnter: null,
 };
 
 FormOption.propTypes = {
@@ -311,5 +312,5 @@ FormOption.propTypes = {
   name: PropTypes.string.isRequired,
   nextField: PropTypes.func,
   getResumedFormValue: PropTypes.func.isRequired,
-  onFieldEnter: PropTypes.func.isRequired,
+  onFieldEnter: PropTypes.func,
 };
