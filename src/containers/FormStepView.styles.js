@@ -13,8 +13,10 @@ export const FormStepViewTopContainer = styled.View`
 
 export const FormStepViewTitleContainer = styled.View`
   flex: 2;
+  width: 90%;
   justify-content: center;
-  margin-left: 16;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 export const FormStepViewTitle = styled.Text`

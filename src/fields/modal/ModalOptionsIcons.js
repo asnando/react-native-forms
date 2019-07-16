@@ -2,8 +2,11 @@
 import React from 'react';
 import { ModalIconArrowRight } from './ModalOptionsIcons.styles';
 
-export const IconArrowRight = () => (
-  <ModalIconArrowRight>
-    >
-  </ModalIconArrowRight>
-);
+export const IconArrowRight = (props) => {
+  const { value } = props;
+  return !value ? (
+    <ModalIconArrowRight>
+      >
+    </ModalIconArrowRight>
+  ) : null;
+};

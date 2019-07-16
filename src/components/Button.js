@@ -3,9 +3,21 @@ import PropTypes from 'prop-types';
 import { StyledFormButton } from './Button.styles';
 
 const FormButton = (props) => {
-  const { title, onPress } = props;
+  const {
+    title,
+    onPress,
+    buttonTintColor,
+    buttonTextColor,
+  } = props;
+
   return (
-    <StyledFormButton title={title} onPress={onPress} />
+    <StyledFormButton
+      title={title}
+      onPress={onPress}
+      buttonTintColor={buttonTintColor}
+      buttonTextColor={buttonTextColor}
+      buttonStyle={{ width: '100%' }}
+    />
   );
 };
 FormButton.defaultProps = {

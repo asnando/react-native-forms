@@ -19,8 +19,13 @@ const ModalOptions = (props) => {
     onNextPage,
     loading,
   } = props;
+
+  const onBackDropPress = () => {
+    return hideModal();
+  };
+
   return (
-    <Modal animationType="slide" visible={showModal} onShow={onShow}>
+    <Modal animationType="slide" visible={showModal} onShow={onShow} onRequestClose={() => onBackDropPress()}>
       <ModalHeader
         title={title}
         hideModal={hideModal}

@@ -362,7 +362,6 @@ export default class FormTextInput extends Component {
       value = value.replace(/\W/g, '');
       return this._replaceMaskPositionsWithValues(mask, value);
     } catch (exception) {
-      console.log(exception);
       return prevValue;
     }
   }
@@ -408,24 +407,32 @@ export default class FormTextInput extends Component {
   }
 
   render() {
+    const {
+      translate,      
+      title,
+      secureTextEntry,
+      placeholder,
+      blurOnSubmit
+    } = this.props;
+
     return (
       <View style={styles.textInputWrapper}>
         <FormTopLabel
           ref={(ref) => this.label = ref}
-          label={this.props.title} />
+          label={translate(title)} />
         <TextInput
           style={styles.textInput}
           ref={(ref) => this.input = ref}
           value={this.state.value}
           maxLength={this.state.maxLength}
-          secureTextEntry={this.props.secureTextEntry}
-          placeholder={this.props.placeholder}
+          secureTextEntry={secureTextEntry}
+          placeholder={placeholder}
           onChangeText={this._onChangeText.bind(this)}
           onSelectionChange={this._onSelectionChange.bind(this)}
           onFocus={this._onFocus.bind(this)}
           onBlur={this._onBlur.bind(this)}
           onSubmitEditing={this._onSubmitEditing.bind(this)}
-          blurOnSubmit={this.props.blurOnSubmit}
+          blurOnSubmit={blurOnSubmit}
           keyboardType={this.state.keyboardType} />
         <FormClearButton onClear={this.clearValue.bind(this)} value={this._hasValue()} />
       </View>
@@ -436,7 +443,6 @@ export default class FormTextInput extends Component {
 const styles = StyleSheet.create({
   textInputWrapper: {
     width: '90%',
-    marginLeft: '5%',
     height: 75,
     marginTop: 25,
     flexDirection: 'row',
@@ -447,6 +453,7 @@ const styles = StyleSheet.create({
     // borderBottomWidth: 1,
     borderColor: '#000',
     fontSize: 20,
+    lineHeight: 18,
     flex: 1,
   },
   invalidField: {

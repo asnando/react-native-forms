@@ -13,12 +13,12 @@ export default class FormTab extends Component {
 
   constructor(props) {
     super(props);
-    const { tabs } = props;
+    const { tabs, translate } = props;
     this.tabs = [];
     this.state = {
       ...initialState,
       routes: tabs.map((tab, tabIndex) => {
-        return { key: tabIndex.toString(), title: tab.title }
+        return { key: tabIndex.toString(), title: translate(tab.title) }
       })
     };
   }
@@ -41,10 +41,19 @@ export default class FormTab extends Component {
   }
 
   _renderTabBar = props => {
-    return <TabBar
-      style={{ borderRadius: 8 }}
-      indicatorStyle={{ display: 'none' }}
-      {...props} />;
+    const {
+      tabIndicatorColor,
+      tabTextColor,
+      tabTintColor,
+    } = this.props;
+    return (
+      <TabBar
+        style={{ borderRadius: 8 }}
+        labelStyle={{ color: tabTextColor, fontWeight: 'bold' }}
+        indicatorStyle={{ backgroundColor: tabIndicatorColor }}
+        style={{ backgroundColor: tabTintColor }}
+        {...props} />
+    );
   }
 
   _renderScene = SceneMap(this._createSceneMap())

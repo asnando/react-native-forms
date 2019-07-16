@@ -7,11 +7,11 @@ import { ClearButtonContainer } from './ClearButton.styles';
 class ClearButton extends PureComponent {
   render() {
     const { value, onClear } = this.props;
-    return (
-      <ClearButtonContainer value={value} onPress={onClear}>
+    return value ? (
+      <ClearButtonContainer onPress={onClear}>
         <Text>X</Text>
       </ClearButtonContainer>
-    );
+    ) : null;
   }
 }
 
@@ -21,7 +21,10 @@ ClearButton.defaultProps = {
 };
 
 ClearButton.propTypes = {
-  value: PropTypes.string,
+  value: PropTypes.oneOfType(
+    PropTypes.string,
+    PropTypes.bool,
+  ),
   onClear: PropTypes.func,
 };
 

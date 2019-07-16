@@ -27,25 +27,60 @@ class Form extends Component {
 
   renderForms() {
     const { props } = this;
-    const { steps, tabs } = props;
+    const { steps, tabs, translate } = props;
     if (isArray(steps)) {
-      return <FormWithSteps {...props} ref={r => this.form = r} />;
+      const {
+        stepIndicatorColor,
+        stepButtonColor,
+        stepButtonTextColor,
+      } = props;
+      return (
+        <FormWithSteps
+          {...props}
+          ref={r => this.form = r}
+          stepIndicatorColor={stepIndicatorColor}
+          stepButtonColor={stepButtonColor}
+          stepButtonTextColor={stepButtonTextColor}
+        />
+      );
     }
     if (tabs) {
-      return <FormTab {...props} ref={r => this.form = r} />;
+      const {
+        tabTintColor,
+        tabIndicatorColor,
+        tabTextColor,
+      } = props;
+      return (
+        <FormTab
+          {...props}
+          ref={r => this.form = r}
+          tabTintColor={tabTintColor}
+          tabIndicatorColor={tabIndicatorColor}
+          tabTextColor={tabTextColor}
+          translate={translate}
+        />
+      );
     }
-    return <FormView {...props} ref={r => this.form = r} />;
+    return (
+      <FormView
+        {...props}
+        ref={r => this.form = r}
+        translate={translate}
+      />
+    );
   }
 
   render() {
+    const { steps } = this.props;
+    const isStepForm = isArray(steps) && steps.length;
     return (
-      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={16} enabled>
-        <FormContainer>
+      // <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={16} enabled>
+        <FormContainer fullHeight={isStepForm}>
           <ScrollView alwaysBounceVertical={false} keyboardShouldPersistTaps="handled" contentContainerStyle={formScrollViewStyle}>
             {this.renderForms()}
           </ScrollView>
         </FormContainer>
-      </KeyboardAvoidingView>
+      // </KeyboardAvoidingView>
     );
   }
 }
@@ -53,11 +88,25 @@ class Form extends Component {
 Form.defaultProps = {
   steps: null,
   tabs: null,
+  tabIndicatorColor: null,
+  tabTextColor: null,
+  tabTintColor: null,
+  stepIndicatorColor: null,
+  stepButtonColor: null,
+  stepButtonTextColor: null,
+  translate: (text) => text,
 };
 
 Form.propTypes = {
   steps: PropTypes.array,
   tabs: PropTypes.array,
+  tabIndicatorColor: PropTypes.string,
+  tabTextColor: PropTypes.string,
+  tabTintColor: PropTypes.string,
+  stepIndicatorColor: PropTypes.string,
+  stepButtonColor: PropTypes.string,
+  stepButtonTextColor: PropTypes.string,
+  translate: PropTypes.func,
 };
 
 export default Form;
