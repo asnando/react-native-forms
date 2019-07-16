@@ -30,7 +30,8 @@ export const ModalHeaderCloseButtonText = styled.Text`
 
 export const ModalHeaderInput = styled.TextInput`
   display: ${props => (!props.showFilterInput ? 'none' : 'flex')};
-  height: 32;
+  font-size: 18;
+  line-height: 18;
   border-width: 1;
   border-radius: 4;
   border-color: #aaa;
@@ -60,4 +61,5 @@ export const ModalHeaderButtonContainer = styled.View`
 
 export const ModalHeaderInputContainer = styled.View`
   flex: 8;
+  height: 40;
 `;
