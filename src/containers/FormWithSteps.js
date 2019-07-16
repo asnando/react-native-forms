@@ -111,6 +111,7 @@ class FormWithSteps extends Component {
           // shouldShowField={this._shouldShowField.bind(this)}
           stepButtonColor={this.props.stepButtonColor}
           stepButtonTextColor={this.props.stepButtonTextColor}
+          translate={props.translate}
           />;
       };
     });

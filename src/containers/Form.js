@@ -41,6 +41,7 @@ class Form extends Component {
           stepIndicatorColor={stepIndicatorColor}
           stepButtonColor={stepButtonColor}
           stepButtonTextColor={stepButtonTextColor}
+          translate={translate}
         />
       );
     }
