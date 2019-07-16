@@ -32,6 +32,7 @@ export const ModalHeaderInput = styled.TextInput`
   display: ${props => (!props.showFilterInput ? 'none' : 'flex')};
   font-size: 18;
   line-height: 18;
+  height: 40;
   border-width: 1;
   border-radius: 4;
   border-color: #aaa;

@@ -451,6 +451,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     borderColor: '#000',
+    height: 40,
     fontSize: 20,
     lineHeight: 18,
     flex: 1,
