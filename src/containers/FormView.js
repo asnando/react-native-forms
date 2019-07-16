@@ -151,7 +151,14 @@ class FormView extends Component {
   }
 
   _renderFields() {
-    const { fields, validStyle, invalidStyle, submitButtonColor, submitButtonTextColor } = this.props;
+    const {
+      fields,
+      validStyle,
+      invalidStyle,
+      submitButtonColor,
+      submitButtonTextColor,
+      translate,
+    } = this.props;
 
     return (fields || []).map((field, fieldKey, self) => {
       // Set boolean if keyboard should close after user
@@ -214,15 +221,24 @@ class FormView extends Component {
               ref={r => this.fields[field.name] = r}
               key={fieldKey}
               secureTextEntry={field.type === 'password'}
+              translate={translate}
               {...field} />
           );
         case 'boolean':
           return (
-            <FormSwitch ref={r => this.fields[field.name] = r} key={fieldKey} {...field} />
+            <FormSwitch
+              ref={r => this.fields[field.name] = r}
+              key={fieldKey}
+              {...field}
+            />
           );
         case 'option':
           return (
-            <FormOption ref={r => this.fields[field.name] = r} key={fieldKey} {...field} />
+            <FormOption
+              ref={r => this.fields[field.name] = r}
+              key={fieldKey} {...field}
+              translate={translate}
+            />
           );
       }
     });
@@ -252,6 +268,7 @@ FormView.defaultProps = {
   invalidStyle: null,
   submitButtonColor: null,
   submitButtonTextColor: null,
+  translate: null,
 };
 
 FormView.propTypes = {
@@ -263,6 +280,7 @@ FormView.propTypes = {
   invalidStyle: PropTypes.object,
   submitButtonColor: PropTypes.string,
   submitButtonTextColor: PropTypes.string,
+  translate: PropTypes.func,
 };
 
 export default FormView;

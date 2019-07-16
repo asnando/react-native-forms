@@ -266,6 +266,7 @@ export default class FormOption extends Component {
     } = this.state;
     const {
       title,
+      translate,
     } = this.props;
     return (
       <View>
@@ -282,7 +283,7 @@ export default class FormOption extends Component {
           loading={loading}
         />
         <OptionContainer onPress={(...args) => this.show(...args)}>
-          <FormTopLabel style={optionLabelStyle} label={title} />
+          <FormTopLabel style={optionLabelStyle} label={translate(title)} />
           <OptionValueContainer>
             <OptionValueLabel>
               {this.getLabelValue()}
@@ -301,6 +302,7 @@ FormOption.defaultProps = {
   title: '',
   nextField: null,
   onFieldEnter: null,
+  translate: null,
 };
 
 FormOption.propTypes = {
@@ -313,4 +315,5 @@ FormOption.propTypes = {
   nextField: PropTypes.func,
   getResumedFormValue: PropTypes.func.isRequired,
   onFieldEnter: PropTypes.func,
+  translate: PropTypes.func,
 };
