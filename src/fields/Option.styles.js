@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 
 export const OptionContainer = styled.TouchableOpacity`
-  width: 100%;
+  width: 98%;
   height: 75;
   margin-top: 25;
 `;
