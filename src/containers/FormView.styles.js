@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 
 export const FormViewContainer = styled.View`
-  width: 90%;
+  width: 85%;
   margin-left: auto;
   margin-right: auto;
 `;
