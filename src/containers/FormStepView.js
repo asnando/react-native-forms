@@ -1,7 +1,8 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
-import { Button, Keyboard } from 'react-native';
+import { Keyboard } from 'react-native';
 import PropTypes from 'prop-types';
+import { TextButton } from 'react-native-custom-button';
 import FormView from './FormView';
 import {
   FormStepViewContainer,
@@ -52,9 +53,9 @@ class FormStepView extends Component {
             // eslint-disable-next-line no-nested-ternary
             isFirstTab
               ? canClose
-                ? <Button title={closeButtonTitle} onPress={onCloseRequest} />
+                ? <TextButton title={closeButtonTitle} onPress={onCloseRequest} buttonStyle={{ width: 96 }} />
                 : null
-              : <Button title={backButtonTitle} onPress={requestPreviousTab} />
+              : <TextButton title={backButtonTitle} onPress={requestPreviousTab} buttonStyle={{ width: 96 }} />
           }
         </FormStepViewTopContainer>
         {/* Title */}
