@@ -6,7 +6,7 @@ const STEP_INDICATOR_CIRCLE_ACTIVE_COLOR = '#3d99fc';
 
 export const StepIndicatorContainer = styled.View`
   flex-direction: row;
-  height: 84;
+  height: 64;
   align-items: center;
   justify-content: center;
   background-color: transparent;
