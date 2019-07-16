@@ -447,14 +447,15 @@ const styles = StyleSheet.create({
     marginTop: 25,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   textInput: {
-    height: 40,
-    // borderBottomWidth: 1,
     borderColor: '#000',
     fontSize: 20,
     lineHeight: 18,
     flex: 1,
+    marginTop: 16,
+    paddingLeft: 0,
   },
   invalidField: {
     borderColor: 'red',
