@@ -75,13 +75,13 @@ class Form extends Component {
     const { steps } = this.props;
     const isStepForm = isArray(steps) && steps.length;
     return (
-      // <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={16} enabled>
+      <KeyboardAvoidingView behavior="padding" enabled>
         <FormContainer fullHeight={isStepForm}>
           <ScrollView alwaysBounceVertical={false} keyboardShouldPersistTaps="handled" contentContainerStyle={formScrollViewStyle}>
             {this.renderForms()}
           </ScrollView>
         </FormContainer>
-      // </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
     );
   }
 }
