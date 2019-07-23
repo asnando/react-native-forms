@@ -4,22 +4,22 @@
   "private": true,
   "scripts": {
     "start": "react-native start -- --reset-cache",
-    "ios": "react-native ios",
-    "android": "react-native android",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios"
   },
   "dependencies": {
     "react": "16.8.6",
-    "react-native": "0.60.0",
-    "react-native-forms": "file:../../"
+    "react-native": "0.60.4",
+    "react-native-forms": "file:../.."
   },
   "devDependencies": {
-    "@babel/core": "^7.5.4",
-    "@babel/runtime": "^7.5.4",
+    "@babel/core": "^7.5.5",
+    "@babel/runtime": "^7.5.5",
     "@react-native-community/eslint-config": "^0.0.5",
     "babel-jest": "^24.8.0",
-    "eslint": "^6.0.1",
+    "eslint": "^6.1.0",
     "jest": "^24.8.0",
     "metro-react-native-babel-preset": "^0.55.0",
     "react-test-renderer": "16.8.6"
