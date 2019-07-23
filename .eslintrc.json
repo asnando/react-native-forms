@@ -1,7 +1,8 @@
 {
     "env": {
         "browser": true,
-        "es6": true
+        "es6": true,
+        "node": true
     },
     "extends": "airbnb",
     "globals": {
@@ -19,7 +20,5 @@
         "react"
     ],
     "rules": {
-        "react/jsx-filename-extension": "off",
-        "no-underscore-dangle": "off"
     }
 }
