@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Children, cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import {
   TabView,
@@ -30,16 +30,26 @@ class FormSteps extends PureComponent {
   }
 
   transformChildrenToSceneMap() {
+    const { routes } = this.state;
     const { children } = this.props;
+    const routesSize = routes.length;
     const map = {};
     // For each child we need to return a function
     // that later will render the real children component.
     // Child component will be inside the FormStep component.
     children.forEach((child, index) => {
       const childKey = index.toString();
-      map[childKey] = () => (
-        <FormStep>{child}</FormStep>
-      );
+      const isFirstStep = !index;
+      const isLastStep = index === routesSize - 1;
+      map[childKey] = () => Children.map(child, (_child) => {
+        return cloneElement(_child, {
+          onNextStepRequest: this.handleNextStepRequest.bind(this),
+          onPreviousStepRequest: this.handlePreviousStepRequest.bind(this),
+          onSubmitRequest: this.handleSubmitRequest.bind(this),
+          isFirstStep,
+          isLastStep,
+        });
+      });
     });
     return new SceneMap(map);
   }
@@ -48,6 +58,25 @@ class FormSteps extends PureComponent {
     console.log(`Form steps handle index change: ${index}`);
     // eslint-disable-next-line react/no-unused-state
     return this.setState({ index });
+  }
+
+  handleNextStepRequest() {
+    const { index, routes } = this.state;
+    const routesSize = routes.length;
+    if (index < routesSize - 1) {
+      this.handleIndexChange(index + 1);
+    }
+  }
+
+  handlePreviousStepRequest() {
+    const { index } = this.state;
+    if (index > 0) {
+      this.handleIndexChange(index - 1);
+    }
+  }
+
+  handleSubmitRequest() {
+    console.warn('requested to submit');
   }
 
   render() {

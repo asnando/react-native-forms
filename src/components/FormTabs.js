@@ -47,7 +47,7 @@ class FormTabs extends PureComponent {
     // Child component will be inside the FormTab component.
     children.forEach((child, index) => {
       const childKey = index.toString();
-      map[childKey] = () => (<FormTab>{child}</FormTab>);
+      map[childKey] = () => child;
     });
     return SceneMap(map);
   }
