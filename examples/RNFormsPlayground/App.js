@@ -39,10 +39,24 @@ const renderFormTabs = () => {
 const renderFormSteps = () => {
   return (
     <FormSteps>
-      <FormStep title="First Step">
+      <FormStep
+        title="First Step"
+        nextStepButtonText="Go to step 2"
+      >
         <FormView>{renderFormFields()}</FormView>
       </FormStep>
-      <FormStep title="Second Step">
+      <FormStep
+        title="Second Step"
+        nextStepButtonText="Go to step 3"
+        backButtonText="Back to step 1"
+      >
+        <FormView>{renderFormFields()}</FormView>
+      </FormStep>
+      <FormStep
+        title="Third Step"
+        submitButtonText="Submit form"
+        backButtonText="Back to step 2"
+      >
         <FormView>{renderFormFields()}</FormView>
       </FormStep>
     </FormSteps>
