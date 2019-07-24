@@ -40,6 +40,8 @@ class FormStep extends PureComponent {
       isLastStep,
       backButtonText,
       nextStepButtonText,
+      buttonTintColor,
+      buttonTextColor,
       submitButtonText,
     } = this.props;
     return (
@@ -56,12 +58,16 @@ class FormStep extends PureComponent {
         { !isLastStep && (
           <FullWidthButton
             title={nextStepButtonText}
+            buttonTintColor={buttonTintColor}
+            buttonTextColor={buttonTextColor}
             onPress={() => this.requestNextStep()}
           />
         )}
         { isLastStep && (
           <FullWidthButton
             title={submitButtonText}
+            buttonTintColor={buttonTintColor}
+            buttonTextColor={buttonTextColor}
             onPress={() => this.requestSubmit()}
           />
         )}
@@ -79,6 +85,8 @@ FormStep.defaultProps = {
   title: null,
   backButtonText: 'Back',
   nextStepButtonText: 'Next',
+  buttonTintColor: null,
+  buttonTextColor: null,
   submitButtonText: 'Submit',
 };
 
@@ -95,6 +103,8 @@ FormStep.propTypes = {
   title: PropTypes.string,
   backButtonText: PropTypes.string,
   nextStepButtonText: PropTypes.string,
+  buttonTintColor: PropTypes.string,
+  buttonTextColor: PropTypes.string,
   submitButtonText: PropTypes.string,
 };
 

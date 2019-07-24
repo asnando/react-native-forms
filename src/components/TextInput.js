@@ -4,14 +4,28 @@ import { TextInput } from './TextInput.styles';
 import { FormField, FormFieldLabel } from  './FormField';
 
 class FormTextInput extends PureComponent {
+  isValid() {
+    const { name } = this.props;
+    console.log(`Validating "${name}" field`);
+    return true;
+  }
+  
   render() {
-    const { title } = this.props;
+    const { props } = this;
+    const {
+      name,
+      title,
+      onFormFieldValue,
+    } = props;
     return (
       <FormField>
         <FormFieldLabel>
           {title}
         </FormFieldLabel>
-        <TextInput />
+        <TextInput
+          {...props}
+          onChangeText={value => onFormFieldValue(name, value)}
+        />
       </FormField>
     );
   }
@@ -19,10 +33,13 @@ class FormTextInput extends PureComponent {
 
 FormTextInput.defaultProps = {
   title: null,
+  onFormFieldValue: null,
 };
 
 FormTextInput.propTypes = {
   title: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  onFormFieldValue: PropTypes.func,
 };
 
 export default FormTextInput;
