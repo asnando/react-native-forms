@@ -3,6 +3,7 @@ import {
   Form,
   FormView,
   TextInput,
+  Submit,
 } from 'react-native-forms';
 
 const WithView = () => {
@@ -14,7 +15,11 @@ const WithView = () => {
           title="User Name"
           required
         />
-        {/* <Submit /> */}
+        <Submit
+          title="Send"
+          buttonTintColor="purple"
+          buttonTextColor="white"
+        />
       </FormView>
     </Form>
   );

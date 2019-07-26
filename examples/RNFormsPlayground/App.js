@@ -7,9 +7,9 @@ import WithSteps from './withSteps';
 const App = () => {
   return (
     <SafeAreaView style={styles.container}>
-      {/* <WithView /> */}
+      <WithView />
       {/* <WithTabs /> */}
-      <WithSteps />
+      {/* <WithSteps /> */}
     </SafeAreaView>
   );
 };

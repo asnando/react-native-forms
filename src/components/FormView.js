@@ -64,9 +64,13 @@ class FormView extends PureComponent {
   }
 
   renderChildren() {
-    const { children } = this.props;
+    const {
+      children,
+      onSubmitRequest,
+    } = this.props;
     return mapChildrenWithProps(children, {
       saveFormFieldRef: this.saveFormFieldRef.bind(this),
+      onSubmitRequest,
     });
   }
 
@@ -82,6 +86,7 @@ class FormView extends PureComponent {
 FormView.defaultProps = {
   saveFormViewRef: null,
   children: null,
+  onSubmitRequest: null,
 };
 
 FormView.propTypes = {
@@ -90,6 +95,7 @@ FormView.propTypes = {
     PropTypes.object,
   ]),
   saveFormViewRef: PropTypes.func,
+  onSubmitRequest: PropTypes.func,
 };
 
 export default FormView;

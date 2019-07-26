@@ -26,7 +26,7 @@ class Form extends PureComponent {
   // This method will be called when form is configured
   // to use tabs and the submit button inside FormView is pressed.
   handleSubmitRequest() {
-
+    console.warn('Form Submit requested!');
   }
 
   // This method will be called when form is configured
@@ -52,6 +52,7 @@ class Form extends PureComponent {
     // Will render the form using children components.
     return mapChildrenWithProps(children, {
       onInvalidField: this.handleInvalidField.bind(this),
+      onSubmitRequest: this.handleSubmitRequest.bind(this),
     });
   }
 
