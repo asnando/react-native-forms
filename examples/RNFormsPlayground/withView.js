@@ -4,6 +4,7 @@ import {
   FormView,
   TextInput,
   Submit,
+  Switch,
 } from 'react-native-forms';
 
 const WithView = () => {
@@ -14,6 +15,11 @@ const WithView = () => {
           name="user_name"
           title="User Name"
           required
+        />
+        <Switch
+          title="Receive News"
+          name="receive_news"
+          activeColor="purple"
         />
         <Submit
           title="Send"
