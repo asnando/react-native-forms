@@ -6,6 +6,7 @@ import {
   Submit,
   Switch,
   Radio,
+  Option,
 } from 'react-native-forms';
 
 const WithView = () => {
@@ -25,6 +26,14 @@ const WithView = () => {
         <Radio
           title="Select a option"
           name="options"
+          options={[
+            { label: 'Option 1', value: 'option1' },
+            { label: 'Option 2', value: 'option2' },
+          ]}
+        />
+        <Option
+          title="Select one option from the modal list"
+          name="another_options"
           options={[
             { label: 'Option 1', value: 'option1' },
             { label: 'Option 2', value: 'option2' },
