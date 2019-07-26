@@ -4,7 +4,6 @@ import {
   TabView,
   SceneMap,
 } from 'react-native-tab-view';
-import FormStep from './FormStep';
 
 const initialState = {
   index: 0,
@@ -31,7 +30,7 @@ class FormSteps extends PureComponent {
 
   transformChildrenToSceneMap() {
     const { routes } = this.state;
-    const { children } = this.props;
+    const { children, onInvalidField } = this.props;
     const routesSize = routes.length;
     const map = {};
     // For each child we need to return a function
@@ -46,6 +45,7 @@ class FormSteps extends PureComponent {
           onNextStepRequest: this.handleNextStepRequest.bind(this),
           onPreviousStepRequest: this.handlePreviousStepRequest.bind(this),
           onSubmitRequest: this.handleSubmitRequest.bind(this),
+          onInvalidField,
           isFirstStep,
           isLastStep,
         });
@@ -94,7 +94,7 @@ class FormSteps extends PureComponent {
 }
 
 FormSteps.defaultProps = {
-
+  onInvalidField: null,
 };
 
 FormSteps.propTypes = {
@@ -102,6 +102,7 @@ FormSteps.propTypes = {
     PropTypes.object,
     PropTypes.array,
   ]).isRequired,
+  onInvalidField: PropTypes.func,
 };
 
 export default FormSteps;

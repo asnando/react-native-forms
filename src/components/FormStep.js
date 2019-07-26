@@ -9,8 +9,19 @@ import {
   FormStepBackButtonStyle,
   FormStepTitle,
 } from './FormStep.styles';
+import mapChildrenWithProps from '../helpers/mapChildrenWithProps';
 
 class FormStep extends PureComponent {
+  isActiveFormViewValid() {
+    const { formView } = this;
+    return formView.validate();
+  }
+
+  whichActiveFormViewFieldIsInvalid() {
+    const { formView } = this;
+    return formView.whichActiveFormViewFieldIsInvalid();
+  }
+  
   requestNextStep() {
     const { onNextStepRequest } = this.props;
     if (typeof onNextStepRequest === 'function') {
@@ -32,9 +43,38 @@ class FormStep extends PureComponent {
     }
   }
 
+  handleNextStepRequest() {
+    const { onInvalidField } = this.props;
+    console.log('Requesting next step');
+    // Check if active FormView have all valid fields.
+    // Then request the transition to the next step FormView.
+    if (this.isActiveFormViewValid()) {
+      this.requestNextStep();
+    }
+    if (typeof onInvalidField === 'function') {
+      const invalidFieldName = this.whichActiveFormViewFieldIsInvalid();
+      onInvalidField(invalidFieldName);
+    }
+  }
+
+  handleSubmitRequest() {
+    console.log('Requesting step submit');
+    
+  }
+
+  saveFormView(ref) {
+    this.formView = ref;
+  }
+
+  renderChildren() {
+    const { children } = this.props;
+    return mapChildrenWithProps(children, {
+      saveFormViewRef: this.saveFormView.bind(this),
+    });
+  }
+
   render() {
     const {
-      children,
       title,
       isFirstStep,
       isLastStep,
@@ -54,13 +94,13 @@ class FormStep extends PureComponent {
           />
         )}
         { title && (<FormStepTitle>{title}</FormStepTitle>)}
-        {children}
+        {this.renderChildren()}
         { !isLastStep && (
           <FullWidthButton
             title={nextStepButtonText}
             buttonTintColor={buttonTintColor}
             buttonTextColor={buttonTextColor}
-            onPress={() => this.requestNextStep()}
+            onPress={() => this.handleNextStepRequest()}
           />
         )}
         { isLastStep && (
@@ -80,6 +120,7 @@ FormStep.defaultProps = {
   onNextStepRequest: null,
   onPreviousStepRequest: null,
   onSubmitRequest: null,
+  onInvalidField: null,
   isFirstStep: false,
   isLastStep: false,
   title: null,
@@ -98,6 +139,7 @@ FormStep.propTypes = {
   onNextStepRequest: PropTypes.func,
   onPreviousStepRequest: PropTypes.func,
   onSubmitRequest: PropTypes.func,
+  onInvalidField: PropTypes.func,
   isFirstStep: PropTypes.bool,
   isLastStep: PropTypes.bool,
   title: PropTypes.string,
