@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { TextInput } from './TextInput.styles';
-import { FormField, FormFieldLabel } from  './FormField';
+import { FormField, FormFieldLabel } from '../FormField.styles';
 
 const initialState = {
   value: '',
