@@ -15,8 +15,19 @@ class Form extends PureComponent {
     this.state = initialState;
   }
 
+  saveFormViewRef(ref) {
+    this.formView = ref;
+  }
+
   submit() {
     // Check if FormView is valid.
+    const { formView } = this;
+    if (!formView.validate()) {
+      const invalidFieldName = formView.whichFormFieldIsInvalid();
+      console.log(`"${invalidFieldName}" have invalid value.`);
+      return;
+    }
+    console.log(formView.getValues());
   }
 
   clear() {
@@ -26,7 +37,7 @@ class Form extends PureComponent {
   // This method will be called when form is configured
   // to use tabs and the submit button inside FormView is pressed.
   handleSubmitRequest() {
-    console.warn('Form Submit requested!');
+    return this.submit();
   }
 
   // This method will be called when form is configured
@@ -53,6 +64,7 @@ class Form extends PureComponent {
     return mapChildrenWithProps(children, {
       onInvalidField: this.handleInvalidField.bind(this),
       onSubmitRequest: this.handleSubmitRequest.bind(this),
+      saveFormViewRef: this.saveFormViewRef.bind(this),
     });
   }
 

@@ -62,14 +62,14 @@ class FormStep extends PureComponent {
     
   }
 
-  saveFormView(ref) {
+  saveFormViewRef(ref) {
     this.formView = ref;
   }
 
   renderChildren() {
     const { children } = this.props;
     return mapChildrenWithProps(children, {
-      saveFormViewRef: this.saveFormView.bind(this),
+      saveFormViewRef: this.saveFormViewRef.bind(this),
     });
   }
 

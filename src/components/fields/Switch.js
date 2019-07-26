@@ -16,6 +16,13 @@ class Switch extends PureComponent {
     this.state = initialState;
   }
 
+  componentDidMount() {
+    const { saveFormFieldRef } = this.props;
+    if (typeof saveFormFieldRef === 'function') {
+      saveFormFieldRef(this);
+    }
+  }
+
   getValue() {
     const { value } = this.state;
     return value;
@@ -64,12 +71,14 @@ class Switch extends PureComponent {
 Switch.defaultProps = {
   title: null,
   activeColor: null,
+  saveFormFieldRef: null,
 };
 
 Switch.propTypes = {
   name: PropTypes.string.isRequired,
   title: PropTypes.string,
   activeColor: PropTypes.string,
+  saveFormFieldRef: PropTypes.func,
 };
 
 export default Switch;

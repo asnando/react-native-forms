@@ -3,6 +3,13 @@ import PropTypes from 'prop-types';
 import mapChildrenWithProps from '../helpers/mapChildrenWithProps';
 import { FormViewContainer } from './FormView.styles';
 
+const getInvalidFieldFromList = fields => fields.find((field) => {
+  if (typeof field.validate !== 'function') {
+    return false;
+  }
+  return !field.validate();
+});
+
 class FormView extends PureComponent {
   constructor(props) {
     super(props);
@@ -31,32 +38,25 @@ class FormView extends PureComponent {
     // the component "validate" method and returns a boolean if
     // all are valid or not.
     const { fields } = this;
-    const invalid = fields.find(field => !field.validate());
-    return !invalid;
+    return !getInvalidFieldFromList(fields);
   }
 
-  whichActiveFormViewFieldIsInvalid() {
+  whichFormFieldIsInvalid() {
     const { fields } = this;
     try {
-      return fields.find(field => !field.validate()).getDisplayName();
+      return getInvalidFieldFromList(fields).getDisplayName();
     } catch (exception) {
       return null;
     }
   }
 
-  clear() {
-    
-  }
+  // clear() {}
 
   saveFormViewRefOnParent() {
     const { saveFormViewRef } = this.props;
     if (typeof saveFormViewRef === 'function') {
       saveFormViewRef(this);
     }
-  }
-
-  handleFormFieldValue(name, value) {
-    console.log(`${name}: "${value}"`);
   }
 
   saveFormFieldRef(ref) {

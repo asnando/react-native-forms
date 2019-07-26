@@ -5,6 +5,7 @@ import {
   TextInput,
   Submit,
   Switch,
+  Radio,
 } from 'react-native-forms';
 
 const WithView = () => {
@@ -20,6 +21,14 @@ const WithView = () => {
           title="Receive News"
           name="receive_news"
           activeColor="purple"
+        />
+        <Radio
+          title="Select a option"
+          name="options"
+          options={[
+            { label: 'Option 1', value: 'option1' },
+            { label: 'Option 2', value: 'option2' },
+          ]}
         />
         <Submit
           title="Send"
