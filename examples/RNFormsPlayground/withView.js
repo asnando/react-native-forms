@@ -7,6 +7,7 @@ import {
   Switch,
   Radio,
   Option,
+  MaskedTextInput,
 } from 'react-native-forms';
 
 const WithView = () => {
@@ -38,6 +39,21 @@ const WithView = () => {
             { label: 'Option 1', value: 'option1' },
             { label: 'Option 2', value: 'option2' },
           ]}
+        />
+        <MaskedTextInput
+          name="cpfMaskedInput"
+          title="CPF"
+          maskType="cpf"
+        />
+        <MaskedTextInput
+          name="cnpjMaskedInput"
+          title="CNPJ"
+          maskType="cnpj"
+        />
+        <MaskedTextInput
+          name="phone"
+          title="Phone"
+          maskType="phone"
         />
         <Submit
           title="Send"
