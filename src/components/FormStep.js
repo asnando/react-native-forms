@@ -3,13 +3,18 @@ import PropTypes from 'prop-types';
 import {
   TextButton,
   FullWidthButton,
-} from 'react-native-custom-button';
+} from 'rn-custom-button';
 import {
   FormStepContainer,
   FormStepBackButtonStyle,
+  FormStepBackButtonTextStyle,
   FormStepTitle,
 } from './FormStep.styles';
 import mapChildrenWithProps from '../helpers/mapChildrenWithProps';
+
+const DEFAULT_BACK_BUTTON_TEXT = 'Back';
+const DEFAULT_NEXT_STEP_BUTTON_TEXT = 'Next';
+const DEFAULT_SUBMIT_BUTTON_TEXT = 'Submit';
 
 class FormStep extends PureComponent {
   isActiveFormViewValid() {
@@ -88,8 +93,10 @@ class FormStep extends PureComponent {
       <FormStepContainer>
         { !isFirstStep && (
           <TextButton
-            title={backButtonText}
+            title={backButtonText || DEFAULT_BACK_BUTTON_TEXT}
             buttonStyle={FormStepBackButtonStyle}
+            buttonTextStyle={FormStepBackButtonTextStyle}
+            buttonTextColor={buttonTintColor}
             onPress={() => this.requestPreviousStep()}
           />
         )}
@@ -97,7 +104,7 @@ class FormStep extends PureComponent {
         {this.renderChildren()}
         { !isLastStep && (
           <FullWidthButton
-            title={nextStepButtonText}
+            title={nextStepButtonText || DEFAULT_NEXT_STEP_BUTTON_TEXT}
             buttonTintColor={buttonTintColor}
             buttonTextColor={buttonTextColor}
             onPress={() => this.handleNextStepRequest()}
@@ -105,7 +112,7 @@ class FormStep extends PureComponent {
         )}
         { isLastStep && (
           <FullWidthButton
-            title={submitButtonText}
+            title={submitButtonText || DEFAULT_SUBMIT_BUTTON_TEXT}
             buttonTintColor={buttonTintColor}
             buttonTextColor={buttonTextColor}
             onPress={() => this.requestSubmit()}
@@ -124,11 +131,11 @@ FormStep.defaultProps = {
   isFirstStep: false,
   isLastStep: false,
   title: null,
-  backButtonText: 'Back',
-  nextStepButtonText: 'Next',
+  backButtonText: null,
+  nextStepButtonText: null,
   buttonTintColor: null,
   buttonTextColor: null,
-  submitButtonText: 'Submit',
+  submitButtonText: null,
 };
 
 FormStep.propTypes = {

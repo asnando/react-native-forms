@@ -17,3 +17,8 @@ export const FormStepTitle = styled.Text`
 export const FormStepBackButtonStyle = {
   width: 128,
 };
+
+export const FormStepBackButtonTextStyle = {
+  textAlign: 'left',
+  marginLeft: 8,
+};

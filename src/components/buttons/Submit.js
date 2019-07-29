@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { FullWidthButton } from 'react-native-custom-button';
+import { FullWidthButton } from 'rn-custom-button';
 
 class Submit extends PureComponent {
   render() {

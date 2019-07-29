@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment, Children, cloneElement } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import {
   TabView,
@@ -32,7 +32,15 @@ class FormSteps extends PureComponent {
 
   transformChildrenToSceneMap() {
     const { routes } = this.state;
-    const { children, onInvalidField } = this.props;
+    const {
+      children,
+      onInvalidField,
+      backButtonText,
+      nextStepButtonText,
+      buttonTintColor,
+      buttonTextColor,
+      submitButtonText,
+    } = this.props;
     const routesSize = routes.length;
     const map = {};
     // For each child we need to return a function
@@ -49,17 +57,13 @@ class FormSteps extends PureComponent {
         onInvalidField,
         isFirstStep,
         isLastStep,
+        // Refers to FormStep props.
+        backButtonText,
+        nextStepButtonText,
+        buttonTintColor,
+        buttonTextColor,
+        submitButtonText,
       });
-      // map[childKey] = () => Children.map(child, (_child) => {
-      //   return cloneElement(_child, {
-      //     onNextStepRequest: this.handleNextStepRequest.bind(this),
-      //     onPreviousStepRequest: this.handlePreviousStepRequest.bind(this),
-      //     onSubmitRequest: this.handleSubmitRequest.bind(this),
-      //     onInvalidField,
-      //     isFirstStep,
-      //     isLastStep,
-      //   });
-      // });
     });
     return new SceneMap(map);
   }
@@ -115,6 +119,12 @@ class FormSteps extends PureComponent {
 FormSteps.defaultProps = {
   onInvalidField: null,
   indicatorColor: null,
+  // FormStep component props.
+  backButtonText: null,
+  nextStepButtonText: null,
+  buttonTintColor: null,
+  buttonTextColor: null,
+  submitButtonText: null,
 };
 
 FormSteps.propTypes = {
@@ -124,6 +134,12 @@ FormSteps.propTypes = {
   ]).isRequired,
   onInvalidField: PropTypes.func,
   indicatorColor: PropTypes.string,
+  // FormStep component props.
+  backButtonText: PropTypes.string,
+  nextStepButtonText: PropTypes.string,
+  buttonTintColor: PropTypes.string,
+  buttonTextColor: PropTypes.string,
+  submitButtonText: PropTypes.string,
 };
 
 export default FormSteps;

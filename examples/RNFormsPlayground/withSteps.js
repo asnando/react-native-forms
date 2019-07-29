@@ -10,14 +10,19 @@ import {
 const WithSteps = () => {
   return (
     <Form>
-      <FormSteps indicatorColor="purple">
+      <FormSteps
+        indicatorColor="purple"
+        buttonTintColor="purple"
+        buttonTextColor="white"
+        backButtonTextColor="purple"
+      >
         {/* Step 1 */}
         <FormStep title="Step 1">
           <FormView>
             <TextInput
               title="User Name"
               name="user_name"
-              required
+              // required
             />
           </FormView>
         </FormStep>
