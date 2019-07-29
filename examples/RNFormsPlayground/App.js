@@ -4,12 +4,14 @@ import WithView from './withView';
 import WithTabs from  './withTabs';
 import WithSteps from './withSteps';
 
+console.disableYellowBox = true;
+
 const App = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <WithView />
+      {/* <WithView /> */}
       {/* <WithTabs /> */}
-      {/* <WithSteps /> */}
+      <WithSteps />
     </SafeAreaView>
   );
 };

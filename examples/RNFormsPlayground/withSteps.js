@@ -10,7 +10,7 @@ import {
 const WithSteps = () => {
   return (
     <Form>
-      <FormSteps>
+      <FormSteps indicatorColor="purple">
         {/* Step 1 */}
         <FormStep title="Step 1">
           <FormView>

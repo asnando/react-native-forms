@@ -50,8 +50,6 @@ class FormView extends PureComponent {
     }
   }
 
-  // clear() {}
-
   saveFormViewRefOnParent() {
     const { saveFormViewRef } = this.props;
     if (typeof saveFormViewRef === 'function') {

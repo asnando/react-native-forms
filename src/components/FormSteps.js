@@ -1,9 +1,11 @@
-import React, { PureComponent, Children, cloneElement } from 'react';
+import React, { PureComponent, Fragment, Children, cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import {
   TabView,
   SceneMap,
 } from 'react-native-tab-view';
+import mapChildrenWithProps from '../helpers/mapChildrenWithProps';
+import FormStepIndicator from './FormStepIndicator';
 
 const initialState = {
   index: 0,
@@ -40,16 +42,24 @@ class FormSteps extends PureComponent {
       const childKey = index.toString();
       const isFirstStep = !index;
       const isLastStep = index === routesSize - 1;
-      map[childKey] = () => Children.map(child, (_child) => {
-        return cloneElement(_child, {
-          onNextStepRequest: this.handleNextStepRequest.bind(this),
-          onPreviousStepRequest: this.handlePreviousStepRequest.bind(this),
-          onSubmitRequest: this.handleSubmitRequest.bind(this),
-          onInvalidField,
-          isFirstStep,
-          isLastStep,
-        });
+      map[childKey] = () => mapChildrenWithProps(child, {
+        onNextStepRequest: this.handleNextStepRequest.bind(this),
+        onPreviousStepRequest: this.handlePreviousStepRequest.bind(this),
+        onSubmitRequest: this.handleSubmitRequest.bind(this),
+        onInvalidField,
+        isFirstStep,
+        isLastStep,
       });
+      // map[childKey] = () => Children.map(child, (_child) => {
+      //   return cloneElement(_child, {
+      //     onNextStepRequest: this.handleNextStepRequest.bind(this),
+      //     onPreviousStepRequest: this.handlePreviousStepRequest.bind(this),
+      //     onSubmitRequest: this.handleSubmitRequest.bind(this),
+      //     onInvalidField,
+      //     isFirstStep,
+      //     isLastStep,
+      //   });
+      // });
     });
     return new SceneMap(map);
   }
@@ -81,20 +91,30 @@ class FormSteps extends PureComponent {
 
   render() {
     const { state } = this;
+    const { index: activeIndex, routes } = state;
+    const { indicatorColor } = this.props;
     return (
-      <TabView
-        navigationState={state}
-        renderScene={this.transformChildrenToSceneMap()}
-        renderTabBar={() => null}
-        onIndexChange={(...args) => this.handleIndexChange(...args)}
-        swipeEnabled={false}
-      />
+      <Fragment>
+        <TabView
+          navigationState={state}
+          renderScene={this.transformChildrenToSceneMap()}
+          renderTabBar={() => null}
+          onIndexChange={(...args) => this.handleIndexChange(...args)}
+          swipeEnabled={false}
+        />
+        <FormStepIndicator
+          stepsSize={routes.length}
+          activeIndex={activeIndex}
+          indicatorColor={indicatorColor}
+        />
+      </Fragment>
     );
   }
 }
 
 FormSteps.defaultProps = {
   onInvalidField: null,
+  indicatorColor: null,
 };
 
 FormSteps.propTypes = {
@@ -103,6 +123,7 @@ FormSteps.propTypes = {
     PropTypes.array,
   ]).isRequired,
   onInvalidField: PropTypes.func,
+  indicatorColor: PropTypes.string,
 };
 
 export default FormSteps;

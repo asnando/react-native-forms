@@ -19,7 +19,7 @@ class FormStep extends PureComponent {
 
   whichActiveFormViewFieldIsInvalid() {
     const { formView } = this;
-    return formView.whichActiveFormViewFieldIsInvalid();
+    return formView.whichFormFieldIsInvalid();
   }
   
   requestNextStep() {
