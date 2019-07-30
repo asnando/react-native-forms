@@ -2,20 +2,20 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { FullWidthButton } from 'rn-custom-button';
 
-class Submit extends PureComponent {
+class Clear extends PureComponent {
   render() {
     const {
       title,
       // Call the parent Form component when user press
-      // the button and handle the submit request.
-      onSubmitRequest,
+      // the button and handle the clear request.
+      onClearRequest,
       buttonTintColor,
       buttonTextColor,
     } = this.props;
     return (
       <FullWidthButton
         title={title}
-        onPress={() => onSubmitRequest()}
+        onPress={onClearRequest}
         buttonTintColor={buttonTintColor}
         buttonTextColor={buttonTextColor}
       />
@@ -23,17 +23,17 @@ class Submit extends PureComponent {
   }
 }
 
-Submit.defaultProps = {
-  onSubmitRequest: null,
+Clear.defaultProps = {
+  onClearRequest: null,
   buttonTintColor: null,
   buttonTextColor: null,
 };
 
-Submit.propTypes = {
+Clear.propTypes = {
   title: PropTypes.string.isRequired,
-  onSubmitRequest: PropTypes.func,
+  onClearRequest: PropTypes.func,
   buttonTintColor: PropTypes.string,
   buttonTextColor: PropTypes.string,
 };
 
-export default Submit;
+export default Clear;

@@ -15,9 +15,7 @@ class FormTextInput extends PureComponent {
 
   componentDidMount() {
     const { saveFormFieldRef } = this.props;
-    if (typeof saveFormFieldRef === 'function') {
-      saveFormFieldRef(this);
-    }
+    saveFormFieldRef(this);
   }
 
   getName() {
@@ -35,6 +33,12 @@ class FormTextInput extends PureComponent {
     return value;
   }
 
+  clear() {
+    return this.setState({
+      value: initialState.value,
+    });
+  }
+
   validate() {
     const { required } = this.props;
     const { value } = this.state;
@@ -47,9 +51,8 @@ class FormTextInput extends PureComponent {
 
   render() {
     const { props } = this;
-    const {
-      title,
-    } = props;
+    const { title } = props;
+    const { value } = this.state;
     return (
       <FormField>
         <FormFieldLabel>
@@ -57,6 +60,7 @@ class FormTextInput extends PureComponent {
         </FormFieldLabel>
         <TextInput
           {...props}
+          value={value}
           onChangeText={(...args) => this.handleChangeText(...args)}
         />
       </FormField>

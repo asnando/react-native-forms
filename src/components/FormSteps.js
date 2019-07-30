@@ -10,6 +10,7 @@ import FormStepIndicator from './FormStepIndicator';
 const initialState = {
   index: 0,
   routes: [],
+  formData: {},
 };
 
 class FormSteps extends PureComponent {
@@ -20,6 +21,30 @@ class FormSteps extends PureComponent {
       // eslint-disable-next-line react/no-unused-state
       routes: this.transformChildrenToRoutes(),
     };
+    // Save the formViews reference with the same step index.
+    this.formViews = [];
+    // Creates the SceneMap used by the react-native-tab-view.
+    this.sceneMap = this.transformChildrenToSceneMap();
+  }
+
+  getActiveFormView() {
+    const { formViews } = this;
+    const { index } = this.state;
+    return formViews[index];
+  }
+
+  getLastActiveFormView() {
+    const { formViews } = this;
+    const { index } = this.state;
+    return formViews[index - 1];
+  }
+
+  // Every FormView component rendered inside this children
+  // list will save the reference directly inside this class instance.
+  // So when user makes any action with the form like submit, clear, request next
+  // step this class will manage it.
+  saveFormViewRef(ref) {
+    this.formViews.push(ref);
   }
 
   transformChildrenToRoutes() {
@@ -50,31 +75,30 @@ class FormSteps extends PureComponent {
       const childKey = index.toString();
       const isFirstStep = !index;
       const isLastStep = index === routesSize - 1;
-      map[childKey] = () => mapChildrenWithProps(child, {
+      const childProps = {
         onNextStepRequest: this.handleNextStepRequest.bind(this),
         onPreviousStepRequest: this.handlePreviousStepRequest.bind(this),
         onSubmitRequest: this.handleSubmitRequest.bind(this),
+        saveFormViewRef: this.saveFormViewRef.bind(this),
         onInvalidField,
         isFirstStep,
         isLastStep,
-        // Refers to FormStep props.
         backButtonText,
         nextStepButtonText,
         buttonTintColor,
         buttonTextColor,
         submitButtonText,
-      });
+      };
+      map[childKey] = () => mapChildrenWithProps(child, childProps);
     });
-    return new SceneMap(map);
+    return SceneMap(map);
   }
 
   handleIndexChange(index) {
-    console.log(`Form steps handle index change: ${index}`);
-    // eslint-disable-next-line react/no-unused-state
     return this.setState({ index });
   }
 
-  handleNextStepRequest() {
+  moveToNextStep() {
     const { index, routes } = this.state;
     const routesSize = routes.length;
     if (index < routesSize - 1) {
@@ -82,26 +106,85 @@ class FormSteps extends PureComponent {
     }
   }
 
-  handlePreviousStepRequest() {
+  moveToPreviousStep() {
     const { index } = this.state;
     if (index > 0) {
       this.handleIndexChange(index - 1);
     }
   }
 
+  addActiveFormViewValuesToStateFormData(callback) {
+    const activeView = this.getActiveFormView();
+    return this.setState(prevState => ({
+      ...prevState,
+      formData: {
+        ...prevState.formData,
+        ...activeView.getValues(),
+      },
+    }), callback);
+  }
+
+  removeActiveFormViewValuesFromStateFormData(callback) {
+    const activeView = this.getActiveFormView();
+    const activeViewFormData = activeView.getValues();
+    const activeViewFormDataKeys = Object.keys(activeViewFormData);
+    return this.setState((prevState) => {
+      const { formData } = prevState;
+      activeViewFormDataKeys.forEach(key => delete formData[key]);
+      return {
+        ...prevState,
+        formData,
+      };
+    }, callback);
+  }
+
+  isActiveFormViewValid() {
+    const activeView = this.getActiveFormView();
+    return activeView.validate();
+  }
+
+  whichActiveFormViewFieldIsInvalid() {
+    const activeView = this.getActiveFormView();
+    return activeView.whichFormFieldIsInvalid();
+  }
+
+  handleNextStepRequest() {
+    // console.log('FormSteps.handleNextStepRequest()');
+    const { onInvalidField } = this.props;
+    if (!this.isActiveFormViewValid()) {
+      onInvalidField(this.whichActiveFormViewFieldIsInvalid());
+    } else {
+      this.addActiveFormViewValuesToStateFormData();
+      this.moveToNextStep();
+    }
+  }
+
+  handlePreviousStepRequest() {
+    // console.log('FormSteps.handlePreviousStepRequest()');
+    this.removeActiveFormViewValuesFromStateFormData();
+    this.moveToPreviousStep();
+  }
+
+  // Called from the FormView inside the children components.
+  // Pass it up to the Form component callback.
   handleSubmitRequest() {
-    console.warn('requested to submit');
+    const { onSubmitRequest } = this.props;
+    console.log('FormSteps.handleSubmitRequest()');
+    this.addActiveFormViewValuesToStateFormData(() => {
+      const { formData } = this.state;
+      onSubmitRequest(formData);
+    });
   }
 
   render() {
-    const { state } = this;
+    const { state, sceneMap } = this;
     const { index: activeIndex, routes } = state;
     const { indicatorColor } = this.props;
     return (
       <Fragment>
         <TabView
           navigationState={state}
-          renderScene={this.transformChildrenToSceneMap()}
+          renderScene={sceneMap}
           renderTabBar={() => null}
           onIndexChange={(...args) => this.handleIndexChange(...args)}
           swipeEnabled={false}
@@ -117,6 +200,7 @@ class FormSteps extends PureComponent {
 }
 
 FormSteps.defaultProps = {
+  onSubmitRequest: null,
   onInvalidField: null,
   indicatorColor: null,
   // FormStep component props.
@@ -132,6 +216,7 @@ FormSteps.propTypes = {
     PropTypes.object,
     PropTypes.array,
   ]).isRequired,
+  onSubmitRequest: PropTypes.func,
   onInvalidField: PropTypes.func,
   indicatorColor: PropTypes.string,
   // FormStep component props.

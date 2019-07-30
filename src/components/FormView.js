@@ -10,6 +10,12 @@ const getInvalidFieldFromList = fields => fields.find((field) => {
   return !field.validate();
 });
 
+const clearFields = fields => fields.forEach((field) => {
+  if (typeof field.clear === 'function') {
+    field.clear();
+  }
+});
+
 class FormView extends PureComponent {
   constructor(props) {
     super(props);
@@ -41,6 +47,11 @@ class FormView extends PureComponent {
     return !getInvalidFieldFromList(fields);
   }
 
+  clear() {
+    const { fields } = this;
+    return clearFields(fields);
+  }
+
   whichFormFieldIsInvalid() {
     const { fields } = this;
     try {
@@ -57,6 +68,10 @@ class FormView extends PureComponent {
     }
   }
 
+  // This method will be called by every children field to
+  // register its reference into this component. Then when we need
+  // to validate all fields on form, get its values or perform any of
+  // these actions we will have the fields reference list.
   saveFormFieldRef(ref) {
     this.fields.push(ref);
   }
@@ -65,10 +80,12 @@ class FormView extends PureComponent {
     const {
       children,
       onSubmitRequest,
+      onClearRequest,
     } = this.props;
     return mapChildrenWithProps(children, {
       saveFormFieldRef: this.saveFormFieldRef.bind(this),
       onSubmitRequest,
+      onClearRequest,
     });
   }
 
@@ -85,6 +102,7 @@ FormView.defaultProps = {
   saveFormViewRef: null,
   children: null,
   onSubmitRequest: null,
+  onClearRequest: null,
 };
 
 FormView.propTypes = {
@@ -94,6 +112,7 @@ FormView.propTypes = {
   ]),
   saveFormViewRef: PropTypes.func,
   onSubmitRequest: PropTypes.func,
+  onClearRequest: PropTypes.func,
 };
 
 export default FormView;

@@ -8,5 +8,6 @@ export { default as Option } from './components/fields/Option';
 export { default as Radio } from './components/fields/Radio';
 export { default as Switch } from './components/fields/Switch';
 export { default as TextInput } from './components/fields/TextInput';
-export { default as Submit } from './components/buttons/Submit';
+export { default as SubmitButton } from './components/buttons/Submit';
+export { default as ClearButton } from './components/buttons/Clear';
 export { default as MaskedTextInput } from './components/fields/MaskedTextInput';
