@@ -6,6 +6,7 @@ import {
   TabBar,
 } from 'react-native-tab-view';
 import mapChildrenWithProps from '../helpers/mapChildrenWithProps';
+import FormTab from './FormTab';
 
 const initialState = {
   index: 0,
@@ -23,7 +24,7 @@ class FormTabs extends PureComponent {
     // Save the FormViews reference.
     this.formViews = [];
     // Creates the SceneMap used by react-native-tab-view.
-    this.sceneMap = this.transformChildrenToSceneMap();
+    this.sceneMap = this.createSceneMap();
   }
 
   componentDidMount() {
@@ -88,34 +89,64 @@ class FormTabs extends PureComponent {
   }
 
   transformChildrenToRoutes() {
-    const { children } = this.props;
-    return children.map((child, index) => ({
-      key: index.toString(),
-      // Note: The "title" property refers to the mounted
-      // FormTab component. PropTypes for that case may be missing
-      // as it is rendered right here and not in the real component.
-      title: child.props.title || '',
-    }));
+    const { children, tabs } = this.props;
+    return (children || tabs).map(({ props, title }, index) => {
+      const useTitle = (props && props.title) || title || '';
+      return {
+        key: index.toString(),
+        // Note: The "title" property refers to the mounted
+        // FormTab component. PropTypes for that case may be missing
+        // as it is rendered right here and not in the real component.
+        title: useTitle,
+      }
+    });
+  }
+
+  getChildrenCommonProps() {
+    const { onInvalidField } = this.props;
+    return {
+      onSubmitRequest: this.handleSubmitRequest.bind(this),
+      onClearRequest: this.handleClearRequest.bind(this),
+      saveFormViewRef: this.saveFormViewRef.bind(this),
+      onInvalidField,
+    };
+  }
+
+  createSceneMap() {
+    const { children, tabs } = this.props;
+    if (children) {
+      return this.transformChildrenToSceneMap();
+    }
+    if (tabs) {
+      return this.transformTabsPropsToSceneMap();
+    }
+    return null;
+  }
+
+  transformTabsPropsToSceneMap() {
+    console.log('Creating tabs SceneMap from props');
+    const { tabs } = this.props;
+    const map = {};
+    const childrenProps = this.getChildrenCommonProps();
+    tabs.forEach((tab, index) => {
+      const childKey = index.toString();
+      map[childKey] = () => (
+        <FormTab {...tab} {...childrenProps} />
+      );
+    });
+    return SceneMap(map);
   }
 
   transformChildrenToSceneMap() {
-    const {
-      children,
-      onInvalidField,
-    } = this.props;
+    const { children } = this.props;
     const map = {};
     // For each child we need to return a function
     // that later will render the real children component.
     // Child component will be inside the FormTab component.
+    const childrenProps = this.getChildrenCommonProps();
     children.forEach((child, index) => {
       const childKey = index.toString();
-      map[childKey] = () => mapChildrenWithProps(child, {
-        // Pass down props to children
-        onSubmitRequest: this.handleSubmitRequest.bind(this),
-        onClearRequest: this.handleClearRequest.bind(this),
-        onInvalidField,
-        saveFormViewRef: this.saveFormViewRef.bind(this),
-      });
+      map[childKey] = () => mapChildrenWithProps(child, childrenProps);
     });
     return SceneMap(map);
   }
@@ -158,6 +189,8 @@ class FormTabs extends PureComponent {
 }
 
 FormTabs.defaultProps = {
+  children: null,
+  tabs: null,
   tabTintColor: null,
   tabTextColor: null,
   tabIndicatorColor: null,
@@ -171,7 +204,7 @@ FormTabs.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.array,
-  ]).isRequired,
+  ]),
   tabTintColor: PropTypes.string,
   tabTextColor: PropTypes.string,
   tabIndicatorColor: PropTypes.string,
@@ -179,6 +212,7 @@ FormTabs.propTypes = {
   onClearRequest: PropTypes.func,
   onInvalidField: PropTypes.func,
   saveFormTabsRef: PropTypes.func,
+  tabs: PropTypes.array,
 };
 
 export default FormTabs;

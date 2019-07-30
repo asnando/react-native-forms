@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import {
   FormContainer,
 } from './Form.styles';
+import FormView from './FormView';
+import FormTabs from './FormTabs';
+import FormSteps from './FormSteps';
 import mapChildrenWithProps from '../helpers/mapChildrenWithProps';
 
 const initialState = {
@@ -132,20 +135,69 @@ class Form extends PureComponent {
     }
   }
 
-  renderForm() {
-    const { children } = this.props;
-    if (typeof children === 'undefined') {
-      // Will render the form from props.
-      throw new Error('Render from props not avaiable yet.');
-    }
-    // Will render the form using children components.
-    return mapChildrenWithProps(children, {
+  getChildrenCommonProps() {
+    return {
       onInvalidField: this.handleInvalidField.bind(this),
       onSubmitRequest: this.handleSubmitRequest.bind(this),
       onClearRequest: this.handleClearRequest.bind(this),
       saveFormViewRef: this.saveFormViewRef.bind(this),
       saveFormTabsRef: this.saveFormTabsRef.bind(this),
-    });
+    };
+  }
+
+  renderFormFromChildren() {
+    const { children } = this.props;
+    if (typeof children === 'undefined') {
+      // Will render the form from props.
+      throw new Error('Render from props not avaiable yet.');
+    }
+    const childrenProps = this.getChildrenCommonProps();
+    // Will render the form using children components.
+    return mapChildrenWithProps(children, childrenProps);
+  }
+
+  renderCustomFormView() {
+    console.log('Creating form from custom view');
+    const { fields } = this.props;
+    const childrenProps = this.getChildrenCommonProps();
+    return (
+      <FormView fields={fields} {...childrenProps} />
+    );
+  }
+
+  renderCustomTabs() {
+    console.log('Creating form from custom tabs');
+    const { props } = this;
+    const childrenProps = this.getChildrenCommonProps();
+    return (
+      <FormTabs {...props} {...childrenProps} />
+    );
+  }
+
+  renderCustomSteps() {
+    console.log('Creating form from custom steps');
+  }
+
+  renderForm() {
+    const {
+      children,
+      fields,
+      tabs,
+      steps,
+    } = this.props;
+    if (children) {
+      return this.renderFormFromChildren();
+    }
+    if (fields) {
+      return this.renderCustomFormView();
+    }
+    if (tabs) {
+      return this.renderCustomTabs();
+    }
+    if (steps) {
+      return this.renderCustomSteps();
+    }
+    return null;
   }
 
   render() {
@@ -161,6 +213,9 @@ Form.defaultProps = {
   onSubmit: null,
   onInvalid: null,
   children: undefined,
+  fields: null,
+  tabs: null,
+  steps: null,
 };
 
 Form.propTypes = {
@@ -171,6 +226,9 @@ Form.propTypes = {
     PropTypes.array,
     PropTypes.object,
   ]),
+  fields: PropTypes.array,
+  tabs: PropTypes.array,
+  steps: PropTypes.array,
 };
 
 export default Form;

@@ -5,6 +5,9 @@ import { Form } from 'react-native-forms';
 import WithView from './withView';
 import WithTabs from  './withTabs';
 import WithSteps from './withSteps';
+import withViewProps from './withViewProps';
+import withTabProps from './withTabProps';
+import withStepProps from './withStepProps';
 
 console.disableYellowBox = true;
 
@@ -25,8 +28,11 @@ const App = () => {
         ref={saveFormRef}
         onSubmit={onSubmit}
         onInvalid={onInvalid}
+        // {...withViewProps}
+        // {...withTabProps}
+        {...withStepProps}
       >
-        <WithView {...props} />
+        {/* <WithView {...props} /> */}
         {/* <WithTabs {...props} /> */}
         {/* <WithSteps {...props} /> */}
       </Form>

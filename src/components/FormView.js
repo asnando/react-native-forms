@@ -2,6 +2,13 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import mapChildrenWithProps from '../helpers/mapChildrenWithProps';
 import { FormViewContainer } from './FormView.styles';
+import MaskedTextInput from './fields/MaskedTextInput';
+import Option from './fields/Option';
+import Radio from './fields/Radio';
+import Switch from './fields/Switch';
+import TextInput from './fields/TextInput';
+import SubmitButton from './buttons/Submit';
+import ClearButton from './buttons/Clear';
 
 const getInvalidFieldFromList = fields => fields.find((field) => {
   if (typeof field.validate !== 'function') {
@@ -15,6 +22,45 @@ const clearFields = fields => fields.forEach((field) => {
     field.clear();
   }
 });
+
+const createFormViewField = (field, props) => {
+  const { type } = field;
+  const fieldProps = {
+    ...props,
+    ...field,
+  };
+  switch (type) {
+    case 'masked':
+      return (
+        <MaskedTextInput {...fieldProps} />
+      );
+    case 'option':
+      return (
+        <Option {...fieldProps} />
+      );
+    case 'radio':
+      return (
+        <Radio {...fieldProps} />
+      );
+    case 'switch':
+      return (
+        <Switch {...fieldProps} />
+      );
+    case 'submit':
+      return (
+        <SubmitButton {...fieldProps} />
+      );
+    case 'clear':
+      return (
+        <ClearButton {...fieldProps} />
+      );
+    case 'text':
+    default:
+      return (
+        <TextInput {...fieldProps} />
+      );
+  }
+};
 
 class FormView extends PureComponent {
   constructor(props) {
@@ -37,6 +83,18 @@ class FormView extends PureComponent {
       formData[fieldName] = fieldValue;
     });
     return formData;
+  }
+
+  getChildrenCommonProps() {
+    const {
+      onSubmitRequest,
+      onClearRequest,
+    } = this.props;
+    return {
+      saveFormFieldRef: this.saveFormFieldRef.bind(this),
+      onSubmitRequest,
+      onClearRequest,
+    };
   }
 
   validate() {
@@ -76,17 +134,33 @@ class FormView extends PureComponent {
     this.fields.push(ref);
   }
 
+  renderFromChildren() {
+    const { children } = this.props;
+    const childrenProps = this.getChildrenCommonProps();
+    return mapChildrenWithProps(children, childrenProps);
+  }
+
+  renderFromFieldList() {
+    const { fields } = this.props;
+    const childrenProps = this.getChildrenCommonProps();
+    return fields.map((field, index) => createFormViewField({
+      ...field,
+      key: index,
+    }, childrenProps));
+  }
+
   renderChildren() {
     const {
       children,
-      onSubmitRequest,
-      onClearRequest,
+      fields,
     } = this.props;
-    return mapChildrenWithProps(children, {
-      saveFormFieldRef: this.saveFormFieldRef.bind(this),
-      onSubmitRequest,
-      onClearRequest,
-    });
+    if (children) {
+      return this.renderFromChildren();
+    }
+    if (fields) {
+      return this.renderFromFieldList();
+    }
+    return null;
   }
 
   render() {
@@ -99,8 +173,9 @@ class FormView extends PureComponent {
 }
 
 FormView.defaultProps = {
-  saveFormViewRef: null,
   children: null,
+  fields: null,
+  saveFormViewRef: null,
   onSubmitRequest: null,
   onClearRequest: null,
 };
@@ -110,6 +185,7 @@ FormView.propTypes = {
     PropTypes.array,
     PropTypes.object,
   ]),
+  fields: PropTypes.array,
   saveFormViewRef: PropTypes.func,
   onSubmitRequest: PropTypes.func,
   onClearRequest: PropTypes.func,
