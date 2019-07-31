@@ -70,7 +70,6 @@ class FormTabs extends PureComponent {
   // which knows which tab is active. So we get the values from
   // the current displayed FormView and pass it back to the Form(parent).
   handleSubmitRequest() {
-    console.log('FormTabs.handleSubmitRequest()');
     const { onInvalidField, onSubmitRequest } = this.props;
     if (!this.isActiveFormViewValid()) {
       // call onInvalidRequest props.
@@ -84,7 +83,6 @@ class FormTabs extends PureComponent {
   // from inside the FormView and will clear only the current active
   // FormView fields.
   handleClearRequest() {
-    console.log('FormTabs.handleClearRequest()');
     return this.getActiveFormView().clear();
   }
 
@@ -124,7 +122,6 @@ class FormTabs extends PureComponent {
   }
 
   transformTabsPropsToSceneMap() {
-    console.log('Creating tabs SceneMap from props');
     const { tabs } = this.props;
     const map = {};
     const childrenProps = this.getChildrenCommonProps();

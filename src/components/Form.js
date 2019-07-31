@@ -64,7 +64,6 @@ class Form extends PureComponent {
   }
 
   submit() {
-    console.log('Called Form.submit()');
     const { onSubmit, onInvalid } = this.props;
     if (this.usingNormalView()) {
       if (!this.isFormViewValid() && typeof onInvalid === 'function') {
@@ -83,7 +82,6 @@ class Form extends PureComponent {
   }
 
   clear() {
-    console.log('Called Form.clear()');
     if (this.usingNormalView()) {
       const { formView } = this;
       formView.clear();
@@ -103,7 +101,6 @@ class Form extends PureComponent {
   // Note.: When using tabs it will only be called if the form is
   // already validated.
   handleSubmitRequest(formData) {
-    console.log('Form.handleSubmitRequest()', formData);
     // When there is not formData object means that the caller directly
     // called the submit and expect this component to resolve the formData.
     // This case occurs when the normal view directly call this.
@@ -120,7 +117,6 @@ class Form extends PureComponent {
   // This method will be called when form is configured
   // to use tabs and the clear button inside FormView is pressed.
   handleClearRequest() {
-    console.log('Form.handleClearRequest()');
     return this.clear();
   }
 
@@ -128,7 +124,6 @@ class Form extends PureComponent {
   // any time that users tries to submit or request the next form step
   // and any one of the filters remais with invalid value.
   handleInvalidField(displayName) {
-    console.log('Form.handleInvalidField()');
     const { onInvalid } = this.props;
     if (typeof onInvalid === 'function') {
       onInvalid(displayName);
@@ -157,7 +152,6 @@ class Form extends PureComponent {
   }
 
   renderCustomFormView() {
-    console.log('Creating form from custom view');
     const { fields } = this.props;
     const childrenProps = this.getChildrenCommonProps();
     return (
@@ -166,7 +160,6 @@ class Form extends PureComponent {
   }
 
   renderCustomTabs() {
-    console.log('Creating form from custom tabs');
     const { props } = this;
     const childrenProps = this.getChildrenCommonProps();
     return (
@@ -175,7 +168,6 @@ class Form extends PureComponent {
   }
 
   renderCustomSteps() {
-    console.log('Creating form from custom steps');
     const { props } = this;
     const childrenProps = this.getChildrenCommonProps();
     return (

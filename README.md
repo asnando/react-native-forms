@@ -226,6 +226,8 @@ Renders a [react-native-text-input-mask](https://github.com/ffrm/react-native-te
 | ---- | ---- |
 | name | String |
 | title | String |
+| maskType | String |
+| validators | String |
 
 See [react-native-text-input-mask](https://github.com/ffrm/react-native-text-input-mask) for more avaiable props.
 
@@ -294,12 +296,27 @@ Renders a plain React Native TextInput component.
 | title | String |
 | name | String |
 | required | Boolean |
+| validators | String |
 
 Refers to this field using ```text``` field type when rendering <b>from props</b>.
 
 ---
 
 <i>Note: All the ```name``` are required at the runtime. This prop will be used to save the value from the form field inside the resumed form data object.</i>
+
+## Supported masks
+There are some default supported masks that can be displayed when using ```MaskedTextInput``` with the default ```maskType``` prop.
+
+See [react-native-text-input-mask](https://github.com/ffrm/react-native-text-input-mask) for reference.
+
+## Supported validators
+You can use the following common validators as ```validator``` prop for ```TextInput``` and ```MaskedTextInput``` fields:
+
+```email```,
+```cpf```,
+```cnpj```,
+```phone```,
+```br-cellphone```
 
 ## Developed by
 [@ffrm - Fernando Rama](https://github.com/ffrm)

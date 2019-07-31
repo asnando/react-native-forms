@@ -93,7 +93,6 @@ class FormSteps extends PureComponent {
   }
 
   transformStepsPropsToSceneMap() {
-    console.log('Creating Form steps from props');
     const { props } = this;
     const { routes } = this.state;
     const { steps } = props;
@@ -193,7 +192,6 @@ class FormSteps extends PureComponent {
   }
 
   handleNextStepRequest() {
-    // console.log('FormSteps.handleNextStepRequest()');
     const { onInvalidField } = this.props;
     if (!this.isActiveFormViewValid()) {
       onInvalidField(this.whichActiveFormViewFieldIsInvalid());
@@ -204,7 +202,6 @@ class FormSteps extends PureComponent {
   }
 
   handlePreviousStepRequest() {
-    // console.log('FormSteps.handlePreviousStepRequest()');
     this.removeActiveFormViewValuesFromStateFormData();
     this.moveToPreviousStep();
   }
@@ -212,12 +209,15 @@ class FormSteps extends PureComponent {
   // Called from the FormView inside the children components.
   // Pass it up to the Form component callback.
   handleSubmitRequest() {
-    const { onSubmitRequest } = this.props;
-    console.log('FormSteps.handleSubmitRequest()');
-    this.addActiveFormViewValuesToStateFormData(() => {
-      const { formData } = this.state;
-      onSubmitRequest(formData);
-    });
+    const { onSubmitRequest, onInvalidField } = this.props;
+    if (!this.isActiveFormViewValid()) {
+      onInvalidField(this.whichActiveFormViewFieldIsInvalid());
+    } else {
+      this.addActiveFormViewValuesToStateFormData(() => {
+        const { formData } = this.state;
+        onSubmitRequest(formData);
+      });
+    }
   }
 
   render() {

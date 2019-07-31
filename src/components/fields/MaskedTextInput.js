@@ -7,9 +7,11 @@ import {
   FormField,
   FormFieldLabel,
 } from './FormField.styles';
+import resolveValidatorFromList from '../../validators/helpers/resolveValidatorFromList';
 
 const initialState = {
   value: null,
+  validator: null,
 };
 
 const resolveKeyboardTypeFromMask = (maskType) => {
@@ -26,8 +28,12 @@ const resolveKeyboardTypeFromMask = (maskType) => {
 
 class MaskedTextInput extends PureComponent {
   constructor(props) {
+    const { validator } = props;
     super(props);
-    this.state = initialState;
+    this.state = {
+      ...initialState,
+      validator: resolveValidatorFromList(validator),
+    };
   }
 
   componentDidMount() {
@@ -50,6 +56,19 @@ class MaskedTextInput extends PureComponent {
   getValue() {
     const { maskedTextInput } = this;
     return maskedTextInput.getValue();
+  }
+
+  validate() {
+    const { required } = this.props;
+    const { validator } = this.state;
+    const value = this.getValue();
+    if (required) {
+      if (typeof validator === 'function') {
+        return validator(value);
+      }
+      return !!value.trim();
+    }
+    return true;
   }
 
   clear() {
@@ -92,6 +111,8 @@ MaskedTextInput.defaultProps = {
   keyboardType: null,
   secureTextEntry: null,
   saveFormFieldRef: null,
+  required: false,
+  validator: null,
 };
 
 MaskedTextInput.propTypes = {
@@ -102,6 +123,8 @@ MaskedTextInput.propTypes = {
   keyboardType: PropTypes.string,
   secureTextEntry: PropTypes.bool,
   saveFormFieldRef: PropTypes.func,
+  required: PropTypes.bool,
+  validator: PropTypes.string,
 };
 
 export default MaskedTextInput;

@@ -23,6 +23,16 @@ const withStepProps = {
           title: 'User Email',
           keyboardType: 'email-address',
           required: true,
+          validator: 'email',
+        },
+        {
+          name: 'user_cellphone',
+          title: 'User Cellphone',
+          type: 'masked',
+          maskType: 'phone',
+          keyboardType: 'numeric',
+          required: true,
+          validator: 'br-cellphone',
         },
       ],
     },
@@ -32,6 +42,15 @@ const withStepProps = {
         {
           name: 'user_birthday',
           title: 'Birthday',
+          type: 'masked',
+          maskType: 'date',
+        },
+        {
+          name: 'cnpj',
+          title: 'CNPJ',
+          type: 'masked',
+          maskType: 'cnpj',
+          validator: 'cnpj',
           required: true,
         }
       ],
