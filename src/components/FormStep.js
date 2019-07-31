@@ -11,20 +11,43 @@ import {
   FormStepTitle,
 } from './FormStep.styles';
 import mapChildrenWithProps from '../helpers/mapChildrenWithProps';
+import FormView from './FormView';
 
 const DEFAULT_BACK_BUTTON_TEXT = 'Back';
 const DEFAULT_NEXT_STEP_BUTTON_TEXT = 'Next';
 const DEFAULT_SUBMIT_BUTTON_TEXT = 'Submit';
 
 class FormStep extends PureComponent {
+  getChildrenCommonProps() {
+    const { saveFormViewRef } = this.props;
+    return {
+      saveFormViewRef,
+    };
+  }
+
+  renderStep() {
+    const { children, fields } = this.props;
+    if (children) {
+      return this.renderChildren();
+    }
+    if (fields) {
+      return this.renderStepFormView();
+    }
+    return null;
+  }
+
+  renderStepFormView() {
+    const { fields } = this.props;
+    const childrenProps = this.getChildrenCommonProps();
+    return (
+      <FormView fields={fields} {...childrenProps} />
+    );
+  }
+
   renderChildren() {
-    const {
-      children,
-      saveFormViewRef,
-    } = this.props;
-    return mapChildrenWithProps(children, {
-      saveFormViewRef,
-    });
+    const { children } = this.props;
+    const childrenProps = this.getChildrenCommonProps();
+    return mapChildrenWithProps(children, childrenProps);
   }
 
   render() {
@@ -53,7 +76,7 @@ class FormStep extends PureComponent {
           />
         )}
         { title && (<FormStepTitle>{title}</FormStepTitle>)}
-        {this.renderChildren()}
+        {this.renderStep()}
         { !isLastStep && (
           <FullWidthButton
             title={nextStepButtonText || DEFAULT_NEXT_STEP_BUTTON_TEXT}
@@ -76,6 +99,8 @@ class FormStep extends PureComponent {
 }
 
 FormStep.defaultProps = {
+  children: null,
+  fields: null,
   isFirstStep: false,
   isLastStep: false,
   title: null,
@@ -95,7 +120,8 @@ FormStep.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.array,
-  ]).isRequired,
+  ]),
+  fields: PropTypes.array,
   isFirstStep: PropTypes.bool,
   isLastStep: PropTypes.bool,
   title: PropTypes.string,

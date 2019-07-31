@@ -3,6 +3,8 @@ const withStepProps = {
   buttonTintColor: 'purple',
   buttonTextColor: 'white',
   backButtonTextColor: 'purple',
+  nextStepButtonText: 'Next Step',
+  backButtonText: 'Go Back',
   steps: [
     {
       title: 'Step 1',

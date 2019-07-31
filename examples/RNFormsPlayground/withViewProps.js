@@ -32,7 +32,7 @@ const withViewProps = {
     },
     {
       name: 'phone',
-      title: 'Phone',
+      title: 'Phone (BR)',
       maskType: 'phone',
       type: 'masked',
     },

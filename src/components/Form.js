@@ -78,7 +78,7 @@ class Form extends PureComponent {
       this.callFormTabsSubmit();
     } else {
       // eslint-disable-next-line no-console
-      console.log('There is no registered FormView component in Form. Maybe you are using form with steps. In that cases the submit must be done directly from inside the form.');
+      console.warn('There is no registered FormView component in Form. Maybe you are using form with steps. In that cases the submit must be done directly from inside the form.');
     }
   }
 
@@ -93,7 +93,7 @@ class Form extends PureComponent {
       formTabs.handleClearRequest();
     } else {
       // eslint-disable-next-line no-console
-      console.log('There is no registered FormView component in Form. Maybe you are using form with steps. In that cases the clear must be done directly from inside the form.');
+      console.warn('There is no registered FormView component in Form. Maybe you are using form with steps. In that cases the clear must be done directly from inside the form.');
     }
   }
 
@@ -176,6 +176,11 @@ class Form extends PureComponent {
 
   renderCustomSteps() {
     console.log('Creating form from custom steps');
+    const { props } = this;
+    const childrenProps = this.getChildrenCommonProps();
+    return (
+      <FormSteps {...props} {...childrenProps} />
+    );
   }
 
   renderForm() {

@@ -6,6 +6,7 @@ import {
 } from 'react-native-tab-view';
 import mapChildrenWithProps from '../helpers/mapChildrenWithProps';
 import FormStepIndicator from './FormStepIndicator';
+import FormStep from './FormStep';
 
 const initialState = {
   index: 0,
@@ -24,7 +25,7 @@ class FormSteps extends PureComponent {
     // Save the formViews reference with the same step index.
     this.formViews = [];
     // Creates the SceneMap used by the react-native-tab-view.
-    this.sceneMap = this.transformChildrenToSceneMap();
+    this.sceneMap = this.createSceneMap();
   }
 
   getActiveFormView() {
@@ -48,17 +49,15 @@ class FormSteps extends PureComponent {
   }
 
   transformChildrenToRoutes() {
-    const { children } = this.props;
-    return children.map((child, index) => ({
+    const { children, steps } = this.props;
+    return (children || steps).map((child, index) => ({
       key: index.toString(),
       title: index.toString(),
     }));
   }
 
-  transformChildrenToSceneMap() {
-    const { routes } = this.state;
+  getChildrenCommonProps() {
     const {
-      children,
       onInvalidField,
       backButtonText,
       nextStepButtonText,
@@ -66,8 +65,63 @@ class FormSteps extends PureComponent {
       buttonTextColor,
       submitButtonText,
     } = this.props;
+    return {
+      onNextStepRequest: this.handleNextStepRequest.bind(this),
+      onPreviousStepRequest: this.handlePreviousStepRequest.bind(this),
+      onSubmitRequest: this.handleSubmitRequest.bind(this),
+      saveFormViewRef: this.saveFormViewRef.bind(this),
+      onInvalidField,
+      // isFirstStep,
+      // isLastStep,
+      backButtonText,
+      nextStepButtonText,
+      buttonTintColor,
+      buttonTextColor,
+      submitButtonText,
+    };
+  }
+
+  createSceneMap() {
+    const { children, steps } = this.props;
+    if (children) {
+      return this.transformChildrenToSceneMap();
+    }
+    if (steps) {
+      return this.transformStepsPropsToSceneMap();
+    }
+    return null;
+  }
+
+  transformStepsPropsToSceneMap() {
+    console.log('Creating Form steps from props');
+    const { props } = this;
+    const { routes } = this.state;
+    const { steps } = props;
+    const routesSize = routes.length;
+    const childrenProps = this.getChildrenCommonProps();
+    const map = {};
+    steps.forEach((step, index) => {
+      const childKey = index.toString();
+      const isFirstStep = !index;
+      const isLastStep = index === routesSize - 1;
+      map[childKey] = () => (
+        <FormStep
+          {...step}
+          {...childrenProps}
+          isFirstStep={isFirstStep}
+          isLastStep={isLastStep}
+        />
+      );
+    });
+    return SceneMap(map);
+  }
+
+  transformChildrenToSceneMap() {
+    const { routes } = this.state;
+    const { children } = this.props;
     const routesSize = routes.length;
     const map = {};
+    const childrenProps = this.getChildrenCommonProps();
     // For each child we need to return a function
     // that later will render the real children component.
     // Child component will be inside the FormStep component.
@@ -75,21 +129,11 @@ class FormSteps extends PureComponent {
       const childKey = index.toString();
       const isFirstStep = !index;
       const isLastStep = index === routesSize - 1;
-      const childProps = {
-        onNextStepRequest: this.handleNextStepRequest.bind(this),
-        onPreviousStepRequest: this.handlePreviousStepRequest.bind(this),
-        onSubmitRequest: this.handleSubmitRequest.bind(this),
-        saveFormViewRef: this.saveFormViewRef.bind(this),
-        onInvalidField,
+      map[childKey] = () => mapChildrenWithProps(child, {
+        ...childrenProps,
         isFirstStep,
         isLastStep,
-        backButtonText,
-        nextStepButtonText,
-        buttonTintColor,
-        buttonTextColor,
-        submitButtonText,
-      };
-      map[childKey] = () => mapChildrenWithProps(child, childProps);
+      });
     });
     return SceneMap(map);
   }
@@ -200,6 +244,8 @@ class FormSteps extends PureComponent {
 }
 
 FormSteps.defaultProps = {
+  children: null,
+  steps: null,
   onSubmitRequest: null,
   onInvalidField: null,
   indicatorColor: null,
@@ -215,7 +261,8 @@ FormSteps.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.array,
-  ]).isRequired,
+  ]),
+  steps: PropTypes.array,
   onSubmitRequest: PropTypes.func,
   onInvalidField: PropTypes.func,
   indicatorColor: PropTypes.string,
