@@ -7,6 +7,7 @@ import resolveValidatorFromList from '../../validators/helpers/resolveValidatorF
 const initialState = {
   value: '',
   validator: null,
+  isVisible: true,
 };
 
 class FormTextInput extends PureComponent {
@@ -39,6 +40,23 @@ class FormTextInput extends PureComponent {
     return value;
   }
 
+  // When a transition occurs inside the form step the FormView
+  // field will be notified that it got active so dynamic TextInput
+  // can be hided or showed as needed.
+  fieldGotActive(formData) {
+    const { show } = this.props;
+    if (typeof show === 'function') {
+      const isVisible = show(formData);
+      // Even if the field must not be rendered we clean any
+      // previous inputed value.
+      if (!isVisible) this.clear();
+      return this.setState({
+        isVisible,
+      });
+    }
+    return true;
+  }
+
   clear() {
     return this.setState({
       value: initialState.value,
@@ -47,8 +65,8 @@ class FormTextInput extends PureComponent {
 
   validate() {
     const { required } = this.props;
-    const { value, validator } = this.state;
-    if (required) {
+    const { value, validator, isVisible } = this.state;
+    if (required && isVisible) {
       if (typeof validator === 'function') {
         return validator(value);
       }
@@ -64,8 +82,8 @@ class FormTextInput extends PureComponent {
   render() {
     const { props } = this;
     const { title } = props;
-    const { value } = this.state;
-    return (
+    const { value, isVisible } = this.state;
+    return isVisible && (
       <FormField>
         <FormFieldLabel>
           {title}
@@ -85,6 +103,7 @@ FormTextInput.defaultProps = {
   required: false,
   saveFormFieldRef: null,
   validator: null,
+  show: null,
 };
 
 FormTextInput.propTypes = {
@@ -93,6 +112,7 @@ FormTextInput.propTypes = {
   required: PropTypes.bool,
   saveFormFieldRef: PropTypes.func,
   validator: PropTypes.string,
+  show: PropTypes.func,
 };
 
 export default FormTextInput;

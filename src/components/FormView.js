@@ -97,6 +97,19 @@ class FormView extends PureComponent {
     };
   }
 
+  // Receive this notification when parent component is a form steps
+  // and it transitioned to this view. Will tell all fields from
+  // this view that this event occurred so they can dynamic show/hide.
+  formViewGotActive(formData) {
+    console.warn('FormView got active!');
+    const { fields } = this;
+    fields.forEach((field) => {
+      if (typeof field.fieldGotActive === 'function') {
+        field.fieldGotActive(formData);
+      }
+    });
+  }
+
   validate() {
     // This function will validate each field in the form using
     // the component "validate" method and returns a boolean if

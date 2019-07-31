@@ -28,6 +28,10 @@ class FormSteps extends PureComponent {
     this.sceneMap = this.createSceneMap();
   }
 
+  componentDidMount() {
+    this.notifyActiveFormViewGotActive();
+  }
+
   getActiveFormView() {
     const { formViews } = this;
     const { index } = this.state;
@@ -137,8 +141,19 @@ class FormSteps extends PureComponent {
     return SceneMap(map);
   }
 
+  notifyActiveFormViewGotActive() {
+    // When using form with steps it tells the new active
+    // FormView that it got active so dynamic fields can be
+    // showed/hided. It will pass the saved form data within
+    // all the previous fields values so fields can know when to
+    // show or hide.
+    const { formData } = this.state;
+    const activeFormView = this.getActiveFormView();
+    activeFormView.formViewGotActive(formData);
+  }
+
   handleIndexChange(index) {
-    return this.setState({ index });
+    return this.setState({ index }, this.notifyActiveFormViewGotActive.bind(this));
   }
 
   moveToNextStep() {
@@ -202,8 +217,9 @@ class FormSteps extends PureComponent {
   }
 
   handlePreviousStepRequest() {
-    this.removeActiveFormViewValuesFromStateFormData();
-    this.moveToPreviousStep();
+    this.removeActiveFormViewValuesFromStateFormData(() => {
+      this.moveToPreviousStep();
+    });
   }
 
   // Called from the FormView inside the children components.

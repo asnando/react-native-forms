@@ -12,6 +12,7 @@ import resolveValidatorFromList from '../../validators/helpers/resolveValidatorF
 const initialState = {
   value: null,
   validator: null,
+  isVisible: true,
 };
 
 const resolveKeyboardTypeFromMask = (maskType) => {
@@ -55,6 +56,9 @@ class MaskedTextInput extends PureComponent {
 
   getValue() {
     const { maskedTextInput } = this;
+    if (!maskedTextInput) {
+      return initialState.value;
+    }
     return maskedTextInput.getValue();
   }
 
@@ -80,14 +84,30 @@ class MaskedTextInput extends PureComponent {
     this.maskedTextInput = ref;
   }
 
+  // When a transition occurs inside the form step the FormView
+  // field will be notified that it got active so dynamic
+  // MaskedTextInput can be hided or showed as needed.
+  fieldGotActive(formData) {
+    const { show } = this.props;
+    if (typeof show === 'function') {
+      const isVisible = show(formData);
+      if (!isVisible) this.clear();
+      return this.setState({
+        isVisible,
+      });
+    }
+    return true;
+  }
+
   render() {
+    const { isVisible } = this.state;
     const {
       title,
       maskType,
       customMask,
       secureTextEntry,
     } = this.props;
-    return (
+    return isVisible && (
       <FormField>
         <FormFieldLabel>
           {title}
@@ -113,6 +133,7 @@ MaskedTextInput.defaultProps = {
   saveFormFieldRef: null,
   required: false,
   validator: null,
+  show: null,
 };
 
 MaskedTextInput.propTypes = {
@@ -125,6 +146,7 @@ MaskedTextInput.propTypes = {
   saveFormFieldRef: PropTypes.func,
   required: PropTypes.bool,
   validator: PropTypes.string,
+  show: PropTypes.func,
 };
 
 export default MaskedTextInput;
