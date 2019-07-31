@@ -30,7 +30,7 @@
     "react-native-modal-select-list": "^1.0.0",
     "react-native-radio-buttons-group": "^1.0.7",
     "rn-custom-button": "^2.0.4",
-    "rn-masked-text-input": "^1.0.0",
+    "rn-masked-text-input": "^1.1.0",
     "styled-components": "^4.3.1"
   }
 }

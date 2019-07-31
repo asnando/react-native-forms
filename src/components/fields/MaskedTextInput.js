@@ -53,7 +53,8 @@ class MaskedTextInput extends PureComponent {
   }
 
   clear() {
-    console.warn('todo: implement clear action on MaskedTextInput');
+    const { maskedTextInput } = this;
+    maskedTextInput.clear();
   }
 
   saveMaskedTextInputRef(ref) {
