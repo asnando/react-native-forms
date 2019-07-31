@@ -305,7 +305,16 @@ Refers to this field using ```text``` field type when rendering <b>from props</b
 <i>Note: All the ```name``` are required at the runtime. This prop will be used to save the value from the form field inside the resumed form data object.</i>
 
 ## Dynamic fields
-When using the form in step-by-step mode you can dynamically show some fields based on previous fields values. Declare a ```show``` function into the fields props. It will receive the actual formData within all inputed fields values until there. Return a boolean that tells if this field must be rendered and visible into the active FormView.
+When using the form in step-by-step mode you can dynamically show some fields based on previous steps fields values. Declare a ```show``` function into the fields props. It will receive the actual formData within all inputed fields values until there. Return a boolean that tells if this field must be rendered and visible into the active FormView.
+
+Example:
+```javascript
+{
+  name: 'myField',
+  type: 'text',
+  show: ({ anotherFieldValue }) => anotherFieldValue === 'abc',
+}
+```
 
 <i>Note: If field is not rendered by the FormView and user submit it will not be defined into the final submit form data.</i>
 
