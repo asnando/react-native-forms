@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
-import { FullWidthButton } from 'react-native-custom-button';
-import { Form } from 'react-native-forms';
+import { TextButton } from 'react-native-custom-button';
+import { Form } from 'react-native-formx';
 import WithView from './withView';
 import WithTabs from  './withTabs';
 import WithSteps from './withSteps';
@@ -28,17 +28,25 @@ const App = () => {
         ref={saveFormRef}
         onSubmit={onSubmit}
         onInvalid={onInvalid}
-        {...withViewProps}
+        // {...withViewProps}
         // {...withTabProps}
-        // {...withStepProps}
+        {...withStepProps}
       >
         {/* <WithView {...props} /> */}
         {/* <WithTabs {...props} /> */}
         {/* <WithSteps {...props} /> */}
       </Form>
       {/* Example to use with tabs */}
-      <FullWidthButton title="Submit Form" onPress={callFormSubmit} />
-      <FullWidthButton title="Clear Form" onPress={callFormClear} />
+      <TextButton
+        title="Submit outside form"
+        onPress={callFormSubmit}
+        buttonStyle={{ width: '100%' }}
+      />
+      <TextButton
+        title="Clear outside form"
+        onPress={callFormClear}
+        buttonStyle={{ width: '100%' }}
+      />
     </SafeAreaView>
   );
 };
@@ -46,7 +54,9 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f0f0',
+    width: '95%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
 });
 

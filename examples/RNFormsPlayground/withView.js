@@ -9,7 +9,7 @@ import {
   Radio,
   Option,
   MaskedTextInput,
-} from 'react-native-forms';
+} from 'react-native-formx';
 
 const WithView = (props) => {
   return (

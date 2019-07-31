@@ -7,7 +7,7 @@ import {
   TextInput,
   SubmitButton,
   ClearButton,
-} from 'react-native-forms';
+} from 'react-native-formx';
 
 const WithTabs = (props) => {
   return (

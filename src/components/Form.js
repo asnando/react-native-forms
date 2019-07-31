@@ -206,8 +206,9 @@ class Form extends PureComponent {
   }
 
   render() {
+    const { style } = this.props;
     return (
-      <FormContainer>
+      <FormContainer style={style}>
         {this.renderForm()}
       </FormContainer>
     );
@@ -215,6 +216,7 @@ class Form extends PureComponent {
 }
 
 Form.defaultProps = {
+  style: null,
   onSubmit: null,
   onInvalid: null,
   children: undefined,
@@ -224,6 +226,8 @@ Form.defaultProps = {
 };
 
 Form.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  style: PropTypes.object,
   onSubmit: PropTypes.func,
   onInvalid: PropTypes.func,
   // eslint-disable-next-line react/forbid-prop-types

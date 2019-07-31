@@ -5,7 +5,7 @@ import {
   FormStep,
   FormView,
   TextInput,
-} from 'react-native-forms';
+} from 'react-native-formx';
 
 const WithSteps = (props) => {
   return (
