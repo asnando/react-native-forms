@@ -37,6 +37,31 @@ const withViewProps = {
       type: 'masked',
     },
     {
+      name: 'random1',
+      title: 'Random 1',
+      type: 'text',
+    },
+    {
+      name: 'random2',
+      title: 'Random 2',
+      type: 'text',
+    },
+    {
+      name: 'random3',
+      title: 'Random 3',
+      type: 'text',
+    },
+    {
+      name: 'random4',
+      title: 'Random 4',
+      type: 'text',
+    },
+    {
+      name: 'random5',
+      title: 'Random 5',
+      type: 'text',
+    },
+    {
       title: 'Send',
       type: 'submit',
     },

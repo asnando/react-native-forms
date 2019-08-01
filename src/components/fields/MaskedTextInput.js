@@ -64,9 +64,9 @@ class MaskedTextInput extends PureComponent {
 
   validate() {
     const { required } = this.props;
-    const { validator } = this.state;
+    const { isVisible, validator } = this.state;
     const value = this.getValue();
-    if (required) {
+    if (required && isVisible) {
       if (typeof validator === 'function') {
         return validator(value);
       }
@@ -77,7 +77,9 @@ class MaskedTextInput extends PureComponent {
 
   clear() {
     const { maskedTextInput } = this;
-    maskedTextInput.clear();
+    if (maskedTextInput) {
+      maskedTextInput.clear();
+    }
   }
 
   saveMaskedTextInputRef(ref) {

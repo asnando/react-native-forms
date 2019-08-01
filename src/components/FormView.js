@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
 import mapChildrenWithProps from '../helpers/mapChildrenWithProps';
 import { FormViewContainer } from './FormView.styles';
@@ -101,7 +102,6 @@ class FormView extends PureComponent {
   // and it transitioned to this view. Will tell all fields from
   // this view that this event occurred so they can dynamic show/hide.
   formViewGotActive(formData) {
-    console.warn('FormView got active!');
     const { fields } = this;
     fields.forEach((field) => {
       if (typeof field.fieldGotActive === 'function') {
@@ -178,9 +178,11 @@ class FormView extends PureComponent {
 
   render() {
     return (
-      <FormViewContainer>
-        {this.renderChildren()}
-      </FormViewContainer>
+      <ScrollView alwaysBounceVertical={false} keyboardShouldPersistTaps="handled">
+        <FormViewContainer>
+          {this.renderChildren()}
+        </FormViewContainer>
+      </ScrollView>
     );
   }
 }
