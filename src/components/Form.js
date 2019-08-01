@@ -8,6 +8,17 @@ import FormTabs from './FormTabs';
 import FormSteps from './FormSteps';
 import mapChildrenWithProps from '../helpers/mapChildrenWithProps';
 
+const stripNullsAndEmptiesFromObject = (object) => {
+  const keys = Object.keys(object);
+  keys.forEach((key) => {
+    const value = object[key];
+    if (value === null || typeof value === 'undefined' || (typeof value === 'string' && !value.trim())) {
+      delete object[key];
+    }
+  });
+  return object;
+};
+
 const initialState = {
   formData: {},
 };
@@ -63,13 +74,21 @@ class Form extends PureComponent {
     formTabs.handleSubmitRequest();
   }
 
-  submit() {
-    const { onSubmit, onInvalid } = this.props;
-    if (this.usingNormalView()) {
+  submit(formData) {
+    const {
+      onSubmit,
+      onInvalid,
+    } = this.props;
+
+    if (formData) {
+      if (typeof onSubmit === 'function') {
+        onSubmit(stripNullsAndEmptiesFromObject(formData));
+      }
+    } else if (this.usingNormalView()) {
       if (!this.isFormViewValid() && typeof onInvalid === 'function') {
         onInvalid(this.whichFormViewFieldIsInvalid());
       } else if (typeof onSubmit === 'function') {
-        onSubmit(this.getFormViewData());
+        onSubmit(stripNullsAndEmptiesFromObject(this.getFormViewData()));
       }
     } else if (this.usingTabs()) {
       // When using form with tabs and user press a custom submit
@@ -104,14 +123,7 @@ class Form extends PureComponent {
     // When there is not formData object means that the caller directly
     // called the submit and expect this component to resolve the formData.
     // This case occurs when the normal view directly call this.
-    if (!formData) {
-      this.submit();
-    } else {
-      const { onSubmit } = this.props;
-      if (typeof onSubmit === 'function') {
-        onSubmit(formData);
-      }
-    }
+    return this.submit(formData);
   }
 
   // This method will be called when form is configured
