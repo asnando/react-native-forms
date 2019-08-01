@@ -28,7 +28,6 @@ const withViewProps = {
         { label: 'Option 1', value: 'option1' },
         { label: 'Option 2', value: 'option2' },
       ],
-      required: true,
     },
     {
       name: 'random1',
@@ -40,6 +39,13 @@ const withViewProps = {
       title: 'Phone (BR)',
       maskType: 'phone',
       type: 'masked',
+    },
+    {
+      name: 'email',
+      title: 'E-mail',
+      type: 'text',
+      validator: 'email',
+      required: true,
     },
     {
       name: 'random2',
