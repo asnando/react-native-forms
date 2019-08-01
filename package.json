@@ -1,6 +1,6 @@
 {
   "name": "react-native-formx",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "⚛️ 📃 React Native custom form builder with support for plain form, tabs and step-by-step",
   "repository": {
     "type": "git",
