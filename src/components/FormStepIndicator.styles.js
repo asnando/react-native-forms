@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const FORM_STEP_INDICATOR_CONTAINER_HEIGHT = 32;
+const FORM_STEP_INDICATOR_CONTAINER_HEIGHT = 24;
 const FORM_STEP_INDICATOR_INACTIVE_COLOR = '#ccc';
 const FORM_STEP_INDICATOR_ACTIVE_COLOR = 'rgb(32,150,243)';
 const FORM_STEP_INDICATOR_SIZE = 8;
@@ -10,6 +10,7 @@ export const FormStepIndicatorContainer = styled.SafeAreaView`
   height: ${FORM_STEP_INDICATOR_CONTAINER_HEIGHT};
   flex-direction: row;
   justify-content: center;
+  align-items: center;
 `;
 
 export const StepIndicator = styled.View`

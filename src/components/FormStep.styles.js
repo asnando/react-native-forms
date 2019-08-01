@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const FormStepContainer = styled.View`
   width: 95%;
+  padding-bottom: 128;
   margin-left: auto;
   margin-right: auto;
 `;

@@ -1,11 +1,45 @@
 import React, { PureComponent } from 'react';
+import { Keyboard } from 'react-native';
 import PropTypes from 'prop-types';
 import {
   FormStepIndicatorContainer,
   StepIndicator,
 } from './FormStepIndicator.styles';
 
+// const initialState = {
+//   visible: true,
+// };
+
 class FormStepIndicator extends PureComponent {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = initialState;
+  // }
+
+  // componentDidMount() {
+  //   this.keyboardWillShowListener = Keyboard.addListener(
+  //     'keyboardWillShow',
+  //     this.handleKeyboardShow.bind(this),
+  //   );
+  //   this.keyboardDidHideListener = Keyboard.addListener(
+  //     'keyboardDidHide',
+  //     this.handleKeyboardHide.bind(this),
+  //   );
+  // }
+
+  // componentWillUnmount() {
+  //   this.keyboardWillShowListener.remove();
+  //   this.keyboardDidHideListener.remove();
+  // }
+
+  // handleKeyboardShow() {
+  //   return this.setState({ visible: false });
+  // }
+
+  // handleKeyboardHide() {
+  //   return this.setState({ visible: true });
+  // }
+
   renderStepsIndicators() {
     const { stepsSize, activeIndex, indicatorColor } = this.props;
     const indicators = [];
@@ -22,6 +56,7 @@ class FormStepIndicator extends PureComponent {
   }
 
   render() {
+    // const { visible } = this.state;
     return (
       <FormStepIndicatorContainer>
         {this.renderStepsIndicators()}

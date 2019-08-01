@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
+import { KeyboardAvoidingView } from 'react-native';
 import PropTypes from 'prop-types';
 import {
   FormContainer,
+  FormContainerStyle,
 } from './Form.styles';
 import FormView from './FormView';
 import FormTabs from './FormTabs';
@@ -212,9 +214,11 @@ class Form extends PureComponent {
   render() {
     const { style } = this.props;
     return (
-      <FormContainer style={style}>
-        {this.renderForm()}
-      </FormContainer>
+      <KeyboardAvoidingView style={FormContainerStyle} behavior="padding" keyboardVerticalOffset={0} enabled>
+        <FormContainer style={style}>
+          {this.renderForm()}
+        </FormContainer>
+      </KeyboardAvoidingView>
     );
   }
 }
