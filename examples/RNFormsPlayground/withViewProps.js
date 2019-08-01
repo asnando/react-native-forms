@@ -62,6 +62,16 @@ const withViewProps = {
       type: 'text',
     },
     {
+      name: 'random6',
+      title: 'Random 6',
+      type: 'text',
+    },
+    {
+      name: 'random7',
+      title: 'Random 7',
+      type: 'text',
+    },
+    {
       title: 'Send',
       type: 'submit',
     },

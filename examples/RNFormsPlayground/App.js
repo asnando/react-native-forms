@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { View, SafeAreaView, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { TextButton } from 'react-native-custom-button';
 import { Form } from 'react-native-formx';
 import WithView from './withView';
@@ -37,16 +37,18 @@ const App = () => {
         {/* <WithSteps {...props} /> */}
       </Form>
       {/* Example to use with tabs */}
-      <TextButton
-        title="Submit outside form"
-        onPress={callFormSubmit}
-        buttonStyle={{ width: '100%' }}
-      />
-      <TextButton
-        title="Clear outside form"
-        onPress={callFormClear}
-        buttonStyle={{ width: '100%' }}
-      />
+      <View style={{ flexDirection: 'row' }}>
+        <TextButton
+          title="Submit outside form"
+          onPress={callFormSubmit}
+          buttonStyle={{ flex: 1 }}
+        />
+        <TextButton
+          title="Clear outside form"
+          onPress={callFormClear}
+          buttonStyle={{ flex: 1 }}
+        />
+      </View>
     </SafeAreaView>
   );
 };
