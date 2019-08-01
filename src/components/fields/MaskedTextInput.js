@@ -101,6 +101,16 @@ class MaskedTextInput extends PureComponent {
     return true;
   }
 
+  handleSubmitEditing() {
+    const { onFormFieldSubmitEditing } = this.props;
+    onFormFieldSubmitEditing(this);
+  }
+
+  focus() {
+    const { maskedTextInput } = this;
+    return maskedTextInput.focus();
+  }
+
   render() {
     const { isVisible } = this.state;
     const {
@@ -120,6 +130,7 @@ class MaskedTextInput extends PureComponent {
           customMask={customMask}
           secureTextEntry={secureTextEntry}
           keyboardType={resolveKeyboardTypeFromMask(maskType)}
+          onSubmitEditing={(...args) => this.handleSubmitEditing(...args)}
         />
       </FormField>
     );
@@ -133,6 +144,7 @@ MaskedTextInput.defaultProps = {
   keyboardType: null,
   secureTextEntry: null,
   saveFormFieldRef: null,
+  onFormFieldSubmitEditing: null,
   required: false,
   validator: null,
   show: null,
@@ -146,6 +158,7 @@ MaskedTextInput.propTypes = {
   keyboardType: PropTypes.string,
   secureTextEntry: PropTypes.bool,
   saveFormFieldRef: PropTypes.func,
+  onFormFieldSubmitEditing: PropTypes.func,
   required: PropTypes.bool,
   validator: PropTypes.string,
   show: PropTypes.func,

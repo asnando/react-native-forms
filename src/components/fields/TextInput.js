@@ -25,6 +25,10 @@ class FormTextInput extends PureComponent {
     saveFormFieldRef(this);
   }
 
+  saveTextInputRef(ref) {
+    this.textInput = ref;
+  }
+
   getName() {
     const { name } = this.props;
     return name;
@@ -79,6 +83,16 @@ class FormTextInput extends PureComponent {
     return this.setState({ value });
   }
 
+  focus() {
+    const { textInput } = this;
+    return textInput.focus();
+  }
+
+  handleSubmitEditing() {
+    const { onFormFieldSubmitEditing } = this.props;
+    onFormFieldSubmitEditing(this);
+  }
+
   render() {
     const { props } = this;
     const { title } = props;
@@ -90,8 +104,10 @@ class FormTextInput extends PureComponent {
         </FormFieldLabel>
         <TextInput
           {...props}
+          ref={(...args) => this.saveTextInputRef(...args)}
           value={value}
           onChangeText={(...args) => this.handleChangeText(...args)}
+          onSubmitEditing={(...args) => this.handleSubmitEditing(...args)}
         />
       </FormField>
     );
@@ -104,6 +120,7 @@ FormTextInput.defaultProps = {
   saveFormFieldRef: null,
   validator: null,
   show: null,
+  onFormFieldSubmitEditing: null,
 };
 
 FormTextInput.propTypes = {
@@ -113,6 +130,7 @@ FormTextInput.propTypes = {
   saveFormFieldRef: PropTypes.func,
   validator: PropTypes.string,
   show: PropTypes.func,
+  onFormFieldSubmitEditing: PropTypes.func,
 };
 
 export default FormTextInput;

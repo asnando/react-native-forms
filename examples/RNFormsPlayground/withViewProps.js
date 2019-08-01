@@ -31,15 +31,15 @@ const withViewProps = {
       required: true,
     },
     {
+      name: 'random1',
+      title: 'Random 1',
+      type: 'text',
+    },
+    {
       name: 'phone',
       title: 'Phone (BR)',
       maskType: 'phone',
       type: 'masked',
-    },
-    {
-      name: 'random1',
-      title: 'Random 1',
-      type: 'text',
     },
     {
       name: 'random2',

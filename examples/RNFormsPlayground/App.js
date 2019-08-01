@@ -28,9 +28,9 @@ const App = () => {
         ref={saveFormRef}
         onSubmit={onSubmit}
         onInvalid={onInvalid}
-        // {...withViewProps}
+        {...withViewProps}
         // {...withTabProps}
-        {...withStepProps}
+        // {...withStepProps}
       >
         {/* <WithView {...props} /> */}
         {/* <WithTabs {...props} /> */}

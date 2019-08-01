@@ -93,6 +93,7 @@ class FormView extends PureComponent {
     } = this.props;
     return {
       saveFormFieldRef: this.saveFormFieldRef.bind(this),
+      onFormFieldSubmitEditing: this.handleFormFieldSubmitEditing.bind(this),
       onSubmitRequest,
       onClearRequest,
     };
@@ -145,6 +146,15 @@ class FormView extends PureComponent {
   // these actions we will have the fields reference list.
   saveFormFieldRef(ref) {
     this.fields.push(ref);
+  }
+
+  handleFormFieldSubmitEditing(ref) {
+    const { fields } = this;
+    const refIndex = fields.findIndex(field => field === ref);
+    const nextField = fields[refIndex + 1];
+    if (nextField && typeof nextField.focus === 'function') {
+      nextField.focus();
+    }
   }
 
   renderFromChildren() {
