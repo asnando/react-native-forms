@@ -6,39 +6,39 @@ import {
   StepIndicator,
 } from './FormStepIndicator.styles';
 
-// const initialState = {
-//   visible: true,
-// };
+const initialState = {
+  visible: true,
+};
 
 class FormStepIndicator extends PureComponent {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = initialState;
-  // }
+  constructor(props) {
+    super(props);
+    this.state = initialState;
+  }
 
-  // componentDidMount() {
-  //   this.keyboardWillShowListener = Keyboard.addListener(
-  //     'keyboardWillShow',
-  //     this.handleKeyboardShow.bind(this),
-  //   );
-  //   this.keyboardDidHideListener = Keyboard.addListener(
-  //     'keyboardDidHide',
-  //     this.handleKeyboardHide.bind(this),
-  //   );
-  // }
+  componentDidMount() {
+    this.keyboardWillShowListener = Keyboard.addListener(
+      'keyboardWillShow',
+      this.handleKeyboardShow.bind(this),
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      this.handleKeyboardHide.bind(this),
+    );
+  }
 
-  // componentWillUnmount() {
-  //   this.keyboardWillShowListener.remove();
-  //   this.keyboardDidHideListener.remove();
-  // }
+  componentWillUnmount() {
+    this.keyboardWillShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
 
-  // handleKeyboardShow() {
-  //   return this.setState({ visible: false });
-  // }
+  handleKeyboardShow() {
+    return this.setState({ visible: false });
+  }
 
-  // handleKeyboardHide() {
-  //   return this.setState({ visible: true });
-  // }
+  handleKeyboardHide() {
+    return this.setState({ visible: true });
+  }
 
   renderStepsIndicators() {
     const { stepsSize, activeIndex, indicatorColor } = this.props;
@@ -56,8 +56,8 @@ class FormStepIndicator extends PureComponent {
   }
 
   render() {
-    // const { visible } = this.state;
-    return (
+    const { visible } = this.state;
+    return visible && (
       <FormStepIndicatorContainer>
         {this.renderStepsIndicators()}
       </FormStepIndicatorContainer>
