@@ -1,4 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
+import { Keyboard } from 'react-native';
 import PropTypes from 'prop-types';
 import {
   TabView,
@@ -153,7 +154,11 @@ class FormSteps extends PureComponent {
   }
 
   handleIndexChange(index) {
-    return this.setState({ index }, this.notifyActiveFormViewGotActive.bind(this));
+    return this.setState({ index }, () => {
+      // Manually dismiss the keyboard on FormStep transitions.
+      Keyboard.dismiss();
+      this.notifyActiveFormViewGotActive();
+    });
   }
 
   moveToNextStep() {
