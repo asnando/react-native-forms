@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { FullWidthButton } from 'rn-custom-button';
+// import { FullWidthButton } from 'rn-custom-button';
+import { Button, Text } from 'native-base'
 
 class Submit extends PureComponent {
   render() {
@@ -13,12 +14,14 @@ class Submit extends PureComponent {
       buttonTextColor,
     } = this.props;
     return (
-      <FullWidthButton
-        title={title}
+      <Button
+        full
+        style={{ backgroundColor: buttonTintColor }}
         onPress={() => onSubmitRequest()}
-        buttonTintColor={buttonTintColor}
-        buttonTextColor={buttonTextColor}
-      />
+
+      >
+        <Text style={{ color: buttonTextColor }}>{title}</Text>
+      </Button>
     );
   }
 }
